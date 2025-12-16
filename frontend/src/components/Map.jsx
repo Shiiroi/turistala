@@ -1,24 +1,68 @@
-// src/components/Map.jsx
-import { MapContainer, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css"; // CRITICAL: Import CSS here
+import { MapContainer, GeoJSON } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { memo } from "react";
 
-// Coordinates for Rizal, Philippines
-const POSITION = [14.5, 121.2]; 
+const POSITION = [14.5, 121.2]; // Rizal area
 
-const Map = () => {
+// Bounding box for the Philippines
+const PH_BOUNDS = [
+  [4.5, 116.0],   // Southwest corner
+  [21.5, 127.5]   // Northeast corner
+]; 
+
+// 1. Define style outside component so it doesn't reset on re-renders
+const DEFAULT_STYLE = { 
+  fillColor: "#4ECDC4",
+  fillOpacity: 0.2,     
+  color: "#ffffff",        
+  weight: 1,
+};
+
+const Map = ({ municipalities, onHover }) => {
   return (
     <MapContainer 
       center={POSITION} 
-      zoom={10} 
+      zoom={10}
+      minZoom={5}
+      maxZoom={18}
+      maxBounds={PH_BOUNDS}
+      maxBoundsViscosity={1.0}
       scrollWheelZoom={true}
       className="leaflet-container"
+      style={{ background: "transparent" }} 
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+
+      {municipalities.map((town) => (
+        <GeoJSON 
+          key={town.id} 
+          data={town.geo_json} 
+          style={DEFAULT_STYLE} 
+          eventHandlers={{
+            mouseover: (e) => {
+              const layer = e.target;
+              
+              layer.setStyle({
+                fillOpacity: 0.8, 
+                weight: 3,        
+                fillColor: "#FF6B6B" 
+              });
+
+              onHover(town.name);
+            },
+            mouseout: (e) => {
+              const layer = e.target;
+              
+              // Reset to default
+              layer.setStyle(DEFAULT_STYLE);
+
+              onHover(null);
+            }
+          }}
+        />
+      ))}
     </MapContainer>
   );
 };
 
-export default Map;
+// 3. Memoize to prevent re-rendering when parent state (hoveredTown) changes
+export default memo(Map);

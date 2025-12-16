@@ -19,7 +19,7 @@ if (!connectionString) {
 }
 
 const pool = new Pool({ connectionString });
-const jsonFolder = path.join(__dirname, 'provdist');
+const jsonFolder = path.join(__dirname, 'municities');
 
 // --- THE DICTIONARY (Add new codes here as you expand) ---
 const REGION_LOOKUP = {
@@ -171,6 +171,10 @@ async function seed() {
   console.log("🚀 Starting Automated Seed...");
 
   try {
+    // CLEAR EXISTING DATA FIRST
+    console.log("🧹 Clearing existing municipalities...");
+    await client.query("DELETE FROM municipalities");
+
     const files = fs.readdirSync(jsonFolder);
 
     for (const file of files) {
@@ -187,12 +191,20 @@ async function seed() {
         // --- STEP 1: DETECT REGION & PROVINCE ---
         // We look at the first item to find out where we are
         const firstProp = features[0].properties;
-        const regionCode = firstProp.adm1_psgc.toString();
-        const provinceCode = firstProp.adm2_psgc.toString();
+        
+        // 1. Get Codes (Handle Old 'adm' vs New 'ADM' + PH prefix)
+        let rawRegionCode = firstProp.adm1_psgc || firstProp.ADM1_PCODE;
+        let rawProvinceCode = firstProp.adm2_psgc || firstProp.ADM2_PCODE;
 
-        // Get Names from our Dictionary
-        const regionName = REGION_LOOKUP[regionCode] || `Unknown Region (${regionCode})`;
-        const provinceName = PROVINCE_LOOKUP[provinceCode] || `Unknown Province (${provinceCode})`;
+        let regionCode = rawRegionCode.toString();
+        let provinceCode = rawProvinceCode.toString();
+
+        if (regionCode.startsWith('PH')) regionCode = regionCode.substring(2);
+        if (provinceCode.startsWith('PH')) provinceCode = provinceCode.substring(2);
+
+        // 2. Get Names (Prefer file data, fallback to dictionary)
+        let regionName = firstProp.ADM1_EN || REGION_LOOKUP[regionCode] || `Unknown Region (${regionCode})`;
+        let provinceName = firstProp.ADM2_EN || PROVINCE_LOOKUP[provinceCode] || `Unknown Province (${provinceCode})`;
 
         // --- STEP 2: ENSURE REGION EXISTS ---
         let regionId;
@@ -231,15 +243,26 @@ async function seed() {
 
         // --- STEP 4: INSERT MUNICIPALITIES ---
         for (const feature of features) {
-          const name = feature.properties.adm3_en;
+          const props = feature.properties;
+          
+          // 1. Handle both naming conventions (Old vs New)
+          const name = props.adm3_en || props.ADM3_EN;
+          
+          // 2. Get the code
+          let rawCode = props.adm3_psgc || props.ADM3_PCODE;
+          
+          // 3. Clean the code: If it's a string starting with "PH", remove "PH"
+          let code = rawCode;
+          if (typeof rawCode === 'string' && rawCode.startsWith('PH')) {
+            code = rawCode.substring(2); // Turns "PH0128000" -> "0128000"
+          }
+
           const geometry = feature.geometry;
-          const code = feature.properties.adm3_psgc;
 
           if (name && geometry && code) {
             await client.query(
               `INSERT INTO municipalities (name, code, geo_json, province_id) 
-               VALUES ($1, $2, $3, $4) 
-               ON CONFLICT (code) DO NOTHING`, // Prevent duplicates
+               VALUES ($1, $2, $3, $4)`, 
               [name, code, geometry, provinceId]
             );
             process.stdout.write('.');

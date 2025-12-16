@@ -10,7 +10,7 @@ import { connectDB } from '../db/db.js';
 export const getMunicipalities = async () => {
     // Logic: "Hey Pool, run this SQL and give me the result."
     const res = await connectDB.query(
-        'SELECT id, name, code, province_id FROM municipalities ORDER BY name ASC'
+        'SELECT id, name, code, province_id, geo_json FROM municipalities ORDER BY name ASC'
     );
     return res.rows;
 };
