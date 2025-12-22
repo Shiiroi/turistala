@@ -4,14 +4,22 @@
 import { connectDB } from '../db/db.js';
 
 /**
- * Fetch all municipalities
+ * Fetch all municipalities with province name
  * Uses pool.query() to automatically connect, query, and release.
  */
 export const getMunicipalities = async () => {
-    // Logic: "Hey Pool, run this SQL and give me the result."
-    const res = await connectDB.query(
-        'SELECT id, name, code, province_id, geo_json FROM municipalities ORDER BY name ASC'
-    );
+    const res = await connectDB.query(`
+        SELECT 
+            m.id, 
+            m.name, 
+            m.code, 
+            m.province_id, 
+            m.geo_json,
+            p.name AS province_name
+        FROM municipalities m
+        LEFT JOIN provinces p ON m.province_id = p.id
+        ORDER BY m.name ASC
+    `);
     return res.rows;
 };
 
