@@ -12,15 +12,35 @@ export const getMunicipalities = async () => {
         SELECT 
             m.id, 
             m.name, 
-            m.code, 
             m.province_id, 
             m.geo_json,
-            p.name AS province_name
-        FROM municipalities m
+            p.name AS province_name,
+            p.code AS province_code,
+            r.name AS region_name,
+            r.code AS region_code,
+            m.type
+        FROM municities m
         LEFT JOIN provinces p ON m.province_id = p.id
+        LEFT JOIN regions r ON p.region_id = r.id
         ORDER BY m.name ASC
     `);
-    return res.rows;
+
+    // Parse geo_json (stored as TEXT) into objects and normalize some region fields
+    const rows = res.rows.map((row) => {
+        try {
+            if (row.geo_json && typeof row.geo_json === 'string') {
+                row.geo_json = JSON.parse(row.geo_json);
+            }
+        } catch (e) {
+            // leave as-is if parsing fails
+        }
+
+        // No presentation logic here — return DB fields as-is. Frontend will use `region_name`/`province_name`/`type`.
+
+        return row;
+    });
+
+    return rows;
 };
 
 /**
@@ -29,10 +49,21 @@ export const getMunicipalities = async () => {
 export const getMunicipalityById = async (id) => {
     // Logic: "Hey Pool, run this SQL with this specific ID ($1)."
     const res = await connectDB.query(
-        'SELECT * FROM municipalities WHERE id = $1',
+        `SELECT m.*, p.name AS province_name, p.code AS province_code, r.name AS region_name, r.code AS region_code
+         FROM municities m
+         LEFT JOIN provinces p ON m.province_id = p.id
+         LEFT JOIN regions r ON p.region_id = r.id
+         WHERE m.id = $1`,
         [id]
     );
-    return res.rows[0];
+    const row = res.rows[0];
+    if (row && row.geo_json && typeof row.geo_json === 'string') {
+        try { row.geo_json = JSON.parse(row.geo_json); } catch (e) { /* noop */ }
+    }
+
+    // No additional presentation fields for single-row fetch. Frontend will use DB values.
+
+    return row;
 };
 
 /**

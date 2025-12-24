@@ -5,7 +5,7 @@ import MapEffect from "./MapEffect";
 
 const POSITION = [14.5, 121.2]; // Rizal area
 
-// Bounding box for the Philippines
+// Bounding box for the Philippines - restricts map panning to Philippine territory
 const PH_BOUNDS = [
   [4.5, 116.0],   // Southwest corner
   [21.5, 127.5]   // Northeast corner
@@ -32,6 +32,17 @@ const SELECTED_STYLE = {
   color: "#ffffff",
 };
 
+/**
+ * Map Component
+ * 
+ * Renders an interactive Leaflet map displaying Philippine municipalities as GeoJSON polygons.
+ * Handles user interactions (hover, click) and visual feedback through styling changes.
+ * 
+ * @param {Array} municipalities - Array of municipality objects with geo_json geometry
+ * @param {Function} onHover - Callback fired on mouse hover, receives municipality name
+ * @param {Function} onSelect - Callback fired on click, receives municipality object or null
+ * @param {Object} selectedTown - Currently selected municipality object
+ */
 const Map = ({ municipalities, onHover, onSelect, selectedTown }) => {
 
   return (
@@ -46,15 +57,23 @@ const Map = ({ municipalities, onHover, onSelect, selectedTown }) => {
       className="leaflet-container"
       style={{ background: "transparent" }} 
     >
+      {/* MapEffect handles camera movement when towns are selected */}
       <MapEffect selectedTown={selectedTown} />
 
+      {/* Render each municipality as an interactive GeoJSON layer */}
       {municipalities.map((town) => {
         const isSelected = selectedTown?.id === town.id;
-        
+
+        // Ensure geo_json is an object (some rows store it as a string)
+        let geoData = town.geo_json;
+        if (typeof geoData === 'string') {
+          try { geoData = JSON.parse(geoData); } catch (e) { /* leave as-is */ }
+        }
+
         return (
           <GeoJSON 
             key={town.id} 
-            data={town.geo_json} 
+            data={geoData} 
             style={isSelected ? SELECTED_STYLE : DEFAULT_STYLE} 
             eventHandlers={{
               mouseover: (e) => {
