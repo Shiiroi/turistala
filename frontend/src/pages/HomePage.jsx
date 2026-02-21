@@ -3,20 +3,7 @@ import Map from "../components/Map";
 import { useGetMunicipalitiesQuery } from "../slices/geogSlice";
 import { Loader } from "../components/Loader";
 
-/**
- * HomePage Component
- * 
- * Main page component for the travel journal app. Displays an interactive map of Philippine municipalities
- * with a sliding sidebar that shows details when a municipality is selected. Manages the overall layout
- * and coordinates between the map component and sidebar display.
- * 
- * Features:
- * - Fetches municipality data from the backend API
- * - Handles loading and error states
- * - Manages municipality selection and hover states
- * - Responsive layout with animated sidebar
- * - HUD overlay showing current municipality name
- */
+
 const HomePage = () => {
   // Fetch municipality data from Redux Query API
   const { data: municipalities = [], isLoading, error } = useGetMunicipalitiesQuery();
