@@ -4,7 +4,10 @@ import { Toaster } from "react-hot-toast";
 function App() {
     return (
         <>
-            <Toaster position="bottom-right" />
+            <Toaster
+                position="bottom-right"
+                containerStyle={{ zIndex: 999999 }}
+            />
             <HomePage />
         </>
     );

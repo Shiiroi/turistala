@@ -1,0 +1,76 @@
+                        <option value="">-- Overview of all goals --</option>
+                        {childMunicipalities.map(m => (
+                            <option key={m.id} value={m.id}>{m.name}</option>
+                        ))}
+                    </select>
+                </div>
+            )}
+
+            {mapMode === "province" && !subTownId ? (
+                <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-6">
+                    {/* Read Only Overview of entire Province */}
+                    {townGoals.length === 0 ? (
+                        <p className="text-slate-400 italic mt-4">
+                            No goals found in {town.name}. Select a municipality above or switch to Municipality mode to add some!
+                        </p>
+                    ) : (
+                        townGoals.map((goal) => {
+                            const parentMuni = childMunicipalities.find(m => m.id === goal.municity_id);
+                            return (
+                                <div
+                                    key={goal.place_id}
+                                    className={`p-4 rounded-xl border transition-colors ${
+                                        goal.is_visited
+                                            ? "bg-slate-800/80 border-teal-500/50"
+                                            : "bg-slate-800/40 border-slate-700 hover:border-slate-500"
+                                    }`}
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <div>
+                                            <h3 className="font-bold text-lg text-white">
+                                                {goal.place_name}
+                                            </h3>
+                                            <p className="text-xs text-slate-400 uppercase tracking-widest mt-1">
+                                                {parentMuni?.name || "Unknown Municipality"}
+                                            </p>
+                                        </div>
+                                        <span className={`text-xs px-2 py-1 rounded-full ${goal.is_visited ? "bg-teal-500/20 text-teal-300" : "bg-slate-700 text-slate-300"}`}>
+                                            {goal.is_visited ? "Visited" : "Planned"}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
+            ) : (
+                <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-6">
+                    {/* Add a specific Place Form */}
+                    <form onSubmit={handleAddPlace} className="flex gap-2">
+                        <input
+                            type="text"
+                            value={newPlaceName}
+                            onChange={(e) => setNewPlaceName(e.target.value)}
+                            placeholder={subTownId ? `Add in ${activeTown.name}...` : "e.g Daranak Falls..."}
+                            className="flex-1 bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-teal-500"
+                        />
+                        <button
+                            type="submit"
+                            disabled={isAdding || !newPlaceName.trim()}
+                            className="bg-teal-500 hover:bg-teal-400 text-slate-900 font-bold px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isAdding ? "..." : "+ Add"}
+                        </button>
+                    </form>
+
+                    {/* List of Places to Go */}
+                    <div className="flex flex-col gap-4 mt-2">
+                        <h3 className="text-xl font-bold border-b border-slate-700 pb-2">
+                            My Places in {town.name}
+                        </h3>
+
+                        {townGoals.length === 0 ? (
+                            <p className="text-slate-400 text-sm italic">
+                                No places added yet. Add a specific place you
+                                want to visit!
+                            </p>

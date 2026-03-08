@@ -73,9 +73,13 @@ async function seedProvincesGeo() {
                 );
 
                 if (res.rows.length > 0) {
-                    console.log(`✅ Updated GeoJSON for: ${res.rows[0].name} (Code: ${res.rows[0].code})`);
+                    console.log(
+                        `✅ Updated GeoJSON for: ${res.rows[0].name} (Code: ${res.rows[0].code})`,
+                    );
                 } else {
-                    console.log(`⚠️ Could not find province in DB with name: ${provinceName}`);
+                    console.log(
+                        `⚠️ Could not find province in DB with name: ${provinceName}`,
+                    );
                 }
             }
         }

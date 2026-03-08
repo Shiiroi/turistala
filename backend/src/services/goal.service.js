@@ -1,4 +1,13 @@
 import { connectDB, withTransaction } from "../db/db.js";
+import { supabase } from "../supabaseClient.js";
+
+const extractPathFromUrl = (url) => {
+    if (!url || typeof url !== "string") return null;
+    const matches = url.match(
+        /\/storage\/v1\/object\/public\/journal-photos\/(.+)$/,
+    );
+    return matches ? matches[1] : null;
+};
 
 /**
  * Adds a new geographic goal to the user's tracking profile.
@@ -139,6 +148,55 @@ export const getGoalProgress = async (userId) => {
  */
 export const removeGoal = async (userId, placeId) => {
     return await withTransaction(async (client) => {
+        // 1. Find all journal entries for this user and place
+        const journalsRes = await client.query(
+            "SELECT id FROM journal_entries WHERE user_id = $1 AND place_id = $2",
+            [userId, placeId],
+        );
+
+        const journalIds = journalsRes.rows.map((r) => r.id);
+
+        if (journalIds.length > 0) {
+            // 2. Find and delete photos from Supabase storage
+            const existingPhotosRes = await client.query(
+                "SELECT storage_url FROM journal_photos WHERE journal_id = ANY($1::uuid[])",
+                [journalIds],
+            );
+            const existingUrls = existingPhotosRes.rows.map(
+                (r) => r.storage_url,
+            );
+
+            if (existingUrls.length > 0) {
+                const pathsToDelete = existingUrls
+                    .map((url) => extractPathFromUrl(url))
+                    .filter(Boolean);
+
+                if (pathsToDelete.length > 0) {
+                    const { error } = await supabase.storage
+                        .from("journal-photos")
+                        .remove(pathsToDelete);
+                    if (error) {
+                        console.error(
+                            "Error deleting photos from bucket on goal delete:",
+                            error,
+                        );
+                    }
+                }
+            }
+
+            // 3. Delete journal photos and entries from DB
+            await client.query(
+                "DELETE FROM journal_photos WHERE journal_id = ANY($1::uuid[])",
+                [journalIds],
+            );
+
+            await client.query(
+                "DELETE FROM journal_entries WHERE user_id = $1 AND place_id = $2",
+                [userId, placeId],
+            );
+        }
+
+        // 4. Finally, remove the goal itself
         const query = `
             DELETE FROM user_place_goals 
             WHERE user_id = $1 AND place_id = $2

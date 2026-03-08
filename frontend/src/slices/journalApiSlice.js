@@ -37,6 +37,28 @@ export const journalApiSlice = apiSlice.injectEndpoints({
                 url: `${JOURNALS_URL}/${journalId}`,
                 method: "DELETE",
             }),
+            async onQueryStarted(
+                { journalId, municityId },
+                { dispatch, queryFulfilled },
+            ) {
+                const patchResult = dispatch(
+                    journalApiSlice.util.updateQueryData(
+                        "getJournalsByPlace",
+                        municityId,
+                        (draft) => {
+                            const index = draft.data.findIndex(
+                                (j) => j.id === journalId,
+                            );
+                            if (index !== -1) draft.data.splice(index, 1);
+                        },
+                    ),
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
             invalidatesTags: (result, error, arg) => [
                 { type: "Journal", id: arg.municityId },
                 "GoalProgress",

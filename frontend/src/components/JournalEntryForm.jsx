@@ -14,6 +14,9 @@ export default function JournalEntryForm({
     existingEntry,
 }) {
     const fileInputRef = useRef(null);
+    const [title, setTitle] = useState(
+        existingEntry ? existingEntry.title : "",
+    );
     const [notes, setNotes] = useState(
         existingEntry ? existingEntry.content : "",
     );
@@ -25,6 +28,7 @@ export default function JournalEntryForm({
     );
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const [addJournalEntry] = useAddJournalEntryMutation();
     const [updateJournalEntry] = useUpdateJournalEntryMutation();
@@ -60,6 +64,7 @@ export default function JournalEntryForm({
     const handleSave = async (e) => {
         e.preventDefault();
         setLoading(true);
+        document.body.style.cursor = "wait";
         try {
             setUploading(true);
 
@@ -71,7 +76,7 @@ export default function JournalEntryForm({
                 const fileName = `${Math.random()}.${fileExt}`;
                 const filePath = `${fileName}`;
 
-                const { data, error } = await supabase.storage
+                const { error } = await supabase.storage
                     .from("journal-photos")
                     .upload(filePath, localFile.file);
 
@@ -100,6 +105,7 @@ export default function JournalEntryForm({
             if (existingEntry) {
                 await updateJournalEntry({
                     journalId: existingEntry.id,
+                    title,
                     notes,
                     photos: finalPhotos,
                     municityId: townId,
@@ -109,6 +115,7 @@ export default function JournalEntryForm({
                 await addJournalEntry({
                     municityId: townId,
                     name: townName,
+                    title,
                     notes,
                     photos: finalPhotos,
                 }).unwrap();
@@ -123,41 +130,46 @@ export default function JournalEntryForm({
             toast.error("Failed to save journal entry.");
             setUploading(false);
         } finally {
+            document.body.style.cursor = "default";
             setLoading(false);
         }
     };
 
     const handleDelete = async () => {
-        if (
-            window.confirm(
-                "Are you sure you want to delete this journal entry?",
-            )
-        ) {
-            setLoading(true);
-            try {
-                await deleteJournalEntry({
-                    journalId: existingEntry.id,
-                    municityId: townId,
-                }).unwrap();
-                toast.success("Journal entry deleted!");
-                onClose();
-            } catch (err) {
-                console.error("Failed to delete journal:", err);
-                toast.error("Failed to delete journal entry.");
-            } finally {
-                setLoading(false);
-            }
+        setLoading(true);
+        document.body.style.cursor = "wait";
+        try {
+            await deleteJournalEntry({
+                journalId: existingEntry.id,
+                municityId: townId,
+            }).unwrap();
+            toast.success("Journal entry deleted!");
+            onClose();
+        } catch (err) {
+            console.error("Failed to delete journal:", err);
+            toast.error("Failed to delete journal entry.");
+        } finally {
+            document.body.style.cursor = "default";
+            setLoading(false);
         }
     };
 
     return (
         <form
             onSubmit={handleSave}
-            className="bg-slate-800 p-4 rounded-lg border border-slate-700 mt-4 animate-fade-in space-y-4"
+            className="w-full animate-fade-in space-y-4"
         >
             <h4 className="text-teal-400 font-bold mb-2">
                 {existingEntry ? "Edit Entry" : "New Entry"}
             </h4>
+
+            <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder={`Title (e.g. My Trip to ${townName})`}
+                className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-sm text-white focus:outline-none focus:border-teal-500 mb-2"
+            />
 
             <textarea
                 value={notes}
@@ -228,7 +240,7 @@ export default function JournalEntryForm({
                     {existingEntry && (
                         <button
                             type="button"
-                            onClick={handleDelete}
+                            onClick={() => setShowDeleteConfirm(true)}
                             disabled={loading}
                             className="text-red-500 hover:text-red-400 text-sm mr-4"
                         >
@@ -246,13 +258,69 @@ export default function JournalEntryForm({
                     </button>
                     <button
                         type="submit"
-                        disabled={loading || !notes.trim()}
+                        disabled={loading || uploading || !notes.trim()}
                         className="bg-teal-500 hover:bg-teal-600 disabled:opacity-50 text-slate-900 px-4 py-1 rounded font-bold transition disabled:cursor-not-allowed"
                     >
-                        {loading ? "Saving..." : "Save"}
+                        {uploading
+                            ? "Uploading Image..."
+                            : loading
+                              ? "Saving..."
+                              : "Save"}
                     </button>
                 </div>
             </div>
+
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-slate-900 border border-red-500/50 w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden text-center p-6 space-y-6">
+                        <div className="text-red-500 mb-2">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-12 w-12 mx-auto"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-white mb-2">
+                                Delete Journal Entry?
+                            </h3>
+                            <p className="text-slate-400 text-sm leading-relaxed">
+                                Are you sure? This will{" "}
+                                <span className="text-red-400 font-bold">
+                                    permanently delete
+                                </span>{" "}
+                                the notes and attached photos.
+                            </p>
+                        </div>
+                        <div className="flex gap-3 pt-4 border-t border-slate-800">
+                            <button
+                                type="button"
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-2.5 rounded-xl font-medium transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleDelete}
+                                disabled={loading}
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {loading ? "Deleting..." : "Delete"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </form>
     );
 }

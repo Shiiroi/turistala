@@ -1,5 +1,5 @@
-import { apiSlice } from './apiSlice';
-import { MUNICIPALITIES_URL } from '../constants';
+import { apiSlice } from "./apiSlice";
+import { MUNICIPALITIES_URL, PROVINCES_URL } from "../constants";
 
 export const geogApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -7,15 +7,19 @@ export const geogApiSlice = apiSlice.injectEndpoints({
             query: () => ({
                 url: MUNICIPALITIES_URL,
             }),
-            // This ONLY runs if status is 200 OK.
-            // If status is 500, this line is skipped entirely.
             transformResponse: (response) => response.data,
             keepUnusedDataFor: 3600,
-            providesTags: ['Municipality'],
+            providesTags: ["Municipality"],
         }),
-    })
-})
+        getProvinces: builder.query({
+            query: () => ({
+                url: PROVINCES_URL,
+            }),
+            transformResponse: (response) => response.data,
+            keepUnusedDataFor: 3600,
+            providesTags: ["Province"],
+        }),
+    }),
+});
 
-export const {
-    useGetMunicipalitiesQuery
-} = geogApiSlice;
+export const { useGetMunicipalitiesQuery, useGetProvincesQuery } = geogApiSlice;

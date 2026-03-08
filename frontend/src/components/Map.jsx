@@ -80,6 +80,7 @@ const Map = ({
     selectedTown,
     baseColor,
     municipalityStats,
+    mapMode = "municity",
 }) => {
     return (
         <MapContainer
@@ -125,7 +126,7 @@ const Map = ({
 
                 return (
                     <GeoJSON
-                        key={`${town.id}-${baseColor}-${townStats?.visited}`}
+                        key={`${mapMode}-${town.id}-${baseColor}-${townStats?.visited}`}
                         data={geoData}
                         style={currentStyle}
                         eventHandlers={{

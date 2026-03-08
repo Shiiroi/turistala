@@ -21,11 +21,38 @@ export const goalApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["Goal", "GoalProgress"],
         }),
         removeUserGoal: builder.mutation({
-            query: (placeId) => ({
+            query: ({ placeId, municityId }) => ({
                 url: `${GOALS_URL}/${placeId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["Goal", "GoalProgress"],
+            async onQueryStarted(
+                { placeId, municityId },
+                { dispatch, queryFulfilled },
+            ) {
+                // Optimistically remove the goal
+                const patchResult = dispatch(
+                    goalApiSlice.util.updateQueryData(
+                        "getUserGoals",
+                        undefined,
+                        (draft) => {
+                            const index = draft.data.findIndex(
+                                (g) => g.place_id === placeId,
+                            );
+                            if (index !== -1) draft.data.splice(index, 1);
+                        },
+                    ),
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
+            invalidatesTags: (result, error, arg) => [
+                "Goal",
+                "GoalProgress",
+                { type: "Journal", id: arg.municityId },
+            ],
         }),
         updateUserGoalStatus: builder.mutation({
             query: ({ placeId, isVisited }) => ({
@@ -33,6 +60,28 @@ export const goalApiSlice = apiSlice.injectEndpoints({
                 method: "PATCH",
                 body: { isVisited },
             }),
+            async onQueryStarted(
+                { placeId, isVisited },
+                { dispatch, queryFulfilled },
+            ) {
+                const patchResult = dispatch(
+                    goalApiSlice.util.updateQueryData(
+                        "getUserGoals",
+                        undefined,
+                        (draft) => {
+                            const goal = draft.data.find(
+                                (g) => g.place_id === placeId,
+                            );
+                            if (goal) goal.is_visited = isVisited;
+                        },
+                    ),
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
             invalidatesTags: ["Goal", "GoalProgress"],
         }),
     }),

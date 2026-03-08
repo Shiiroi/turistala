@@ -75,7 +75,20 @@ export const getProvinces = async () => {
     const res = await connectDB.query(
         "SELECT * FROM provinces ORDER BY id ASC",
     );
-    return res.rows;
+
+    // Parse geo_json string into an object, similar to municipalities
+    const rows = res.rows.map((row) => {
+        try {
+            if (row.geo_json && typeof row.geo_json === "string") {
+                row.geo_json = JSON.parse(row.geo_json);
+            }
+        } catch (e) {
+            /* noop */
+        }
+        return row;
+    });
+
+    return rows;
 };
 
 /**

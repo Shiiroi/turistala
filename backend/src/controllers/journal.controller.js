@@ -14,7 +14,7 @@ const HARDCODED_USER_ID = "00000000-0000-0000-0000-000000000000";
  */
 export const addJournalEntry = async (req, res) => {
     try {
-        const { municityId, name, notes, photos } = req.body;
+        const { municityId, name, title, notes, photos } = req.body;
         if (!municityId || !notes) {
             return res.status(400).json({
                 success: false,
@@ -26,6 +26,7 @@ export const addJournalEntry = async (req, res) => {
             HARDCODED_USER_ID,
             municityId,
             name,
+            title,
             notes,
             photos,
         );
@@ -49,11 +50,12 @@ export const addJournalEntry = async (req, res) => {
 export const editJournalEntry = async (req, res) => {
     try {
         const { journalId } = req.params;
-        const { notes, photos } = req.body;
+        const { title, notes, photos } = req.body;
 
         const updatedJournal = await editJournal(
             HARDCODED_USER_ID,
             journalId,
+            title,
             notes,
             photos,
         );

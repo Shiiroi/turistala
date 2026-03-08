@@ -30,6 +30,7 @@ export const addJournal = async (
     userId,
     municityId,
     name,
+    title,
     content,
     photos = [],
 ) => {
@@ -56,7 +57,7 @@ export const addJournal = async (
 
         const journalRes = await client.query(
             "INSERT INTO journal_entries (user_id, place_id, content, title, visit_date) VALUES ($1, $2, $3, $4, CURRENT_DATE) RETURNING *",
-            [userId, placeId, content, name],
+            [userId, placeId, content, title || name],
         );
         const journal = journalRes.rows[0];
 
@@ -83,7 +84,13 @@ export const addJournal = async (
  * @param {Array<string>} photos - Comprehensive replacement array of photo object URIs.
  * @returns {Promise<Object>} Refreshed projection of customized journal entity.
  */
-export const editJournal = async (userId, journalId, content, photos = []) => {
+export const editJournal = async (
+    userId,
+    journalId,
+    title,
+    content,
+    photos = [],
+) => {
     return await withTransaction(async (client) => {
         const checkRes = await client.query(
             "SELECT user_id FROM journal_entries WHERE id = $1",
@@ -93,11 +100,27 @@ export const editJournal = async (userId, journalId, content, photos = []) => {
             throw new Error("Journal not found or unauthorized");
         }
 
-        if (content !== undefined) {
-            await client.query(
-                "UPDATE journal_entries SET content = $1 WHERE id = $2",
-                [content, journalId],
-            );
+        if (content !== undefined || title !== undefined) {
+            let updateFields = [];
+            let values = [];
+            let idx = 1;
+
+            if (content !== undefined) {
+                updateFields.push(`content = $${idx++}`);
+                values.push(content);
+            }
+            if (title !== undefined) {
+                updateFields.push(`title = $${idx++}`);
+                values.push(title);
+            }
+
+            if (updateFields.length > 0) {
+                values.push(journalId);
+                await client.query(
+                    `UPDATE journal_entries SET ${updateFields.join(", ")} WHERE id = $${idx}`,
+                    values,
+                );
+            }
         }
 
         const existingPhotosRes = await client.query(
