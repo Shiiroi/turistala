@@ -1,118 +1,182 @@
-import { useState } from "react"; 
+import { useState, useMemo, useEffect } from "react";
 import Map from "../components/Map";
 import { useGetMunicipalitiesQuery } from "../slices/geogSlice";
+import { useGetUserGoalsQuery } from "../slices/goalApiSlice";
+import {
+    useGetUserProfileQuery,
+    useUpdateMapColorMutation,
+} from "../slices/userApiSlice";
 import { Loader } from "../components/Loader";
+import MunicipalityDetails from "../components/MunicipalityDetails";
 
-
+/**
+ * Primary dashboard view integrating the interactive geographic heatmap and
+ * context-sensitive sidebar widgets. Retrieves layout definitions, parses statistical
+ * metadata for spatial shading overlays, and coordinates user preference sync state.
+ */
 const HomePage = () => {
-  // Fetch municipality data from Redux Query API
-  const { data: municipalities = [], isLoading, error } = useGetMunicipalitiesQuery();
-  
-  // State for tracking which municipality is being hovered (for HUD display)
-  const [activeTown, setActiveTown] = useState("");
-  
-  // State for the currently selected municipality (controls sidebar visibility)
-  const [selectedTown, setSelectedTown] = useState(null);
+    const {
+        data: municipalities = [],
+        isLoading,
+        error,
+    } = useGetMunicipalitiesQuery();
 
-  return (
-    <div className="relative w-full h-screen bg-slate-900">
-      {isLoading ? (
-        // Loading state: show centered loader
-        <div className="w-full h-full flex items-center justify-center">
-          <Loader />
-        </div>
-      ) : error ? (
-        // Error state: show error message
-        <div className="w-full h-full flex items-center justify-center text-red-500 font-mono text-xl">
-          Error: {error?.data?.message || 'Failed to load map data'}
-        </div>
-      ) : (
-        // Main content: map and sidebar layout
-        <div className="flex h-full">
-          {/* Map Area - dynamically resizes when sidebar opens/closes */}
-          <div className={`relative transition-all duration-500 ease-in-out ${selectedTown ? 'w-2/3' : 'w-full'} h-full`}>
-            
-            {/* HUD Overlay - displays current municipality name and instructions */}
-            <div className="absolute top-10 left-10 z-1000 pointer-events-none">
-              <h1 className="text-6xl font-black text-white uppercase tracking-tighter opacity-80">
-                {activeTown || selectedTown?.name || "EXPLORE"}
-              </h1>
-              {!selectedTown && (
-                <p className="text-lg text-slate-400 font-mono mt-2">
-                  Click a municipality to view details
-                </p>
-              )}
-            </div>
+    const [activeTown, setActiveTown] = useState("");
+    const [selectedTown, setSelectedTown] = useState(null);
 
-            {/* Map Component - handles all map interactions */}
-            <Map 
-              municipalities={municipalities} 
-              onHover={setActiveTown}
-              onSelect={setSelectedTown}
-              selectedTown={selectedTown}
-            />
-          </div>
+    const [isColorMenuOpen, setIsColorMenuOpen] = useState(false);
 
-          {/* Sidebar - slides in from right when municipality is selected */}
-          <div 
-            className={`h-full bg-slate-800 border-l border-slate-700 overflow-hidden transition-all duration-500 ease-in-out ${
-              selectedTown ? 'w-1/3 p-8' : 'w-0 p-0'
-            }`}
-          >
-            {selectedTown && (
-              <div className="text-white animate-fade-in">
-                {/* Header with municipality name and close button */}
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <h2 className="text-3xl font-bold text-teal-400">{selectedTown.name}</h2>
-                    <p className="text-slate-400 text-sm mt-1">{['City','HUC','ICC'].includes(selectedTown.type) ? 'City' : 'Municipality'}</p>
-                  </div>
-                  <button 
-                    onClick={() => setSelectedTown(null)} 
-                    className="text-slate-400 hover:text-white text-2xl transition-colors"
-                  >
-                    ✕
-                  </button>
+    const { data: userProfileData } = useGetUserProfileQuery();
+    const [updateMapColor] = useUpdateMapColorMutation();
+    const { data: userGoalsData } = useGetUserGoalsQuery();
+
+    // Derive base color from user profile, using local state for optimistic updates
+    const [localColor, setLocalColor] = useState(null);
+    const baseColor =
+        localColor || userProfileData?.data?.map_color || "#ec4899";
+
+    /**
+     * Propagates visual color shift to local state while triggering
+     * an asynchronous server synchronization request.
+     *
+     * @param {string} colorHex - The target hexadecimal configuration.
+     */
+    const handleColorChange = async (colorHex) => {
+        setLocalColor(colorHex);
+        try {
+            await updateMapColor(colorHex).unwrap();
+        } catch (error) {
+            console.error("Failed to save map color", error);
+        }
+    };
+
+    const municipalityStats = useMemo(() => {
+        const stats = {};
+        if (userGoalsData?.data) {
+            userGoalsData.data.forEach((goal) => {
+                if (!stats[goal.municity_id]) {
+                    stats[goal.municity_id] = { total: 0, visited: 0 };
+                }
+                stats[goal.municity_id].total += 1;
+                if (goal.is_visited) {
+                    stats[goal.municity_id].visited += 1;
+                }
+            });
+        }
+        return stats;
+    }, [userGoalsData]);
+
+    return (
+        <div className="relative w-full h-screen bg-slate-900">
+            {isLoading ? (
+                <div className="w-full h-full flex items-center justify-center">
+                    <Loader />
                 </div>
-                
-                {/* Content area with municipality details */}
-                <div className="space-y-4">
-                  {/* Region and Province display logic */}
-                  {(
-                    // Show only region when the municipality is HUC/ICC, when province is missing,
-                    // or when the DB `region_name` indicates the capital region (rendered as-is)
-                    selectedTown.type === 'HUC' || selectedTown.type === 'ICC' || !selectedTown.province_name || selectedTown.region_name?.includes('Capital')
-                  ) ? (
-                    <div className="bg-slate-700/50 p-4 rounded-lg">
-                      <p className="text-xs text-slate-400 uppercase tracking-wider">Region</p>
-                      <p className="text-xl text-white mt-1">{selectedTown.region_name || '—'}</p>
+            ) : error ? (
+                <div className="w-full h-full flex items-center justify-center text-red-500 font-mono text-xl">
+                    Error: {error?.data?.message || "Failed to load map data"}
+                </div>
+            ) : (
+                <div className="flex h-full">
+                    <div
+                        className={`relative transition-all duration-500 ease-in-out ${selectedTown ? "w-2/3" : "w-full"} h-full`}
+                    >
+                        {/* HUD Overlay - displays current municipality name and instructions */}
+                        <div className="absolute top-10 left-10 z-[1000] pointer-events-none">
+                            <h1 className="text-6xl font-black text-white uppercase tracking-tighter opacity-80">
+                                {activeTown || selectedTown?.name || "EXPLORE"}
+                            </h1>
+                            {!selectedTown && (
+                                <p className="text-lg text-slate-400 font-mono mt-2">
+                                    Click a municipality to view details
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="absolute bottom-10 left-10 z-[1000] flex flex-col gap-2 pointer-events-auto">
+                            <button
+                                onClick={() =>
+                                    setIsColorMenuOpen(!isColorMenuOpen)
+                                }
+                                className="bg-slate-800/90 hover:bg-slate-700/90 backdrop-blur pl-3 pr-4 py-2 rounded-xl border border-slate-700 shadow-xl flex items-center gap-2 transition-colors w-fit"
+                            >
+                                <div
+                                    className="w-4 h-4 rounded-full border border-slate-500"
+                                    style={{ backgroundColor: baseColor }}
+                                />
+                                <span className="text-white text-sm font-semibold">
+                                    Map Color
+                                </span>
+                            </button>
+
+                            <div
+                                className={`bg-slate-800/90 backdrop-blur p-4 rounded-xl border border-slate-700 shadow-xl transition-all duration-300 origin-bottom-left ${
+                                    isColorMenuOpen
+                                        ? "opacity-100 scale-100 visible"
+                                        : "opacity-0 scale-95 invisible absolute bottom-full"
+                                }`}
+                            >
+                                <div className="grid grid-cols-4 gap-2">
+                                    {[
+                                        { name: "Black", hex: "#000000" },
+                                        { name: "Indigo", hex: "#4f46e5" },
+                                        { name: "Brown", hex: "#8b4513" },
+                                        { name: "Pink", hex: "#ec4899" },
+                                        { name: "Red", hex: "#ef4444" },
+                                        { name: "Orange", hex: "#f97316" },
+                                        { name: "Yellow", hex: "#eab308" },
+                                        { name: "Green", hex: "#22c55e" },
+                                        { name: "Teal", hex: "#14b8a6" },
+                                        { name: "Cyan", hex: "#06b6d4" },
+                                        { name: "Blue", hex: "#3b82f6" },
+                                        { name: "Purple", hex: "#a855f7" },
+                                    ].map((color) => (
+                                        <button
+                                            key={color.hex}
+                                            title={color.name}
+                                            onClick={() =>
+                                                handleColorChange(color.hex)
+                                            }
+                                            className={`w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 ${
+                                                baseColor === color.hex
+                                                    ? "border-white scale-110 shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                                                    : "border-transparent"
+                                            }`}
+                                            style={{
+                                                backgroundColor: color.hex,
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <Map
+                            municipalities={municipalities}
+                            onHover={setActiveTown}
+                            onSelect={setSelectedTown}
+                            selectedTown={selectedTown}
+                            baseColor={baseColor}
+                            municipalityStats={municipalityStats}
+                        />
                     </div>
-                  ) : (
-                    // Others: Show both region and province
-                    <>
-                      <div className="bg-slate-700/50 p-4 rounded-lg">
-                        <p className="text-xs text-slate-400 uppercase tracking-wider">Region</p>
-                        <p className="text-xl text-white mt-1">{selectedTown.region_name || '—'}</p>
-                      </div>
-                      <div className="bg-slate-700/50 p-4 rounded-lg">
-                        <p className="text-xs text-slate-400 uppercase tracking-wider">Province</p>
-                        <p className="text-xl text-white mt-1">{selectedTown.province_name || '—'}</p>
-                      </div>
-                    </>
-                  )}
 
-                  {/* Placeholder for future tourist spots content */}
-                  <div className="h-48 bg-slate-700/30 rounded-lg flex items-center justify-center border-2 border-dashed border-slate-600">
-                    <span className="text-slate-500 text-sm">Tourist spots coming soon...</span>
-                  </div>
+                    <div
+                        className={`h-full bg-slate-800 border-l border-slate-700 overflow-hidden transition-all duration-500 ease-in-out ${
+                            selectedTown ? "w-1/3 p-8" : "w-0 p-0"
+                        }`}
+                    >
+                        {selectedTown && (
+                            <MunicipalityDetails
+                                town={selectedTown}
+                                onClose={() => setSelectedTown(null)}
+                            />
+                        )}
+                    </div>
                 </div>
-              </div>
             )}
-          </div>
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default HomePage;

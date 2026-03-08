@@ -1,11 +1,13 @@
 import HomePage from "./pages/HomePage";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-  return (
-    <>
-      <HomePage />
-    </>
-  );
+    return (
+        <>
+            <Toaster position="bottom-right" />
+            <HomePage />
+        </>
+    );
 }
 
 export default App;

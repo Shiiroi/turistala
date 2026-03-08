@@ -1,4 +1,4 @@
-import * as geographicService from '../services/geographic.service.js';
+import * as geographicService from "../services/geographic.service.js";
 
 /**
  * @desc   Get all municipalities
@@ -7,12 +7,11 @@ import * as geographicService from '../services/geographic.service.js';
  */
 export const getMunicipalities = async (req, res) => {
     try {
-        // Uncommented this line to actually get data
         const data = await geographicService.getMunicipalities();
-        
-        res.status(200).json({ 
-            success: true, 
-            data: data 
+
+        res.status(200).json({
+            success: true,
+            data: data,
         });
     } catch (error) {
         console.error(error);
@@ -31,9 +30,9 @@ export const getMunicipalityById = async (req, res) => {
 
         const data = await geographicService.getMunicipalityById(id);
 
-        res.status(200).json({ 
-            success: true, 
-            data: data
+        res.status(200).json({
+            success: true,
+            data: data,
         });
     } catch (error) {
         res.status(500).json({ success: false, error: "Server Error" });
@@ -49,9 +48,9 @@ export const getRegions = async (req, res) => {
     try {
         const data = await geographicService.getRegions();
 
-        res.status(200).json({ 
-            success: true, 
-            data: data
+        res.status(200).json({
+            success: true,
+            data: data,
         });
     } catch (error) {
         res.status(500).json({ success: false, error: "Server Error" });
@@ -67,9 +66,9 @@ export const getProvinces = async (req, res) => {
     try {
         const data = await geographicService.getProvinces();
 
-        res.status(200).json({ 
-            success: true, 
-            data: data
+        res.status(200).json({
+            success: true,
+            data: data,
         });
     } catch (error) {
         res.status(500).json({ success: false, error: "Server Error" });
@@ -85,9 +84,9 @@ export const getProvincesbyRegionId = async (req, res) => {
     try {
         const data = await geographicService.getRegions();
 
-        res.status(200).json({ 
-            success: true, 
-            data: data
+        res.status(200).json({
+            success: true,
+            data: data,
         });
     } catch (error) {
         res.status(500).json({ success: false, error: "Server Error" });
