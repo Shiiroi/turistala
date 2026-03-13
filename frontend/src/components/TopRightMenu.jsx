@@ -36,8 +36,8 @@ const stringSimilarity = (a, b) => {
             } else {
                 matrix[i][j] = Math.min(
                     matrix[i - 1][j - 1] + 1, // substitution
-                    matrix[i][j - 1] + 1,     // insertion
-                    matrix[i - 1][j] + 1      // deletion
+                    matrix[i][j - 1] + 1, // insertion
+                    matrix[i - 1][j] + 1, // deletion
                 );
             }
         }
@@ -47,7 +47,13 @@ const stringSimilarity = (a, b) => {
     return 1 - lev / maxLen;
 };
 
-const TopRightMenu = ({ userProfileData, hideMenu, mapMode, mapData, onSelectPlace }) => {
+const TopRightMenu = ({
+    userProfileData,
+    hideMenu,
+    mapMode,
+    mapData,
+    onSelectPlace,
+}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = useSelector((state) => state.auth.token);
@@ -117,7 +123,10 @@ const TopRightMenu = ({ userProfileData, hideMenu, mapMode, mapData, onSelectPla
             if (e.key === "Escape") setIsSearchOpen(false);
         };
         const handleClick = (e) => {
-            if (e.target.classList && e.target.classList.contains("search-modal-overlay")) {
+            if (
+                e.target.classList &&
+                e.target.classList.contains("search-modal-overlay")
+            ) {
                 setIsSearchOpen(false);
             }
         };
@@ -146,7 +155,7 @@ const TopRightMenu = ({ userProfileData, hideMenu, mapMode, mapData, onSelectPla
         }
         // Substring matches
         let results = mapData.filter((place) =>
-            place.name.toLowerCase().includes(searchQuery.toLowerCase())
+            place.name.toLowerCase().includes(searchQuery.toLowerCase()),
         );
         // If no substring matches, show the best fuzzy match (if any)
         if (results.length === 0 && mapData.length > 0) {
@@ -169,7 +178,10 @@ const TopRightMenu = ({ userProfileData, hideMenu, mapMode, mapData, onSelectPla
 
     useEffect(() => {
         if (isSearchOpen && resultRefs.current[highlightedIndex]) {
-            resultRefs.current[highlightedIndex].scrollIntoView({ block: "nearest", behavior: "smooth" });
+            resultRefs.current[highlightedIndex].scrollIntoView({
+                block: "nearest",
+                behavior: "smooth",
+            });
         }
     }, [highlightedIndex, isSearchOpen, searchResults]);
 
@@ -196,44 +208,82 @@ const TopRightMenu = ({ userProfileData, hideMenu, mapMode, mapData, onSelectPla
                                 <input
                                     autoFocus
                                     value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    onKeyDown={e => {
+                                    onChange={(e) =>
+                                        setSearchQuery(e.target.value)
+                                    }
+                                    onKeyDown={(e) => {
                                         if (e.key === "Enter") {
                                             if (searchResults.length > 0) {
-                                                onSelectPlace(searchResults[highlightedIndex]);
+                                                onSelectPlace(
+                                                    searchResults[
+                                                        highlightedIndex
+                                                    ],
+                                                );
                                                 setIsSearchOpen(false);
                                             } else {
-                                                toast.error(`${mapMode === "province" ? "Province" : "Municipality"} not found`);
+                                                toast.error(
+                                                    `${mapMode === "province" ? "Province" : "Municipality"} not found`,
+                                                );
                                                 setIsSearchOpen(false);
                                             }
                                         } else if (e.key === "ArrowDown") {
-                                            setHighlightedIndex(i => Math.min(i + 1, searchResults.length - 1));
+                                            setHighlightedIndex((i) =>
+                                                Math.min(
+                                                    i + 1,
+                                                    searchResults.length - 1,
+                                                ),
+                                            );
                                         } else if (e.key === "ArrowUp") {
-                                            setHighlightedIndex(i => Math.max(i - 1, 0));
+                                            setHighlightedIndex((i) =>
+                                                Math.max(i - 1, 0),
+                                            );
                                         }
                                     }}
                                     placeholder={`Search for a ${mapMode === "province" ? "province" : "municipality"}...`}
                                     className="bg-transparent text-white outline-none w-full"
                                 />
-                                <button onClick={() => setIsSearchOpen(false)} className="text-slate-400 text-sm">Cancel</button>
+                                <button
+                                    onClick={() => setIsSearchOpen(false)}
+                                    className="text-slate-400 text-sm"
+                                >
+                                    Cancel
+                                </button>
                             </div>
                             <div className="max-h-80 overflow-y-auto">
                                 {searchQuery && searchResults.length === 0 && (
-                                    <div className="p-4 text-slate-400 text-center text-sm">No results found.</div>
+                                    <div className="p-4 text-slate-400 text-center text-sm">
+                                        No results found.
+                                    </div>
                                 )}
                                 {searchResults.map((place, idx) => (
                                     <button
                                         key={place.id}
-                                        ref={el => resultRefs.current[idx] = el}
+                                        ref={(el) =>
+                                            (resultRefs.current[idx] = el)
+                                        }
                                         onClick={() => {
                                             onSelectPlace(place);
                                             setIsSearchOpen(false);
                                         }}
                                         className={`w-full text-left px-6 py-3 hover:bg-slate-700/80 text-slate-200 transition-colors ${idx === highlightedIndex ? "bg-slate-700/80" : ""}`}
-                                        style={{ fontWeight: idx === highlightedIndex ? "bold" : "normal" }}
+                                        style={{
+                                            fontWeight:
+                                                idx === highlightedIndex
+                                                    ? "bold"
+                                                    : "normal",
+                                        }}
                                     >
-                                        <span className="block font-semibold">{place.name}</span>
-                                        <span className="block text-xs text-slate-400">{place.province_name || place.province || "Unknown Province"}</span>
+                                        <span className="block font-semibold">
+                                            {place.name}
+                                        </span>
+                                        <span className="block text-xs text-slate-400">
+                                            {mapMode === "province"
+                                                ? place.region_name ||
+                                                  "Unknown Region"
+                                                : place.province_name ||
+                                                  place.province ||
+                                                  "Unknown Province"}
+                                        </span>
                                     </button>
                                 ))}
                             </div>

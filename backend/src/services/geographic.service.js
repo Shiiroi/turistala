@@ -73,7 +73,10 @@ export const getRegions = async () => {
 
 export const getProvinces = async () => {
     const res = await connectDB.query(
-        "SELECT * FROM provinces ORDER BY id ASC",
+        `SELECT p.*, r.name AS region_name, r.code AS region_code
+         FROM provinces p
+         LEFT JOIN regions r ON p.region_id = r.id
+         ORDER BY p.id ASC`,
     );
 
     // Parse geo_json string into an object, similar to municipalities

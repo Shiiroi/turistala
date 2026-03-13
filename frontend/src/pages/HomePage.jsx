@@ -149,7 +149,7 @@ const HomePage = () => {
                             hideMenu={!!selectedTown}
                             mapMode={mapMode}
                             mapData={mapData}
-                            onSelectPlace={place => {
+                            onSelectPlace={(place) => {
                                 setSelectedTown(place);
                                 // Optionally, you can also setActiveTown(place.name) if you want the HUD to update immediately
                             }}
