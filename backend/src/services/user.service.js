@@ -5,7 +5,7 @@ import { connectDB } from "../db/db.js";
  */
 export const getUserProfile = async (userId) => {
     const query = `
-        SELECT id, map_color
+        SELECT id, map_color, username, email 
         FROM users
         WHERE id = $1
     `;

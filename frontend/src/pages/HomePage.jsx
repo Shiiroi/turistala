@@ -12,13 +12,12 @@ import {
 } from "../slices/userApiSlice";
 import { Loader } from "../components/Loader";
 import MunicipalityDetails from "../components/MunicipalityDetails";
+import { useSelector } from "react-redux";
+import TopRightMenu from "../components/TopRightMenu";
+import { toast } from "react-hot-toast";
 
-/**
- * Primary dashboard view integrating the interactive geographic heatmap and
- * context-sensitive sidebar widgets. Retrieves layout definitions, parses statistical
- * metadata for spatial shading overlays, and coordinates user preference sync state.
- */
 const HomePage = () => {
+    const token = useSelector((state) => state.auth.token);
     const [mapMode, setMapMode] = useState("municity"); // 'municity' or 'province'
 
     const {
@@ -43,9 +42,13 @@ const HomePage = () => {
 
     const [isColorMenuOpen, setIsColorMenuOpen] = useState(false);
 
-    const { data: userProfileData } = useGetUserProfileQuery();
+    const { data: userProfileData } = useGetUserProfileQuery(undefined, {
+        skip: !token,
+    });
     const [updateMapColor] = useUpdateMapColorMutation();
-    const { data: userGoalsData } = useGetUserGoalsQuery();
+    const { data: userGoalsData } = useGetUserGoalsQuery(undefined, {
+        skip: !token,
+    });
 
     // Derive base color from user profile, using local state for optimistic updates
     const [localColor, setLocalColor] = useState(null);
@@ -55,15 +58,19 @@ const HomePage = () => {
     /**
      * Propagates visual color shift to local state while triggering
      * an asynchronous server synchronization request.
-     *
-     * @param {string} colorHex - The target hexadecimal configuration.
      */
     const handleColorChange = async (colorHex) => {
+        if (!token) {
+            toast.error("Sign in to save colorful maps!");
+            return;
+        }
+
         setLocalColor(colorHex);
         try {
             await updateMapColor(colorHex).unwrap();
         } catch (error) {
             console.error("Failed to save map color", error);
+            toast.error("Failed to save map color");
         }
     };
 
@@ -99,6 +106,16 @@ const HomePage = () => {
         return stats;
     }, [userGoalsData, mapMode, municipalities]);
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setSelectedTown(null); // Closes the sidebar
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
     return (
         <div className="relative w-full h-screen bg-slate-900">
             {isLoading ? (
@@ -126,10 +143,22 @@ const HomePage = () => {
                             )}
                         </div>
 
+                        {/* --- INJECT THE TOP RIGHT MENU HERE --- */}
+                        <TopRightMenu
+                            userProfileData={userProfileData}
+                            hideMenu={!!selectedTown}
+                            mapMode={mapMode}
+                            mapData={mapData}
+                            onSelectPlace={place => {
+                                setSelectedTown(place);
+                                // Optionally, you can also setActiveTown(place.name) if you want the HUD to update immediately
+                            }}
+                        />
+
                         <div className="absolute bottom-10 left-10 z-[1000] flex flex-col gap-2 pointer-events-auto">
                             <div className="relative w-fit flex flex-col justify-end">
                                 <div
-                                    className={`absolute bottom-full left-0 mb-2 bg-slate-800/90 backdrop-blur p-4 rounded-xl border border-slate-700 shadow-xl transition-all duration-300 origin-bottom-left ${
+                                    className={`absolute bottom-full left-0 mb-3 bg-slate-800/90 backdrop-blur p-3 rounded-xl border border-slate-700 shadow-xl transition-all duration-300 origin-bottom-left w-max ${
                                         isColorMenuOpen
                                             ? "opacity-100 scale-100 visible"
                                             : "opacity-0 scale-95 invisible"

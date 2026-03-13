@@ -9,16 +9,22 @@ import {
 } from "../slices/goalApiSlice";
 import { useGetMunicipalitiesQuery } from "../slices/geogSlice";
 import JournalModal from "./JournalModal";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function MunicipalityDetails({ town, onClose, mapMode }) {
+    const user = useSelector((state) => state.auth.user);
+
     const { data: municipalities = [] } = useGetMunicipalitiesQuery();
 
     // Goals and states
     const { data: response, isLoading: loadingJournals } =
-        useGetJournalsByPlaceQuery(town.id);
+        useGetJournalsByPlaceQuery(town.id, { skip: !user || !town?.id });
     const journals = response?.data || [];
 
-    const { data: goalsResponse } = useGetUserGoalsQuery();
+    const { data: goalsResponse } = useGetUserGoalsQuery(undefined, {
+        skip: !user,
+    });
     const goals = goalsResponse?.data || [];
 
     // Get places added in this area (municipality or province)
@@ -32,8 +38,7 @@ export default function MunicipalityDetails({ town, onClose, mapMode }) {
 
     const [addGoal, { isLoading: isAdding }] = useAddUserGoalMutation();
     const [removeGoal, { isLoading: isRemoving }] = useRemoveUserGoalMutation();
-    const [updateGoalStatus, { isLoading: isUpdatingStatus }] =
-        useUpdateUserGoalStatusMutation();
+    const [updateGoalStatus] = useUpdateUserGoalStatusMutation();
 
     const [newPlaceName, setNewPlaceName] = useState("");
     const [selectedMunicipalityId, setSelectedMunicipalityId] = useState("");
@@ -66,6 +71,11 @@ export default function MunicipalityDetails({ town, onClose, mapMode }) {
 
     const handleAddPlace = async (e) => {
         e.preventDefault();
+
+        if (!user) {
+            toast.error("You must be logged in to add destinations!");
+            return;
+        }
         if (!newPlaceName.trim()) return;
 
         let targetMunicityId = town.id;
@@ -95,6 +105,11 @@ export default function MunicipalityDetails({ town, onClose, mapMode }) {
     };
 
     const toggleVisitedStatus = async (goal) => {
+        if (!user) {
+            toast.error("You must be logged in to modify status!");
+            return;
+        }
+
         document.body.style.cursor = "wait";
         setUpdatingGoalId(goal.place_id);
         try {
@@ -117,6 +132,10 @@ export default function MunicipalityDetails({ town, onClose, mapMode }) {
     };
 
     const handleRemovePlace = async (goal) => {
+        if (!user) {
+            toast.error("You must be logged in to modify destinations!");
+            return;
+        }
         setGoalToDelete(goal);
     };
 

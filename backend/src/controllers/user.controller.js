@@ -3,23 +3,23 @@ import {
     updateUserMapColor,
 } from "../services/user.service.js";
 
-const HARDCODED_USER_ID = "00000000-0000-0000-0000-000000000000";
-
 /**
  * @desc   Get current user profile
  * @route  GET /api/users/profile
- * @access Public
+ * @access Private
  */
 export const getProfile = async (req, res) => {
     try {
-        const profile = await getUserProfile(HARDCODED_USER_ID);
+        const userId = req.user.id;
+        const profile = await getUserProfile(userId);
 
         if (!profile) {
             return res.status(200).json({
                 success: true,
-                data: { id: HARDCODED_USER_ID, map_color: "#ec4899" },
+                data: { id: userId, map_color: "#ec4899" },
             });
         }
+
         res.status(200).json({ success: true, data: profile });
     } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -30,12 +30,11 @@ export const getProfile = async (req, res) => {
 /**
  * @desc   Update user color
  * @route  PATCH /api/users/map-color
- * @access Public
+ * @access Private
  */
 export const updateMapColor = async (req, res) => {
     try {
         const { map_color } = req.body;
-
         if (!map_color) {
             return res.status(400).json({
                 success: false,
@@ -43,10 +42,16 @@ export const updateMapColor = async (req, res) => {
             });
         }
 
-        const updatedProfile = await updateUserMapColor(
-            HARDCODED_USER_ID,
-            map_color,
-        );
+        const userId = req.user.id;
+        const updatedProfile = await updateUserMapColor(userId, map_color);
+
+        if (!updatedProfile) {
+            return res.status(404).json({
+                success: false,
+                message: "User profile not found in public.users",
+            });
+        }
+
         res.status(200).json({ success: true, data: updatedProfile });
     } catch (error) {
         console.error("Error updating map color:", error);

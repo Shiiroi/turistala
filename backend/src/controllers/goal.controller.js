@@ -22,7 +22,8 @@ export const addUserGoal = async (req, res) => {
                 message: "Municipality ID and name are required",
             });
         }
-        const newGoal = await addGoal(HARDCODED_USER_ID, municityId, name);
+        const userId = req.user.id;
+        const newGoal = await addGoal(userId, municityId, name);
         res.status(201).json({ success: true, data: newGoal });
     } catch (error) {
         console.error("Error adding goal:", error);
@@ -40,7 +41,8 @@ export const addUserGoal = async (req, res) => {
  */
 export const getUserGoals = async (req, res) => {
     try {
-        const goals = await getGoals(HARDCODED_USER_ID);
+        const userId = req.user.id;
+        const goals = await getGoals(userId);
         res.status(200).json({ success: true, data: goals });
     } catch (error) {
         console.error("Error fetching goals:", error);
@@ -55,7 +57,8 @@ export const getUserGoals = async (req, res) => {
  */
 export const getUserGoalProgress = async (req, res) => {
     try {
-        const progress = await getGoalProgress(HARDCODED_USER_ID);
+        const userId = req.user.id;
+        const progress = await getGoalProgress(userId);
         res.status(200).json({ success: true, data: progress });
     } catch (error) {
         console.error("Error fetching goal progress:", error);
@@ -80,11 +83,8 @@ export const updateUserGoalStatus = async (req, res) => {
             });
         }
 
-        const updatedGoal = await updateGoalStatus(
-            HARDCODED_USER_ID,
-            placeId,
-            isVisited,
-        );
+        const userId = req.user.id;
+        const updatedGoal = await updateGoalStatus(userId, placeId, isVisited);
         res.status(200).json({ success: true, data: updatedGoal });
     } catch (error) {
         if (error.message === "Goal not found.") {
@@ -111,7 +111,10 @@ export const removeUserGoal = async (req, res) => {
                 message: "Place ID is required",
             });
         }
-        await removeGoal(HARDCODED_USER_ID, placeId);
+
+        const userId = req.user.id;
+        await removeGoal(userId, placeId);
+
         res.status(200).json({
             success: true,
             message: "Goal removed successfully",

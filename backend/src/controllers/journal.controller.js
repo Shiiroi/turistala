@@ -5,8 +5,6 @@ import {
     getJournalsByPlace,
 } from "../services/journal.service.js";
 
-const HARDCODED_USER_ID = "00000000-0000-0000-0000-000000000000";
-
 /**
  * @desc   Add a new journal entry
  * @route  POST /api/journals
@@ -22,8 +20,9 @@ export const addJournalEntry = async (req, res) => {
             });
         }
 
+        const userId = req.user.id;
         const newJournal = await addJournal(
-            HARDCODED_USER_ID,
+            userId,
             municityId,
             name,
             title,
@@ -51,9 +50,10 @@ export const editJournalEntry = async (req, res) => {
     try {
         const { journalId } = req.params;
         const { title, notes, photos } = req.body;
+        const userId = req.user.id;
 
         const updatedJournal = await editJournal(
-            HARDCODED_USER_ID,
+            userId,
             journalId,
             title,
             notes,
@@ -79,7 +79,9 @@ export const editJournalEntry = async (req, res) => {
 export const deleteJournalEntry = async (req, res) => {
     try {
         const { journalId } = req.params;
-        await deleteJournal(HARDCODED_USER_ID, journalId);
+        const userId = req.user.id;
+
+        await deleteJournal(userId, journalId);
         res.status(200).json({
             success: true,
             message: "Journal deleted successfully",
@@ -103,11 +105,9 @@ export const deleteJournalEntry = async (req, res) => {
 export const getJournalEntriesByPlace = async (req, res) => {
     try {
         const { municityId } = req.params;
-        const journals = await getJournalsByPlace(
-            HARDCODED_USER_ID,
-            municityId,
-        );
-        res.status(200).json({ success: true, data: journals });
+        const userId = req.user.id;
+        const entries = await getJournalsByPlace(userId, municityId);
+        res.status(200).json({ success: true, data: entries });
     } catch (error) {
         console.error("Error fetching journals:", error);
         res.status(500).json({ success: false, message: "Server error" });

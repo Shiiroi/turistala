@@ -1,4 +1,5 @@
 import express from "express";
+import { protect } from "../middleware/authMiddleware.js"; // <-- 1. ADD THIS IMPORT
 import {
     addUserGoal,
     getUserGoals,
@@ -8,6 +9,8 @@ import {
 } from "../controllers/goal.controller.js";
 
 const router = express.Router();
+
+router.use(protect);
 
 router.post("/", addUserGoal);
 router.get("/", getUserGoals);

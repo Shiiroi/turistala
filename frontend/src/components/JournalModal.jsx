@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import JournalEntryForm from "./JournalEntryForm";
 import { useDeleteJournalEntryMutation } from "../slices/journalApiSlice";
 import { supabase } from "../supabaseClient";
+import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
 export default function JournalModal({
@@ -10,6 +11,8 @@ export default function JournalModal({
     loadingJournals,
     onClose,
 }) {
+    const user = useSelector((state) => state.auth.user);
+
     const [isAdding, setIsAdding] = useState(false);
     const [editingJournal, setEditingJournal] = useState(null);
     const [viewerImages, setViewerImages] = useState(null);
@@ -24,11 +27,19 @@ export default function JournalModal({
     );
 
     const handleEdit = (journal) => {
+        if (!user) {
+            toast.error("You must be logged in to edit journals!");
+            return;
+        }
         setEditingJournal(journal);
         setIsAdding(true);
     };
 
     const handleDeleteClick = (journal) => {
+        if (!user) {
+            toast.error("You must be logged in to delete journals!");
+            return;
+        }
         setJournalToDelete(journal);
     };
 
@@ -176,7 +187,15 @@ export default function JournalModal({
                                     Entries
                                 </h3>
                                 <button
-                                    onClick={() => setIsAdding(true)}
+                                    onClick={() => {
+                                        if (!user) {
+                                            toast.error(
+                                                "You must be logged in to create journals!",
+                                            );
+                                            return;
+                                        }
+                                        setIsAdding(true);
+                                    }}
                                     className="bg-teal-500 hover:bg-teal-400 text-slate-900 px-4 py-2 rounded-lg font-bold transition-colors text-sm"
                                 >
                                     + Add New Entry

@@ -1,15 +1,18 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import { Toaster } from "react-hot-toast";
+import AuthPage from "./pages/AuthPage";
+import AuthProvider from "./components/AuthProvider";
 
 function App() {
     return (
-        <>
-            <Toaster
-                position="bottom-right"
-                containerStyle={{ zIndex: 999999 }}
-            />
-            <HomePage />
-        </>
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/login" element={<AuthPage />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
     );
 }
 

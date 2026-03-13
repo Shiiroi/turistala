@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { protect } from "../middleware/authMiddleware.js";
 import {
     addJournalEntry,
     editJournalEntry,
@@ -7,6 +8,8 @@ import {
 } from "../controllers/journal.controller.js";
 
 const router = Router();
+
+router.use(protect);
 
 // Matches: POST /api/journals
 router.route("/").post(addJournalEntry);
