@@ -141,7 +141,7 @@ async function seedTable<T>(tableName: string, fileName: string, mapper: (row: a
 
     for (let i = 0; i < records.length; i += batchSize) {
         const batch = records.slice(i, i + batchSize);
-        const { error } = await supabase.from(tableName).insert(batch);
+        const { error } = await supabase.from(tableName).insert(batch as never);
         if (error) {
             console.error(`\n❌ Error inserting batch at index ${i} (rows ${i + 1}–${Math.min(i + batchSize, records.length)}):`);
             console.error(`   Message: ${error.message}`);

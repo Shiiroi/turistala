@@ -1,11 +1,11 @@
-import type { GeoJSON } from "geojson";
+import type { Geometry } from "geojson";
 
 export interface ProvinceGeoJSON {
     id: number;
     code: string;
     name: string;
     region_id: number;
-    geometry: GeoJSON.Geometry;
+    geometry: Geometry;
 }
 
 export interface MunicityGeoJSON {
@@ -15,7 +15,7 @@ export interface MunicityGeoJSON {
     province_id: number | null;
     region_id: number | null;
     type: "city" | "municipality";
-    geometry: GeoJSON.Geometry;
+    geometry: Geometry;
 }
 
 /** Municity metadata only (no geometry) — fast to load */
@@ -32,5 +32,5 @@ export interface Region {
     id: number;
     code: string;
     name: string;
-    geometry: GeoJSON.Geometry;
+    geometry: Geometry;
 }

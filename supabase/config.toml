@@ -117,6 +117,11 @@ enabled = true
 file_size_limit = "50MiB"
 
 # Uncomment to configure local storage buckets
+[storage.buckets.geo]
+public = true
+file_size_limit = "50MiB"
+allowed_mime_types = ["application/json", "application/geo+json"]
+
 # [storage.buckets.images]
 # public = false
 # file_size_limit = "50MiB"

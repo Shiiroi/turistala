@@ -1,5 +1,4 @@
 import { supabase } from "./supabaseClient";
-import type { GeoJSON } from "geojson";
 import type { ProvinceGeoJSON, MunicityGeoJSON, Region } from "../types/geography";
 
 interface RawRegion {

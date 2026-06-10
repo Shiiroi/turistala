@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProvinces, fetchMunicitiesMeta, fetchMunicitiesGeometry, fetchRegions } from "../services/mapApi";
+import type { MapMode } from "../../homepage/types";
 import type { ProvinceGeoJSON, MunicityGeoJSON, MunicityMeta, Region } from "../types";
 
 interface UseMapLayersReturn {
@@ -8,30 +10,18 @@ interface UseMapLayersReturn {
     municityMeta: MunicityMeta[];
     regions: Region[];
     loading: boolean;
+    municitiesLoading: boolean;
+    municitiesLoadProgress: number | null;
     error: Error | null;
 }
 
-export function useMapLayers(): UseMapLayersReturn {
+export function useMapLayers(mapMode: MapMode): UseMapLayersReturn {
+    const [loadProgress, setLoadProgress] = useState<number | null>(null);
+
     const provincesQuery = useQuery<ProvinceGeoJSON[]>({
         queryKey: ["provinces"],
         queryFn: fetchProvinces,
         staleTime: 15 * 60 * 1000,
-    });
-
-    // Load lightweight metadata first (no geometry) — fast, won't timeout
-    const municityMetaQuery = useQuery<MunicityMeta[]>({
-        queryKey: ["municities", "meta"],
-        queryFn: fetchMunicitiesMeta,
-        staleTime: 20 * 60 * 1000,
-    });
-
-    // Full geometry — loaded on mount alongside everything else, cached for fast tab switching
-    const municitiesGeometryQuery = useQuery<MunicityGeoJSON[]>({
-        queryKey: ["municities", "geometry"],
-        queryFn: fetchMunicitiesGeometry,
-        staleTime: 20 * 60 * 1000,
-        gcTime: 30 * 60 * 1000,
-        retry: false, // don't retry — if geometry fails, user can retry manually
     });
 
     const regionsQuery = useQuery<Region[]>({
@@ -40,8 +30,39 @@ export function useMapLayers(): UseMapLayersReturn {
         staleTime: 15 * 60 * 1000,
     });
 
-    const loading = provincesQuery.isLoading || municityMetaQuery.isLoading || regionsQuery.isLoading || municitiesGeometryQuery.isFetching;
-    const error = provincesQuery.error ?? municityMetaQuery.error ?? regionsQuery.error ?? municitiesGeometryQuery.error;
+    const mapLayersReady = regionsQuery.isSuccess && provincesQuery.isSuccess;
+
+    const municityMetaQuery = useQuery<MunicityMeta[]>({
+        queryKey: ["municities", "meta"],
+        queryFn: fetchMunicitiesMeta,
+        staleTime: 20 * 60 * 1000,
+        enabled: mapLayersReady,
+    });
+
+    const municitiesGeometryQuery = useQuery<MunicityGeoJSON[]>({
+        queryKey: ["municities", "geometry"],
+        queryFn: () =>
+            fetchMunicitiesGeometry((loaded) => {
+                setLoadProgress(loaded);
+            }),
+        staleTime: 20 * 60 * 1000,
+        gcTime: 30 * 60 * 1000,
+        enabled: mapMode === "municipality",
+        retry: 1,
+    });
+
+    const loading = provincesQuery.isLoading || regionsQuery.isLoading;
+
+    const municitiesLoading = municitiesGeometryQuery.isFetching && !municitiesGeometryQuery.data;
+
+    const municitiesLoadProgress =
+        municitiesLoading && loadProgress != null ? loadProgress : null;
+
+    const error =
+        provincesQuery.error ??
+        municityMetaQuery.error ??
+        regionsQuery.error ??
+        (mapMode === "municipality" ? municitiesGeometryQuery.error : null);
 
     return {
         provinces: provincesQuery.data ?? [],
@@ -49,20 +70,8 @@ export function useMapLayers(): UseMapLayersReturn {
         municityMeta: municityMetaQuery.data ?? [],
         regions: regionsQuery.data ?? [],
         loading,
+        municitiesLoading,
+        municitiesLoadProgress,
         error: error as Error | null,
     };
-}
-
-export function useProvinces() {
-    return useQuery<ProvinceGeoJSON[]>({
-        queryKey: ["provinces"],
-        queryFn: fetchProvinces,
-    });
-}
-
-export function useMunicities() {
-    return useQuery<MunicityGeoJSON[]>({
-        queryKey: ["municities"],
-        queryFn: fetchMunicitiesGeometry,
-    });
 }

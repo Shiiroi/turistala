@@ -7,15 +7,28 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export function Input({ label, style, ...props }: InputProps) {
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {label && <label style={{ fontSize: 13, fontWeight: 500, color: "#4a5568" }}>{label}</label>}
+            {label && (
+                <label
+                    style={{
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: "var(--text-muted)",
+                        fontFamily: "var(--font-mono)",
+                    }}
+                >
+                    {label}
+                </label>
+            )}
             <input
                 style={{
                     padding: "8px 12px",
                     borderRadius: 6,
-                    border: "1px solid #e2e8f0",
+                    border: "1px solid var(--border)",
                     fontSize: 14,
                     outline: "none",
-                    transition: "border-color 0.2s",
+                    background: "var(--surface)",
+                    color: "var(--text-primary)",
+                    fontFamily: "var(--font-body)",
                     ...style,
                 }}
                 {...props}
