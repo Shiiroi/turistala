@@ -8,7 +8,7 @@ import { DetailPanel } from "../features/homepage/components/DetailPanel";
 import { municityToDivision, useMapSelection } from "../features/homepage/hooks/useMapSelection";
 import { useTravelStore } from "../features/travel/hooks/useTravelStore";
 import { useProgressHeatmapColors } from "../features/travel/hooks/useProgressHeatmapColors";
-import { DEFAULT_MAP_ACCENT } from "../features/travel/hooks/useMockHeatmapData";
+import { useMapAccentColor } from "../features/profile/hooks/useMapAccentColor";
 import { getDefaultViewTab, type ExploreViewTab } from "../features/homepage/components/DivisionExploreSection";
 import { DemoBanner, ImportDemoModal } from "../features/auth/components/ImportDemoModal";
 import { useDemoImportPrompt } from "../features/auth/hooks/useDemoImportPrompt";
@@ -39,7 +39,7 @@ export default function HomePage() {
     const importPrompt = useDemoImportPrompt();
     const [sidebarExploreViewTab, setSidebarExploreViewTab] = useState<ExploreViewTab>("provinces");
     const [mapProgressBy, setMapProgressBy] = useState<ExploreViewTab>("provinces");
-    const [mapAccentColor, setMapAccentColor] = useState(DEFAULT_MAP_ACCENT);
+    const { mapAccentColor, onMapAccentColorChange } = useMapAccentColor();
 
     useEffect(() => {
         if (selectedDivision) {
@@ -136,7 +136,7 @@ export default function HomePage() {
                             mapProgressBy={mapProgressBy}
                             onMapProgressByChange={setMapProgressBy}
                             mapAccentColor={mapAccentColor}
-                            onMapAccentColorChange={setMapAccentColor}
+                            onMapAccentColorChange={onMapAccentColorChange}
                         />
                     </>
                 }
