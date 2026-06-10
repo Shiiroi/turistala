@@ -4,6 +4,8 @@ import { MapOverlayCard } from "../../../components/ui/MapOverlayCard";
 import { cn } from "../../../lib/cn";
 import type { Division, MapMode } from "../../homepage/types";
 import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
+import type { MunicityMeta, ProvinceGeoJSON, Region } from "../types";
+import type { TravelStore } from "../../travel/types";
 import { HoverInfoCard } from "./HoverInfoCard";
 import { MapToolbar } from "./MapToolbar";
 import { MapToolsPanel } from "./MapToolsPanel";
@@ -19,6 +21,11 @@ interface MapOverlaysProps {
     onMapProgressByChange: (tab: ExploreViewTab) => void;
     mapAccentColor: string;
     onMapAccentColorChange: (color: string) => void;
+    travelStore: TravelStore;
+    regions: Region[];
+    provinces: ProvinceGeoJSON[];
+    municityMeta: MunicityMeta[];
+    onViewOnMap: (division: Division, mapMode: MapMode) => void;
 }
 
 export function MapOverlays({
@@ -32,13 +39,25 @@ export function MapOverlays({
     onMapProgressByChange,
     mapAccentColor,
     onMapAccentColorChange,
+    travelStore,
+    regions,
+    provinces,
+    municityMeta,
+    onViewOnMap,
 }: MapOverlaysProps) {
     const [toolsOpen, setToolsOpen] = useState(false);
 
     return (
         <>
             <HoverInfoCard hoveredDivision={hoveredDivision} />
-            <MapToolbar onSearchClick={onSearchClick} />
+            <MapToolbar
+                onSearchClick={onSearchClick}
+                travelStore={travelStore}
+                regions={regions}
+                provinces={provinces}
+                municityMeta={municityMeta}
+                onViewOnMap={onViewOnMap}
+            />
             <div
                 className={cn(
                     "absolute bottom-4 left-4 z-[1000] flex flex-col-reverse items-start gap-2",

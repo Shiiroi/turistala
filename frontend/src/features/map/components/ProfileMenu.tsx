@@ -13,18 +13,34 @@ import {
     getInitials,
 } from "../../profile/components/AvatarEditor";
 import { ImportDemoModal } from "../../auth/components/ImportDemoModal";
+import { PassportModal } from "../../passport/components/PassportModal";
 import {
     clearDemoMode,
     clearImportDismissed,
     getDemoDataForImport,
     hasDemoData,
 } from "../../travel/demoStorage";
+import type { Division, MapMode } from "../../homepage/types";
+import type { MunicityMeta, ProvinceGeoJSON, Region } from "../types";
+import type { TravelStore } from "../../travel/types";
 
 interface ProfileMenuProps {
+    travelStore: TravelStore;
+    regions: Region[];
+    provinces: ProvinceGeoJSON[];
+    municityMeta: MunicityMeta[];
+    onViewOnMap: (division: Division, mapMode: MapMode) => void;
     onEditProfile?: () => void;
 }
 
-export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
+export function ProfileMenu({
+    travelStore,
+    regions,
+    provinces,
+    municityMeta,
+    onViewOnMap,
+    onEditProfile,
+}: ProfileMenuProps) {
     const navigate = useNavigate();
     const { data: session } = useAuthSession();
     const signOut = useSignOut();
@@ -40,6 +56,7 @@ export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
 
     const [open, setOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const [passportOpen, setPassportOpen] = useState(false);
     const [importOpen, setImportOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
@@ -65,6 +82,11 @@ export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
         document.addEventListener("mousedown", handleClick);
         return () => document.removeEventListener("mousedown", handleClick);
     }, []);
+
+    function openPassport() {
+        setOpen(false);
+        setPassportOpen(true);
+    }
 
     function openEdit() {
         if (isDemo) {
@@ -159,6 +181,9 @@ export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
                                 Edit Profile
                             </button>
                         )}
+                        <button type="button" className={menuItemClass} onClick={openPassport}>
+                            My Passport
+                        </button>
                         {showManualImport && (
                             <button type="button" className={menuItemClass} onClick={openManualImport}>
                                 Import demo from this device
@@ -205,6 +230,25 @@ export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
                     </Button>
                 </div>
             </Modal>
+
+            <PassportModal
+                isOpen={passportOpen}
+                onClose={() => setPassportOpen(false)}
+                username={username}
+                initials={initials}
+                avatarUrl={avatarUrl}
+                passportId={
+                    userId
+                        ? `PH-${userId.slice(0, 8).toUpperCase()}`
+                        : `DEMO-${Date.now().toString(36).slice(-6).toUpperCase()}`
+                }
+                isDemo={isDemo}
+                travelStore={travelStore}
+                regions={regions}
+                provinces={provinces}
+                municityMeta={municityMeta}
+                onViewOnMap={onViewOnMap}
+            />
 
             {userId && manualImportData && (
                 <ImportDemoModal

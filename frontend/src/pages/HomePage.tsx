@@ -6,6 +6,7 @@ import { useMapLayers } from "../features/map/hooks/useMapLayers";
 import { HomePageLayout } from "../features/homepage/components/HomePageLayout";
 import { DetailPanel } from "../features/homepage/components/DetailPanel";
 import { municityToDivision, useMapSelection } from "../features/homepage/hooks/useMapSelection";
+import type { Division, MapMode } from "../features/homepage/types";
 import { useTravelStore } from "../features/travel/hooks/useTravelStore";
 import { useProgressHeatmapColors } from "../features/travel/hooks/useProgressHeatmapColors";
 import { useMapAccentColor } from "../features/profile/hooks/useMapAccentColor";
@@ -86,6 +87,11 @@ export default function HomePage() {
         if (loaded) selectDivision(municityToDivision(loaded));
     }, [selectedDivision, municities, selectDivision]);
 
+    function handleViewOnMap(division: Division, mode: MapMode) {
+        setMapMode(mode);
+        selectDivision(division);
+    }
+
     if (loading || travelStore.isLoading) {
         return (
             <div className="flex h-screen w-screen items-center justify-center bg-parchment">
@@ -137,6 +143,11 @@ export default function HomePage() {
                             onMapProgressByChange={setMapProgressBy}
                             mapAccentColor={mapAccentColor}
                             onMapAccentColorChange={onMapAccentColorChange}
+                            travelStore={travelStore}
+                            regions={regions}
+                            provinces={provinces}
+                            municityMeta={municityMeta}
+                            onViewOnMap={handleViewOnMap}
                         />
                     </>
                 }

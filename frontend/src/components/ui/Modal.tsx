@@ -18,6 +18,7 @@ interface ModalProps {
     title?: string;
     subtitle?: string;
     size?: ModalSize;
+    zIndex?: number;
     /** @deprecated prefer size */
     maxWidth?: number | string;
     minHeight?: number | string;
@@ -31,6 +32,7 @@ export function Modal({
     title,
     subtitle,
     size = "md",
+    zIndex = 9999,
     maxWidth,
     minHeight,
     className,
@@ -47,7 +49,8 @@ export function Modal({
 
     return (
         <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-[rgba(44,36,22,0.45)] p-4"
+            className="fixed inset-0 flex items-center justify-center bg-[rgba(44,36,22,0.45)] p-4"
+            style={{ zIndex }}
             onClick={onClose}
         >
             <div
