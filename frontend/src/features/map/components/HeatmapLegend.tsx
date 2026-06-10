@@ -1,3 +1,5 @@
+import { Label } from "../../../components/ui/Label";
+import { cn } from "../../../lib/cn";
 import { buildHeatmapPalette } from "../../travel/hooks/useMockHeatmapData";
 
 interface HeatmapLegendProps {
@@ -10,13 +12,13 @@ export function HeatmapLegend({ accentColor, onAccentColorChange }: HeatmapLegen
 
     return (
         <>
-            <div className="label-mono map-tools-section__label">Heatmap</div>
-            <div className="map-tools-heatmap-row">
+            <Label className={cn("mb-1.5")}>Heatmap</Label>
+            <div className="flex items-center gap-0.5">
                 {palette.map((color, i) => (
                     <div
                         key={`${color}-${i}`}
                         title={`Level ${i}`}
-                        className="map-tools-heatmap-swatch"
+                        className="h-3 w-6 border border-border-light transition-[background-color] duration-150"
                         style={{
                             background: color,
                             borderRadius:
@@ -32,7 +34,7 @@ export function HeatmapLegend({ accentColor, onAccentColorChange }: HeatmapLegen
                     type="color"
                     value={accentColor}
                     title="Map accent color"
-                    className="map-tools-color-input"
+                    className="ml-2 size-7 cursor-pointer rounded border border-border bg-transparent p-0"
                     onInput={(e) => onAccentColorChange(e.currentTarget.value)}
                     onChange={(e) => onAccentColorChange(e.currentTarget.value)}
                 />

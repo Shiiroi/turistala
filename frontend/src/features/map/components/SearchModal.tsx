@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { Modal } from "../../../components/ui/Modal";
 import { Input } from "../../../components/ui/Input";
+import { Modal } from "../../../components/ui/Modal";
+import { cn } from "../../../lib/cn";
 import { municityMetaToDivision, municityToDivision } from "../../homepage/hooks/useMapSelection";
 import type { Division, MapMode } from "../../homepage/types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../types";
@@ -91,27 +92,18 @@ export function SearchModal({
                 onChange={(e) => setQuery(e.target.value)}
                 autoFocus
             />
-            <div style={{ marginTop: 12, maxHeight: 300, overflowY: "auto" }}>
+            <div className="mt-3 max-h-[300px] overflow-y-auto">
                 {results.length === 0 && query.trim() && (
-                    <p style={{ color: "var(--text-muted)", fontSize: 14 }}>No results found.</p>
+                    <p className="text-sm text-muted">No results found.</p>
                 )}
                 {results.map((item) => (
                     <button
                         key={`${item.level}-${item.id}`}
                         type="button"
                         onClick={() => handleSelect(item)}
-                        style={{
-                            display: "block",
-                            width: "100%",
-                            padding: "10px 12px",
-                            border: "none",
-                            borderBottom: "1px solid var(--border-light)",
-                            background: "transparent",
-                            textAlign: "left",
-                            cursor: "pointer",
-                            fontFamily: "var(--font-body)",
-                            fontSize: 14,
-                        }}
+                        className={cn(
+                            "block w-full cursor-pointer border-none border-b border-border-light bg-transparent px-3 py-2.5 text-left font-body text-sm text-primary",
+                        )}
                     >
                         {item.name}
                     </button>

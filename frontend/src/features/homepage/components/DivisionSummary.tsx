@@ -1,8 +1,12 @@
 import { X } from "lucide-react";
+import { CloseButton } from "../../../components/ui/CloseButton";
+import { Label } from "../../../components/ui/Label";
+import { PillTabs } from "../../../components/ui/PillTabs";
+import { cn } from "../../../lib/cn";
 import type { Division } from "../types";
 import { divisionLevelLabel } from "../types";
 import type { ExploreViewTab } from "./DivisionExploreSection";
-import { ExploreViewTabs, getAvailableViewTabs } from "./DivisionExploreSection";
+import { getAvailableViewTabs } from "./DivisionExploreSection";
 
 interface DivisionSummaryProps {
     division: Division;
@@ -15,6 +19,12 @@ interface DivisionSummaryProps {
     onViewTabChange?: (tab: ExploreViewTab) => void;
     onClose?: () => void;
 }
+
+const VIEW_TAB_LABELS: Record<ExploreViewTab, string> = {
+    provinces: "Provinces",
+    municipalities: "Municipalities",
+    places: "Places",
+};
 
 export function DivisionSummary({
     division,
@@ -35,102 +45,65 @@ export function DivisionSummary({
                 : "Municipality"
             : divisionLevelLabel(division.level);
 
+    const viewTabs =
+        viewTab != null && onViewTabChange ? getAvailableViewTabs(division.level) : [];
+
     return (
-        <div style={{ marginBottom: 20 }}>
-            <div className="division-summary__top-row">
-                <div className="label-mono">{typeLabel}</div>
+        <div className="mb-5">
+            <div className="flex items-center justify-between gap-2">
+                <Label>{typeLabel}</Label>
                 {onClose && (
-                    <button
-                        type="button"
+                    <CloseButton
                         onClick={onClose}
-                        aria-label="Close panel"
-                        className="modal-close"
+                        ariaLabel="Close panel"
+                        className="hover:bg-border-light"
                     >
                         <X size={20} strokeWidth={2} />
-                    </button>
+                    </CloseButton>
                 )}
             </div>
-            <h2
-                style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: 26,
-                    marginTop: 4,
-                    marginBottom: 4,
-                }}
-            >
-                {division.name}
-            </h2>
+            <h2 className="mb-1 mt-1 font-display text-[26px] text-primary">{division.name}</h2>
             {breadcrumb && (
-                <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 12 }}>
-                    {breadcrumb}
-                </p>
+                <p className="mb-3 text-[13px] text-muted">{breadcrumb}</p>
             )}
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
-                    gap: 8,
-                }}
-            >
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(80px,1fr))] gap-2">
                 {stats.map((s) => (
                     <div
                         key={s.label}
-                        style={{
-                            background: "var(--bg-parchment)",
-                            border: "1px solid var(--border-light)",
-                            borderRadius: 6,
-                            padding: "8px 10px",
-                            textAlign: "center",
-                        }}
+                        className="rounded-md border border-border-light bg-parchment px-2.5 py-2 text-center"
                     >
-                        <div
-                            style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: 18,
-                                fontWeight: 500,
-                                color: "var(--accent)",
-                            }}
-                        >
-                            {s.value}
-                        </div>
-                        <div className="label-mono" style={{ marginTop: 2 }}>
-                            {s.label}
-                        </div>
+                        <div className="font-mono text-lg font-medium text-accent">{s.value}</div>
+                        <Label className="mt-0.5">{s.label}</Label>
                     </div>
                 ))}
             </div>
 
-            {viewTab != null && onViewTabChange && (
-                <ExploreViewTabs
-                    tabs={getAvailableViewTabs(division.level)}
-                    active={viewTab}
+            {viewTabs.length > 1 && viewTab != null && onViewTabChange && (
+                <PillTabs
+                    value={viewTab}
+                    options={viewTabs.map((tab) => ({
+                        value: tab,
+                        label: VIEW_TAB_LABELS[tab],
+                    }))}
                     onChange={onViewTabChange}
+                    className="mb-2.5 mt-3.5"
                 />
             )}
 
             {progress != null && (
-                <div style={{ marginTop: 12 }}>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            marginBottom: 6,
-                            fontSize: 12,
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--text-muted)",
-                        }}
-                    >
+                <div className="mt-3">
+                    <div className="mb-1.5 flex justify-between font-mono text-xs text-muted">
                         <span>{progressLabel}</span>
                         <span>
                             {progress.visited}/{progress.total}
                         </span>
                     </div>
                     <div
-                        className="progress-bar"
+                        className="h-1.5 overflow-hidden rounded-full bg-border-light"
                         title={`${progress.visited} of ${progress.total} ${progressLabel}`}
                     >
                         <div
-                            className="progress-bar__fill"
+                            className="h-full rounded-full bg-gradient-to-r from-[var(--heatmap-2)] to-accent transition-[width] duration-300 ease-in-out"
                             style={{
                                 width:
                                     progress.total > 0

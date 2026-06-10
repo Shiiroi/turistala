@@ -1,10 +1,10 @@
 import type { MockPlace } from "../../travel/types";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import type { TravelStore } from "../../travel/types";
 import { JournalPreviewList } from "../../travel/components/JournalPreviewList";
 
 interface PanelJournalsViewProps {
     places: MockPlace[];
-    store: MockTravelStore;
+    store: TravelStore;
     onOpenJournal: (journalId: string, placeId: string) => void;
 }
 

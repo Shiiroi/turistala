@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "../../../lib/cn";
 
 interface HomePageLayoutProps {
     mapSection: ReactNode;
@@ -8,14 +9,30 @@ interface HomePageLayoutProps {
 
 export function HomePageLayout({ mapSection, detailPanel, panelOpen }: HomePageLayoutProps) {
     return (
-        <div className="home-layout">
-            <div className={`home-layout__map ${panelOpen ? "home-layout__map--panel-open" : ""}`}>
+        <div className="relative flex h-dvh w-screen overflow-hidden bg-parchment">
+            <div
+                className={cn(
+                    "relative flex-[1_1_100%] transition-[flex] duration-[250ms] ease-in-out",
+                    panelOpen && "md:flex-[0_0_62%] md:border-r md:border-border",
+                )}
+            >
                 {mapSection}
             </div>
             {panelOpen && (
                 <>
-                    <div className="home-layout__backdrop" aria-hidden />
-                    <aside className="home-layout__panel">{detailPanel}</aside>
+                    <div
+                        className="fixed inset-0 z-[900] hidden bg-[rgba(44,36,22,0.35)] max-md:block"
+                        aria-hidden
+                    />
+                    <aside
+                        className={cn(
+                            "overflow-y-auto bg-surface [-webkit-overflow-scrolling:touch]",
+                            "md:flex-[0_0_38%]",
+                            "max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-[901] max-md:w-full max-md:max-h-[88dvh] max-md:flex-none max-md:rounded-t-2xl max-md:border-t max-md:border-border max-md:shadow-[var(--shadow-lg)]",
+                        )}
+                    >
+                        {detailPanel}
+                    </aside>
                 </>
             )}
         </div>

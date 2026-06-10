@@ -1,10 +1,14 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../../../components/ui/Button";
+import { Label } from "../../../components/ui/Label";
+import { SegmentedControl } from "../../../components/ui/SegmentedControl";
+import { cn } from "../../../lib/cn";
+import { useSaveFeedback, useToast } from "../../../hooks/useToast";
 import { PlaceSearchCombobox } from "../../places/components/PlaceSearchCombobox";
 import type { OsmSearchResult } from "../../places/types";
 import type { PlaceStatus } from "../../travel/types";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import type { TravelStore } from "../../travel/types";
 import type { Division } from "../types";
 import { resolveProvinceId, resolveRegionId } from "../utils/divisionPlaces";
 import { fetchMunicitiesMetaByProvince } from "../../map/services/mapApi";
@@ -15,12 +19,15 @@ interface AddPlaceWizardProps {
     regions: Region[];
     provinces: ProvinceGeoJSON[];
     municityMeta: MunicityMeta[];
-    travelStore: MockTravelStore;
+    travelStore: TravelStore;
     existingOsmIds: Set<string>;
     onComplete: () => void;
     onCancel: () => void;
     hideHeading?: boolean;
 }
+
+const selectClassName =
+    "w-full rounded-lg border border-border bg-parchment px-3 py-2.5 font-body text-sm text-primary";
 
 export function AddPlaceWizard({
     contextDivision,
@@ -33,6 +40,8 @@ export function AddPlaceWizard({
     onCancel,
     hideHeading = false,
 }: AddPlaceWizardProps) {
+    const showSaved = useSaveFeedback();
+    const { error: toastError } = useToast();
     const regionId = resolveRegionId(contextDivision, provinces);
     const initialProvinceId = resolveProvinceId(contextDivision);
 
@@ -44,6 +53,7 @@ export function AddPlaceWizard({
     );
     const [pendingPlace, setPendingPlace] = useState<OsmSearchResult | null>(null);
     const [status, setStatus] = useState<PlaceStatus>("goal");
+    const [isSaving, setIsSaving] = useState(false);
 
     const regionProvinces = useMemo(
         () => (regionId != null ? provinces.filter((p) => p.region_id === regionId) : []),
@@ -76,55 +86,59 @@ export function AddPlaceWizard({
     const showProvinceStep = contextDivision.level === "region";
     const showMunicityStep = contextDivision.level === "region" || contextDivision.level === "province";
 
+    const selectedMunicityName = useMemo(() => {
+        if (municityId == null) return undefined;
+        return (
+            provinceMunicities.find((m) => m.id === municityId)?.name ??
+            municityMeta.find((m) => m.id === municityId)?.name
+        );
+    }, [municityId, provinceMunicities, municityMeta]);
+
     function handleOsmSelect(result: OsmSearchResult) {
         setPendingPlace(result);
     }
 
-    function handleConfirm() {
-        if (!pendingPlace || municityId == null) return;
+    async function handleConfirm() {
+        if (!pendingPlace || municityId == null || isSaving) return;
+        setIsSaving(true);
+        try {
+            const place = await Promise.resolve(
+                travelStore.addPlace({
+                    osm_id: pendingPlace.osm_id,
+                    name: pendingPlace.name,
+                    category: pendingPlace.category,
+                    municity_id: municityId,
+                    lat: pendingPlace.lat,
+                    lng: pendingPlace.lng,
+                }),
+            );
 
-        const place = travelStore.addPlace({
-            osm_id: pendingPlace.osm_id,
-            name: pendingPlace.name,
-            category: pendingPlace.category,
-            municity_id: municityId,
-            lat: pendingPlace.lat,
-            lng: pendingPlace.lng,
-        });
+            if (!travelStore.getPlaceStatus(place.id)) {
+                if (status === "goal") await Promise.resolve(travelStore.addAsGoal(place.id));
+                else await Promise.resolve(travelStore.addAsVisited(place.id));
+            }
 
-        if (!travelStore.getPlaceStatus(place.id)) {
-            if (status === "goal") travelStore.addAsGoal(place.id);
-            else travelStore.addAsVisited(place.id);
+            showSaved(travelStore.isDemo);
+            onComplete();
+        } catch {
+            toastError("Could not save place");
+        } finally {
+            setIsSaving(false);
         }
-
-        onComplete();
     }
 
     return (
         <div>
-            {!hideHeading && (
-                <div className="label-mono" style={{ marginBottom: 8 }}>
-                    Add a place
-                </div>
-            )}
+            {!hideHeading && <Label className="mb-2">Add a place</Label>}
             {breadcrumb && (
-                <p
-                    style={{
-                        fontSize: 13,
-                        color: "var(--text-muted)",
-                        marginBottom: 16,
-                        fontFamily: "var(--font-mono)",
-                    }}
-                >
-                    {breadcrumb}
-                </p>
+                <p className="mb-4 font-mono text-[13px] text-muted">{breadcrumb}</p>
             )}
 
             {showProvinceStep && (
-                <div style={{ marginBottom: 16 }}>
-                    <label className="label-mono" style={{ display: "block", marginBottom: 6 }}>
+                <div className="mb-4">
+                    <Label as="label" className="mb-1.5 block">
                         Province
-                    </label>
+                    </Label>
                     <select
                         value={provinceId ?? ""}
                         onChange={(e) => {
@@ -133,7 +147,7 @@ export function AddPlaceWizard({
                             setMunicityId(null);
                             setPendingPlace(null);
                         }}
-                        style={selectStyle}
+                        className={selectClassName}
                     >
                         <option value="">Select province…</option>
                         {regionProvinces.map((p) => (
@@ -146,10 +160,10 @@ export function AddPlaceWizard({
             )}
 
             {showMunicityStep && (
-                <div style={{ marginBottom: 16 }}>
-                    <label className="label-mono" style={{ display: "block", marginBottom: 6 }}>
+                <div className="mb-4">
+                    <Label as="label" className="mb-1.5 block">
                         Municipality / City
-                    </label>
+                    </Label>
                     <select
                         value={municityId ?? ""}
                         onChange={(e) => {
@@ -157,7 +171,7 @@ export function AddPlaceWizard({
                             setPendingPlace(null);
                         }}
                         disabled={showProvinceStep && provinceId == null}
-                        style={selectStyle}
+                        className={cn(selectClassName, "disabled:cursor-not-allowed disabled:opacity-50")}
                     >
                         <option value="">Select municipality…</option>
                         {provinceMunicities.map((m) => (
@@ -172,6 +186,7 @@ export function AddPlaceWizard({
             {municityId != null && !pendingPlace && (
                 <PlaceSearchCombobox
                     municityId={municityId}
+                    municityName={selectedMunicityName}
                     onSelect={handleOsmSelect}
                     existingOsmIds={existingOsmIds}
                     hideHeading
@@ -179,40 +194,21 @@ export function AddPlaceWizard({
             )}
 
             {pendingPlace && (
-                <div
-                    style={{
-                        background: "var(--bg-parchment)",
-                        border: "1px solid var(--border-light)",
-                        borderRadius: 8,
-                        padding: 14,
-                        marginBottom: 16,
-                    }}
-                >
-                    <div style={{ fontWeight: 600, marginBottom: 4 }}>{pendingPlace.name}</div>
-                    <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 12 }}>
-                        {pendingPlace.category}
-                    </div>
-                    <div className="label-mono" style={{ marginBottom: 6 }}>
-                        Save as
-                    </div>
-                    <div className="segmented-control" style={{ marginBottom: 12 }}>
-                        <button
-                            type="button"
-                            className={status === "goal" ? "active" : ""}
-                            onClick={() => setStatus("goal")}
-                        >
-                            Goal
-                        </button>
-                        <button
-                            type="button"
-                            className={status === "visited" ? "active" : ""}
-                            onClick={() => setStatus("visited")}
-                        >
-                            Visited
-                        </button>
-                    </div>
-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                        <Button size="sm" onClick={handleConfirm}>
+                <div className="mb-4 rounded-lg border border-border-light bg-parchment p-3.5">
+                    <div className="mb-1 font-semibold text-primary">{pendingPlace.name}</div>
+                    <div className="mb-3 text-xs text-muted">{pendingPlace.category}</div>
+                    <Label className="mb-1.5">Save as</Label>
+                    <SegmentedControl
+                        value={status}
+                        options={[
+                            { value: "goal", label: "Goal" },
+                            { value: "visited", label: "Visited" },
+                        ]}
+                        onChange={setStatus}
+                        className="mb-3"
+                    />
+                    <div className="flex flex-wrap gap-2">
+                        <Button size="sm" onClick={handleConfirm} loading={isSaving} disabled={isSaving}>
                             Save place
                         </Button>
                         <Button size="sm" variant="secondary" onClick={() => setPendingPlace(null)}>
@@ -222,19 +218,9 @@ export function AddPlaceWizard({
                 </div>
             )}
 
-            <Button variant="secondary" size="sm" onClick={onCancel} style={{ marginTop: 16 }}>
+            <Button variant="secondary" size="sm" onClick={onCancel} className="mt-4">
                 Cancel
             </Button>
         </div>
     );
 }
-
-const selectStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "10px 12px",
-    borderRadius: 8,
-    border: "1px solid var(--border)",
-    background: "var(--bg-parchment)",
-    fontFamily: "var(--font-body)",
-    fontSize: 14,
-};

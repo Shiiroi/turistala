@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { FaLayerGroup } from "react-icons/fa";
+import { MapOverlayCard } from "../../../components/ui/MapOverlayCard";
+import { cn } from "../../../lib/cn";
 import type { Division, MapMode } from "../../homepage/types";
 import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
 import { HoverInfoCard } from "./HoverInfoCard";
@@ -37,11 +39,20 @@ export function MapOverlays({
         <>
             <HoverInfoCard hoveredDivision={hoveredDivision} />
             <MapToolbar onSearchClick={onSearchClick} />
-            <div className="map-tools-anchor">
+            <div
+                className={cn(
+                    "absolute bottom-4 left-4 z-[1000] flex flex-col-reverse items-start gap-2",
+                )}
+            >
                 {!toolsOpen && (
                     <button
                         type="button"
-                        className="map-tools-toggle"
+                        className={cn(
+                            "inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[rgba(200,190,175,0.55)]",
+                            "bg-[rgba(250,246,238,0.94)] px-3 py-2 font-mono text-xs text-muted shadow-[0_2px_10px_rgba(44,36,22,0.06)] backdrop-blur-[10px]",
+                            "transition-[border-color,color,background] duration-150",
+                            "hover:border-[rgba(192,98,47,0.45)] hover:bg-[rgba(255,252,247,0.98)] hover:text-accent",
+                        )}
                         onClick={() => setToolsOpen(true)}
                         aria-expanded={false}
                         aria-label="Show map tools"
@@ -63,25 +74,18 @@ export function MapOverlays({
                     />
                 )}
             </div>
-            {municitiesLoading && (
-                <div
-                    className="map-overlay-card map-overlay-card--compact"
-                    style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        zIndex: 1000,
-                        pointerEvents: "none",
-                    }}
+            {mapMode === "municipality" && municitiesLoading && (
+                <MapOverlayCard
+                    compact
+                    className="pointer-events-none absolute left-1/2 top-1/2 z-[1000] -translate-x-1/2 -translate-y-1/2"
                 >
                     Loading municipalities…
                     {municitiesLoadProgress != null && (
-                        <span style={{ display: "block", fontSize: 12, marginTop: 4, opacity: 0.85 }}>
+                        <span className="mt-1 block text-xs opacity-85">
                             {municitiesLoadProgress} / 1642
                         </span>
                     )}
-                </div>
+                </MapOverlayCard>
             )}
         </>
     );

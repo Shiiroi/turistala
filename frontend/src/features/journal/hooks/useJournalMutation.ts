@@ -1,44 +1,59 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchJournalEntries, createJournalEntry, updateJournalEntry, deleteJournalEntry } from "../services/journalApi";
-import type { JournalEntry } from "../types";
+import {
+    fetchJournalEntries,
+    createJournalEntry,
+    updateJournalEntry,
+    deleteJournalEntry,
+} from "../services/journalApi";
 
 export function useJournalEntries(userId: string | undefined) {
-    return useQuery<JournalEntry[]>({
+    return useQuery({
         queryKey: ["journal-entries", userId],
         queryFn: () => fetchJournalEntries(userId!),
         enabled: !!userId,
     });
 }
 
-export function useCreateJournalEntry() {
+export function useCreateJournalEntry(userId: string) {
     const queryClient = useQueryClient();
-
     return useMutation({
-        mutationFn: (entry: Omit<JournalEntry, "id" | "created_at" | "updated_at">) => createJournalEntry(entry),
+        mutationFn: (entry: {
+            place_id: string;
+            title: string;
+            content: string;
+            visit_date: string;
+        }) => createJournalEntry(userId, entry),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["journal-entries"] });
+            queryClient.invalidateQueries({ queryKey: ["journal-entries", userId] });
+            queryClient.invalidateQueries({ queryKey: ["travel", userId] });
         },
     });
 }
 
-export function useUpdateJournalEntry() {
+export function useUpdateJournalEntry(userId: string) {
     const queryClient = useQueryClient();
-
     return useMutation({
-        mutationFn: ({ id, updates }: { id: number; updates: Partial<JournalEntry> }) => updateJournalEntry(id, updates),
+        mutationFn: ({
+            id,
+            updates,
+        }: {
+            id: string;
+            updates: Partial<{ title: string; content: string; visit_date: string }>;
+        }) => updateJournalEntry(userId, id, updates),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["journal-entries"] });
+            queryClient.invalidateQueries({ queryKey: ["journal-entries", userId] });
+            queryClient.invalidateQueries({ queryKey: ["travel", userId] });
         },
     });
 }
 
-export function useDeleteJournalEntry() {
+export function useDeleteJournalEntry(userId: string) {
     const queryClient = useQueryClient();
-
     return useMutation({
-        mutationFn: (id: number) => deleteJournalEntry(id),
+        mutationFn: (id: string) => deleteJournalEntry(userId, id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["journal-entries"] });
+            queryClient.invalidateQueries({ queryKey: ["journal-entries", userId] });
+            queryClient.invalidateQueries({ queryKey: ["travel", userId] });
         },
     });
 }

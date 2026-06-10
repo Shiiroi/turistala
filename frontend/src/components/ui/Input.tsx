@@ -1,36 +1,23 @@
 import type { InputHTMLAttributes } from "react";
+import { cn } from "../../lib/cn";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
 }
 
-export function Input({ label, style, ...props }: InputProps) {
+export function Input({ label, className, ...props }: InputProps) {
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        <div className="flex flex-col gap-1">
             {label && (
-                <label
-                    style={{
-                        fontSize: 13,
-                        fontWeight: 500,
-                        color: "var(--text-muted)",
-                        fontFamily: "var(--font-mono)",
-                    }}
-                >
+                <label className="font-mono text-[13px] font-medium text-muted">
                     {label}
                 </label>
             )}
             <input
-                style={{
-                    padding: "8px 12px",
-                    borderRadius: 6,
-                    border: "1px solid var(--border)",
-                    fontSize: 14,
-                    outline: "none",
-                    background: "var(--surface)",
-                    color: "var(--text-primary)",
-                    fontFamily: "var(--font-body)",
-                    ...style,
-                }}
+                className={cn(
+                    "rounded-md border border-border bg-surface px-3 py-2 font-body text-sm text-primary outline-none",
+                    className,
+                )}
                 {...props}
             />
         </div>

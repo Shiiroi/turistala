@@ -1,72 +1,110 @@
 import { BookOpen, MapPin, Plus } from "lucide-react";
+import { useState } from "react";
+import { Badge } from "../../../components/ui/Badge";
 import { Button } from "../../../components/ui/Button";
+import { PillTabs } from "../../../components/ui/PillTabs";
+import { useToast } from "../../../hooks/useToast";
 import type { MockPlace, PlaceStatus } from "../../travel/types";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import type { TravelStore } from "../../travel/types";
 
 interface PlaceCardProps {
     place: MockPlace;
     status: PlaceStatus;
-    store: MockTravelStore;
+    store: TravelStore;
     onNewJournal?: (placeId: string) => void;
 }
 
 export function PlaceCard({ place, status, store, onNewJournal }: PlaceCardProps) {
+    const { error: toastError } = useToast();
+    const [pendingAction, setPendingAction] = useState<"mark" | "remove" | "unmark" | null>(null);
     const goal = store.goals.find((g) => g.place_id === place.id && !g.is_visited);
     const journalCount = store.journals.filter((j) => j.place_id === place.id).length;
 
+    async function handleMarkVisited() {
+        if (!goal || pendingAction) return;
+        setPendingAction("mark");
+        try {
+            await Promise.resolve(store.markGoalVisited(goal.id));
+        } catch {
+            toastError("Could not update place");
+        } finally {
+            setPendingAction(null);
+        }
+    }
+
+    async function handleRemoveGoal() {
+        if (!goal || pendingAction) return;
+        setPendingAction("remove");
+        try {
+            await Promise.resolve(store.removeGoal(goal.id));
+        } catch {
+            toastError("Could not update place");
+        } finally {
+            setPendingAction(null);
+        }
+    }
+
+    async function handleUnmarkVisited() {
+        const v = store.visited.find((x) => x.place_id === place.id);
+        if (!v || pendingAction) return;
+        setPendingAction("unmark");
+        try {
+            await Promise.resolve(store.removeVisited(v.id));
+        } catch {
+            toastError("Could not update place");
+        } finally {
+            setPendingAction(null);
+        }
+    }
+
     return (
-        <div
-            style={{
-                background: "var(--bg-parchment)",
-                border: "1px solid var(--border-light)",
-                borderRadius: 8,
-                padding: 14,
-                marginBottom: 10,
-            }}
-        >
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 4 }}>
-                <MapPin size={14} style={{ flexShrink: 0, marginTop: 3, color: "var(--accent)" }} />
-                <div style={{ fontWeight: 500 }}>{place.name}</div>
+        <div className="mb-2.5 rounded-lg border border-border-light bg-parchment p-3.5">
+            <div className="mb-1 flex items-start gap-2">
+                <MapPin size={14} className="mt-0.5 shrink-0 text-accent" />
+                <div className="font-medium">{place.name}</div>
             </div>
             {place.category && (
-                <div className="badge" style={{ marginBottom: 8 }}>
-                    {place.category}
-                </div>
+                <Badge className="mb-2">{place.category}</Badge>
             )}
-            <span className="badge" style={{ marginBottom: 8, display: "inline-block" }}>
+            <Badge
+                variant={status === "visited" ? "visited" : "default"}
+                className="mb-2 inline-block"
+            >
                 {status === "goal" ? "Unvisited" : "Visited"}
-            </span>
+            </Badge>
 
             {status === "goal" && goal && (
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
-                    <Button size="sm" onClick={() => store.markGoalVisited(goal.id)}>
+                <div className="mt-2 flex flex-wrap gap-2">
+                    <Button
+                        size="sm"
+                        onClick={handleMarkVisited}
+                        loading={pendingAction === "mark"}
+                        disabled={pendingAction != null}
+                    >
                         Mark as visited
                     </Button>
-                    <Button size="sm" variant="secondary" onClick={() => store.removeGoal(goal.id)}>
+                    <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={handleRemoveGoal}
+                        loading={pendingAction === "remove"}
+                        disabled={pendingAction != null}
+                    >
                         Remove
                     </Button>
                 </div>
             )}
 
             {status === "visited" && (
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+                <div className="mt-2 flex flex-wrap gap-2">
                     {onNewJournal && (
                         <Button size="sm" onClick={() => onNewJournal(place.id)}>
-                            <Plus size={14} style={{ marginRight: 4, verticalAlign: "middle" }} />
+                            <Plus size={14} className="mr-1 inline align-middle" />
                             Journal
                         </Button>
                     )}
                     {journalCount > 0 && (
-                        <span
-                            style={{
-                                fontSize: 12,
-                                color: "var(--text-muted)",
-                                alignSelf: "center",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 4,
-                            }}
-                        >
+                        <span className="inline-flex items-center gap-1 self-center text-xs text-muted">
                             <BookOpen size={12} />
                             {journalCount} {journalCount === 1 ? "entry" : "entries"}
                         </span>
@@ -74,10 +112,9 @@ export function PlaceCard({ place, status, store, onNewJournal }: PlaceCardProps
                     <Button
                         size="sm"
                         variant="secondary"
-                        onClick={() => {
-                            const v = store.visited.find((x) => x.place_id === place.id);
-                            if (v) store.removeVisited(v.id);
-                        }}
+                        onClick={handleUnmarkVisited}
+                        loading={pendingAction === "unmark"}
+                        disabled={pendingAction != null}
                     >
                         Unmark visited
                     </Button>
@@ -92,7 +129,7 @@ export type PlaceFilterTab = "all" | "unvisited" | "visited";
 interface PlaceExploreSectionProps {
     divisionName: string;
     places: MockPlace[];
-    store: MockTravelStore;
+    store: TravelStore;
     filter: PlaceFilterTab;
     onFilterChange: (filter: PlaceFilterTab) => void;
     onNewJournal?: (placeId: string) => void;
@@ -128,24 +165,23 @@ export function PlaceExploreSection({
     ];
 
     return (
-        <div className="explore-section">
-            <div className="explore-section__header">
-                <div className="explore-section__title">Exploring {divisionName}</div>
+        <div className="mb-4">
+            <div className="mb-2.5 flex items-baseline justify-between gap-2">
+                <div className="font-display text-[17px] font-semibold">
+                    Exploring {divisionName}
+                </div>
             </div>
-            <div className="place-filter-tabs">
-                {tabs.map((tab) => (
-                    <button
-                        key={tab.id}
-                        type="button"
-                        className={filter === tab.id ? "active" : ""}
-                        onClick={() => onFilterChange(tab.id)}
-                    >
-                        {tab.label} ({tab.count})
-                    </button>
-                ))}
-            </div>
+            <PillTabs
+                value={filter}
+                onChange={onFilterChange}
+                className="mb-3"
+                options={tabs.map((tab) => ({
+                    value: tab.id,
+                    label: `${tab.label} (${tab.count})`,
+                }))}
+            />
             {filtered.length === 0 ? (
-                <div className="place-empty-hint">
+                <div className="rounded-lg border border-dashed border-border bg-parchment p-4 text-center text-[13px] italic text-muted">
                     No places added yet. Use Add a place above to start your list.
                 </div>
             ) : (

@@ -1,14 +1,19 @@
 import { useMemo, useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
 import { Button } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/Input";
+import { Label } from "../../../components/ui/Label";
 import { Modal } from "../../../components/ui/Modal";
-import type { MockJournal, MockPlace } from "../../travel/types";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import { cn } from "../../../lib/cn";
+import { useSaveFeedback, useToast } from "../../../hooks/useToast";
+import type { MockJournal, MockPlace, TravelStore } from "../../travel/types";
 import {
     JournalPhotoPicker,
-    localPhotosToStorePhotos,
+    localPhotosToJournalInput,
     type LocalPhoto,
 } from "./JournalPhotoPicker";
+import { useAuthSession } from "../../auth/hooks/useAuthSession";
+import { useUserStorageUsage } from "../../journal/hooks/useUserStorageUsage";
 
 const SIDEBAR_JOURNAL_LIMIT = 3;
 
@@ -20,7 +25,7 @@ interface JournalGroup {
 
 function buildJournalGroups(
     places: MockPlace[],
-    store: MockTravelStore,
+    store: TravelStore,
 ): JournalGroup[] {
     const placeIds = new Set(places.map((p) => p.id));
     const placeNameById = new Map(places.map((p) => [p.id, p.name]));
@@ -81,11 +86,11 @@ function JournalEntryList({
                 return (
                     <div key={group.placeId}>
                         {showHeader && (
-                            <div className="journal-group__header">
+                            <div className="mb-1.5 mt-3 flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.03em] text-muted first:mt-0">
                                 <MapPin size={12} />
                                 {group.placeName}
                                 {group.entries.length > 1 && (
-                                    <span style={{ opacity: 0.7 }}>
+                                    <span className="opacity-70">
                                         · {group.entries.length} entries
                                     </span>
                                 )}
@@ -95,16 +100,21 @@ function JournalEntryList({
                             <button
                                 key={j.id}
                                 type="button"
-                                className="journal-preview-card"
+                                className={cn(
+                                    "mb-2 block w-full cursor-pointer rounded-lg border border-border-light border-l-[3px] border-l-accent bg-parchment px-3.5 py-3 text-left font-body",
+                                    "transition-[border-color,box-shadow] duration-150 hover:border-border hover:shadow-[var(--shadow)]",
+                                )}
                                 onClick={() => onOpenJournal(j.id, j.place_id)}
                             >
-                                <div className="journal-preview-card__title">{j.title}</div>
-                                <div className="journal-preview-card__meta">
+                                <div className="mb-1 text-[15px] font-semibold">{j.title}</div>
+                                <div className="flex items-center gap-1.5 font-mono text-xs text-muted">
                                     <Calendar size={12} />
                                     <span>{j.visit_date}</span>
                                 </div>
                                 {j.content && (
-                                    <p className="journal-preview-card__excerpt">{j.content}</p>
+                                    <p className="mt-1.5 truncate text-[13px] text-muted">
+                                        {j.content}
+                                    </p>
                                 )}
                             </button>
                         ))}
@@ -117,7 +127,7 @@ function JournalEntryList({
 
 interface JournalPreviewListProps {
     places: MockPlace[];
-    store: MockTravelStore;
+    store: TravelStore;
     onOpenJournal: (journalId: string, placeId: string) => void;
     /** When true, show full list with no sidebar cap or see-all modal */
     showAll?: boolean;
@@ -135,14 +145,10 @@ export function JournalPreviewList({
     const limit = showAll ? undefined : SIDEBAR_JOURNAL_LIMIT;
 
     return (
-        <div style={{ marginBottom: 16 }}>
-            <div className="label-mono" style={{ marginBottom: 8 }}>
-                Journals
-            </div>
+        <div className="mb-4">
+            <Label className="mb-2">Journals</Label>
             {totalEntries === 0 ? (
-                <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
-                    No journal entries in this area yet.
-                </p>
+                <p className="text-[13px] text-muted">No journal entries in this area yet.</p>
             ) : (
                 <>
                     <JournalEntryList
@@ -153,7 +159,10 @@ export function JournalPreviewList({
                     {!showAll && totalEntries > SIDEBAR_JOURNAL_LIMIT && (
                         <button
                             type="button"
-                            className="journal-see-all-btn"
+                            className={cn(
+                                "mt-1 block w-full cursor-pointer rounded-lg border border-dashed border-border bg-transparent px-3 py-2 text-center font-body text-[13px] text-accent",
+                                "transition-[background,border-color] duration-150 hover:border-accent hover:bg-parchment",
+                            )}
                             onClick={() => setSeeAllOpen(true)}
                         >
                             See all ({totalEntries}) journals →
@@ -184,8 +193,8 @@ export function JournalPreviewList({
 
 interface QuickJournalFormProps {
     place: MockPlace;
-    store: MockTravelStore;
-    onCreated: (journalId: string) => void;
+    store: TravelStore;
+    onCreated: (journal: MockJournal) => void;
     onCancel: () => void;
     hideHeading?: boolean;
 }
@@ -197,75 +206,90 @@ export function QuickJournalForm({
     onCancel,
     hideHeading = false,
 }: QuickJournalFormProps) {
+    const showSaved = useSaveFeedback();
+    const { error: toastError } = useToast();
+    const { data: session } = useAuthSession();
+    const { data: storageBytesUsed = 0 } = useUserStorageUsage(
+        store.isDemo ? undefined : session?.user?.id,
+    );
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [visitDate, setVisitDate] = useState(new Date().toISOString().slice(0, 10));
     const [photos, setPhotos] = useState<LocalPhoto[]>([]);
+    const [isSaving, setIsSaving] = useState(false);
 
-    function handleSave() {
-        const j = store.createJournal({
-            place_id: place.id,
-            title,
-            content,
-            visit_date: visitDate,
-            photos: localPhotosToStorePhotos(photos),
-        });
-        onCreated(j.id);
+    async function handleSave() {
+        if (isSaving || !title.trim()) return;
+        setIsSaving(true);
+        try {
+            const j = await Promise.resolve(
+                store.createJournal({
+                    place_id: place.id,
+                    title,
+                    content,
+                    visit_date: visitDate,
+                    photos: localPhotosToJournalInput(photos),
+                }),
+            );
+            showSaved(store.isDemo);
+            onCreated(j);
+        } catch {
+            toastError("Could not save journal");
+        } finally {
+            setIsSaving(false);
+        }
     }
 
     return (
         <div
-            style={{
-                background: hideHeading ? "transparent" : "var(--bg-parchment)",
-                border: hideHeading ? "none" : "1px solid var(--border-light)",
-                borderRadius: hideHeading ? 0 : 8,
-                padding: hideHeading ? 0 : 14,
-                marginBottom: hideHeading ? 0 : 16,
-            }}
+            className={cn(
+                hideHeading ? "mb-0" : "mb-4 rounded-lg border border-border-light bg-parchment p-3.5",
+            )}
         >
             {!hideHeading && (
-                <div className="label-mono" style={{ marginBottom: 8 }}>
+                <Label className="mb-2">
                     New journal · {place.name}
-                </div>
+                </Label>
             )}
-            <input
+            <Input
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                style={inputStyle}
             />
             <textarea
                 placeholder="Write about your visit…"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={4}
-                style={{ ...inputStyle, marginTop: 8, resize: "vertical" }}
+                className={cn(
+                    "mt-2 w-full resize-y rounded-md border border-border bg-surface px-2.5 py-2 font-body text-sm text-primary outline-none",
+                )}
             />
-            <input
+            <Input
                 type="date"
                 value={visitDate}
                 onChange={(e) => setVisitDate(e.target.value)}
-                style={{ ...inputStyle, marginTop: 8 }}
+                className="mt-2"
             />
-            <JournalPhotoPicker photos={photos} onChange={setPhotos} />
-            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-                <Button size="sm" onClick={handleSave} disabled={!title.trim()}>
+            <JournalPhotoPicker
+                photos={photos}
+                onChange={setPhotos}
+                disabled={store.isDemo}
+                storageBytesUsed={storageBytesUsed}
+            />
+            <div className="mt-3 flex gap-2">
+                <Button
+                    size="sm"
+                    onClick={handleSave}
+                    loading={isSaving}
+                    disabled={!title.trim() || isSaving}
+                >
                     Save
                 </Button>
-                <Button size="sm" variant="secondary" onClick={onCancel}>
+                <Button size="sm" variant="secondary" onClick={onCancel} disabled={isSaving}>
                     Cancel
                 </Button>
             </div>
         </div>
     );
 }
-
-const inputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "8px 10px",
-    borderRadius: 6,
-    border: "1px solid var(--border)",
-    background: "var(--surface)",
-    fontFamily: "var(--font-body)",
-    fontSize: 14,
-};

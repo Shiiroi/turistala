@@ -9,20 +9,15 @@ export function ShareCard({ stats, username }: ShareCardProps) {
     if (!stats) return null;
 
     return (
-        <div
-            style={{
-                padding: 24,
-                borderRadius: 12,
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                color: "white",
-                textAlign: "center",
-                maxWidth: 400,
-            }}
-        >
-            <h3>{username ?? "Traveler"}'s Passport</h3>
-            <div style={{ fontSize: 48, margin: "16px 0" }}>{Math.round(stats.overallCompletion * 100)}%</div>
+        <div className="mx-auto max-w-[400px] rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 px-6 py-6 text-center text-white">
+            <h3 className="font-display text-lg font-semibold text-white">
+                {username ?? "Traveler"}'s Passport
+            </h3>
+            <div className="my-4 text-5xl font-bold">
+                {Math.round(stats.overallCompletion * 100)}%
+            </div>
             <p>Philippines Complete</p>
-            <p style={{ fontSize: 14, opacity: 0.8 }}>
+            <p className="text-sm opacity-80">
                 {stats.visitedMunicities} of {stats.totalMunicities} municipalities
             </p>
         </div>

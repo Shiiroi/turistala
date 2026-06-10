@@ -1,21 +1,21 @@
 import { useMemo } from "react";
 import type { MapMode } from "../../homepage/types";
 import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
-import type { MockTravelStore } from "../hooks/useMockTravelStore";
+import type { TravelStore } from "../types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON } from "../../map/types";
 import { buildHeatmapPalette, getHeatmapColorFromRatio } from "./useMockHeatmapData";
 
-function visitedPlaceIds(store: MockTravelStore): Set<string> {
+function visitedPlaceIds(store: TravelStore): Set<string> {
     return new Set(store.visited.map((v) => v.place_id));
 }
 
-function isMuniExplored(muniId: number, store: MockTravelStore, visited: Set<string>): boolean {
+function isMuniExplored(muniId: number, store: TravelStore, visited: Set<string>): boolean {
     return store.places.some((p) => p.municity_id === muniId && visited.has(p.id));
 }
 
 function isProvinceExplored(
     provinceId: number,
-    store: MockTravelStore,
+    store: TravelStore,
     municityMeta: MunicityMeta[],
     visited: Set<string>,
 ): boolean {
@@ -35,7 +35,7 @@ function ratioColor(visited: number, total: number, palette: string[]): string {
 export function useProgressHeatmapColors(
     mapMode: MapMode,
     progressBy: ExploreViewTab,
-    store: MockTravelStore,
+    store: TravelStore,
     regions: { id: number }[],
     provinces: ProvinceGeoJSON[],
     municityMeta: MunicityMeta[],

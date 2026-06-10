@@ -1,4 +1,7 @@
 import { MapPin } from "lucide-react";
+import { Badge } from "../../../components/ui/Badge";
+import { PillTabs } from "../../../components/ui/PillTabs";
+import { cn } from "../../../lib/cn";
 import {
     municityMetaToDivision,
     municityToDivision,
@@ -7,7 +10,7 @@ import {
 import type { Division } from "../types";
 import { PlaceCard, type PlaceFilterTab } from "../../travel/components/PlaceActions";
 import type { MockPlace } from "../../travel/types";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import type { TravelStore } from "../../travel/types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON } from "../../map/types";
 
 export type ExploreViewTab = "provinces" | "municipalities" | "places";
@@ -26,7 +29,7 @@ interface DivisionExploreSectionProps {
     municityMeta: MunicityMeta[];
     provinceMunicities: MunicityMeta[];
     places: MockPlace[];
-    store: MockTravelStore;
+    store: TravelStore;
     viewTab: ExploreViewTab;
     statusFilter: PlaceFilterTab;
     onStatusFilterChange: (filter: PlaceFilterTab) => void;
@@ -36,7 +39,7 @@ interface DivisionExploreSectionProps {
 
 function isMuniExplored(
     muniId: number,
-    store: MockTravelStore,
+    store: TravelStore,
     visitedPlaceIds: Set<string>,
 ): boolean {
     return store.places.some((p) => p.municity_id === muniId && visitedPlaceIds.has(p.id));
@@ -44,7 +47,7 @@ function isMuniExplored(
 
 function isProvinceExplored(
     provinceId: number,
-    store: MockTravelStore,
+    store: TravelStore,
     municityMeta: MunicityMeta[],
     visitedPlaceIds: Set<string>,
 ): boolean {
@@ -93,18 +96,12 @@ export function ExploreViewTabs({ tabs, active, onChange }: ExploreViewTabsProps
     if (tabs.length <= 1) return null;
 
     return (
-        <div className="explore-view-tabs">
-            {tabs.map((tab) => (
-                <button
-                    key={tab}
-                    type="button"
-                    className={active === tab ? "active" : ""}
-                    onClick={() => onChange(tab)}
-                >
-                    {VIEW_TAB_LABELS[tab]}
-                </button>
-            ))}
-        </div>
+        <PillTabs
+            value={active}
+            options={tabs.map((tab) => ({ value: tab, label: VIEW_TAB_LABELS[tab] }))}
+            onChange={onChange}
+            className="mb-2.5 mt-3.5"
+        />
     );
 }
 
@@ -115,7 +112,7 @@ export function computeExploreProgress(
     municityMeta: MunicityMeta[],
     provinceMunicities: MunicityMeta[],
     places: MockPlace[],
-    store: MockTravelStore,
+    store: TravelStore,
 ): { visited: number; total: number } {
     const visitedPlaceIds = new Set(store.visited.map((v) => v.place_id));
 
@@ -276,27 +273,28 @@ export function DivisionExploreSection({
             : `No ${viewTabLabels[viewTab].toLowerCase()} match this filter.`;
 
     return (
-        <div className="explore-section">
-            <div className="explore-section__header">
-                <div className="explore-section__title">Exploring {division.name}</div>
+        <div className="mb-4">
+            <div className="mb-2.5 flex items-baseline justify-between gap-2">
+                <div className="font-display text-[17px] font-semibold text-primary">
+                    Exploring {division.name}
+                </div>
             </div>
 
-            <div className="explore-status-tabs">
-                {statusTabs.map((tab) => (
-                    <button
-                        key={tab.id}
-                        type="button"
-                        className={statusFilter === tab.id ? "active" : ""}
-                        onClick={() => onStatusFilterChange(tab.id)}
-                    >
-                        {tab.label} ({tab.count})
-                    </button>
-                ))}
-            </div>
+            <PillTabs
+                value={statusFilter}
+                options={statusTabs.map((tab) => ({
+                    value: tab.id,
+                    label: `${tab.label} (${tab.count})`,
+                }))}
+                onChange={onStatusFilterChange}
+                className="mb-3 border-t border-border-light pt-3.5"
+            />
 
             {viewTab === "places" ? (
                 filteredPlaces.length === 0 ? (
-                    <div className="place-empty-hint">{emptyHint}</div>
+                    <div className="rounded-lg border border-dashed border-border bg-parchment px-4 py-4 text-center text-[13px] italic text-muted">
+                        {emptyHint}
+                    </div>
                 ) : (
                     filteredPlaces.map((place) => {
                         const status = store.getPlaceStatus(place.id)!;
@@ -312,59 +310,34 @@ export function DivisionExploreSection({
                     })
                 )
             ) : filteredSubdivisions.length === 0 ? (
-                <div className="place-empty-hint">{emptyHint}</div>
+                <div className="rounded-lg border border-dashed border-border bg-parchment px-4 py-4 text-center text-[13px] italic text-muted">
+                    {emptyHint}
+                </div>
             ) : (
-                <div
-                    style={{
-                        marginTop: 12,
-                        border: "1px solid var(--border-light)",
-                        borderRadius: 8,
-                        overflow: "hidden",
-                    }}
-                >
+                <div className="mt-3 overflow-hidden rounded-lg border border-border-light">
                     {filteredSubdivisions.map((item) => (
                         <button
                             key={item.id}
                             type="button"
                             onClick={() => handleSubdivisionSelect(item.id)}
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 10,
-                                width: "100%",
-                                padding: "10px 14px",
-                                border: "none",
-                                borderBottom: "1px solid var(--border-light)",
-                                background: "transparent",
-                                textAlign: "left",
-                                cursor: "pointer",
-                                fontFamily: "var(--font-body)",
-                            }}
+                            className="flex w-full cursor-pointer items-center gap-2.5 border-none border-b border-border-light bg-transparent px-3.5 py-2.5 text-left font-body last:border-b-0"
                         >
                             <MapPin
                                 size={14}
-                                style={{
-                                    flexShrink: 0,
-                                    color: item.explored ? "var(--accent)" : "var(--text-muted)",
-                                }}
+                                className={cn(
+                                    "shrink-0",
+                                    item.explored ? "text-accent" : "text-muted",
+                                )}
                             />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ fontSize: 14, fontWeight: 500 }}>{item.name}</div>
+                            <div className="min-w-0 flex-1">
+                                <div className="text-sm font-medium text-primary">{item.name}</div>
                                 {item.subtitle && (
-                                    <div
-                                        style={{
-                                            fontSize: 12,
-                                            color: "var(--text-muted)",
-                                            fontFamily: "var(--font-mono)",
-                                        }}
-                                    >
-                                        {item.subtitle}
-                                    </div>
+                                    <div className="font-mono text-xs text-muted">{item.subtitle}</div>
                                 )}
                             </div>
-                            <span className={`badge ${item.explored ? "badge--visited" : ""}`}>
+                            <Badge variant={item.explored ? "visited" : "default"}>
                                 {item.explored ? "Visited" : "Unvisited"}
-                            </span>
+                            </Badge>
                         </button>
                     ))}
                 </div>

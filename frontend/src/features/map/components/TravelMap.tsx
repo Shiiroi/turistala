@@ -4,6 +4,7 @@ import L from "leaflet";
 import type { Feature, Geometry } from "geojson";
 import type { Division, MapMode } from "../../homepage/types";
 import type { MunicityGeoJSON, ProvinceGeoJSON, Region } from "../types";
+import { cn } from "../../../lib/cn";
 
 const PH_CENTER: [number, number] = [12.8797, 121.774];
 const PH_ZOOM = 6;
@@ -25,8 +26,12 @@ interface TravelMapProps {
     selectedDivision: Division | null;
     heatmapColors: Map<number, string>;
     goalMunicityIds?: Set<number>;
+    goalProvinceIds?: Set<number>;
+    goalRegionIds?: Set<number>;
     onHover: (division: Division | null) => void;
     onSelect: (division: Division | null) => void;
+    interactive?: boolean;
+    showTiles?: boolean;
 }
 
 function divisionFromFeature(feature: Feature): Division | null {
@@ -60,10 +65,15 @@ function getBaseStyle(
     feature: Feature,
     heatmapColors: Map<number, string>,
     goalMunicityIds: Set<number>,
+    goalProvinceIds: Set<number>,
+    goalRegionIds: Set<number>,
     mode: MapMode,
 ): L.PathOptions {
     const id = feature.properties?.id as number;
-    const isGoal = mode === "municipality" && goalMunicityIds.has(id);
+    const isGoal =
+        (mode === "municipality" && goalMunicityIds.has(id)) ||
+        (mode === "province" && goalProvinceIds.has(id)) ||
+        (mode === "region" && goalRegionIds.has(id));
 
     return {
         color: isGoal ? "#c0622f" : "#a89880",
@@ -156,8 +166,12 @@ function TravelMapInner({
     selectedDivision,
     heatmapColors,
     goalMunicityIds = new Set<number>(),
+    goalProvinceIds = new Set<number>(),
+    goalRegionIds = new Set<number>(),
     onHover,
     onSelect,
+    interactive = true,
+    showTiles = true,
 }: TravelMapProps) {
     const layerMapRef = useRef<Map<number, L.Path>>(new Map());
     const selectedIdRef = useRef<number | null>(null);
@@ -166,6 +180,8 @@ function TravelMapInner({
     const onSelectRef = useRef(onSelect);
     const heatmapColorsRef = useRef(heatmapColors);
     const goalIdsRef = useRef(goalMunicityIds);
+    const goalProvinceIdsRef = useRef(goalProvinceIds);
+    const goalRegionIdsRef = useRef(goalRegionIds);
     const modeRef = useRef(mode);
     const geoKeyRef = useRef("");
 
@@ -173,6 +189,8 @@ function TravelMapInner({
     onSelectRef.current = onSelect;
     heatmapColorsRef.current = heatmapColors;
     goalIdsRef.current = goalMunicityIds;
+    goalProvinceIdsRef.current = goalProvinceIds;
+    goalRegionIdsRef.current = goalRegionIds;
     modeRef.current = mode;
 
     const currentData = useMemo(() => {
@@ -234,6 +252,8 @@ function TravelMapInner({
                 feature,
                 heatmapColorsRef.current,
                 goalIdsRef.current,
+                goalProvinceIdsRef.current,
+                goalRegionIdsRef.current,
                 modeRef.current,
             ),
             renderer: SHARED_RENDERER,
@@ -246,6 +266,8 @@ function TravelMapInner({
                 feature,
                 heatmapColorsRef.current,
                 goalIdsRef.current,
+                goalProvinceIdsRef.current,
+                goalRegionIdsRef.current,
                 modeRef.current,
             );
             const style =
@@ -294,7 +316,7 @@ function TravelMapInner({
                 id === selId ? "selected" : id === hoverId ? "hover" : "base";
             applyStyleToLayer(layer, feature as Feature, variant);
         }
-    }, [heatmapColors, currentData.features, applyStyleToLayer]);
+    }, [heatmapColors, goalMunicityIds, goalProvinceIds, goalRegionIds, currentData.features, applyStyleToLayer]);
 
     const onEachFeature = useCallback(
         (feature: Feature, layer: L.Layer) => {
@@ -303,12 +325,14 @@ function TravelMapInner({
             layerMapRef.current.set(id, pathLayer);
 
             const name = feature.properties?.name as string;
-            if (name) {
+            if (name && interactive) {
                 pathLayer.bindTooltip(name, { sticky: false, direction: "top" });
             }
 
             const variant = selectedIdRef.current === id ? "selected" : "base";
             applyStyleToLayer(pathLayer, feature, variant);
+
+            if (!interactive) return;
 
             pathLayer.on("mouseover", () => {
                 const prevHoverId = hoveredIdRef.current;
@@ -355,30 +379,42 @@ function TravelMapInner({
                 }
             });
         },
-        [applyStyleToLayer, currentData.features],
+        [applyStyleToLayer, currentData.features, interactive],
     );
 
     return (
-        <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 500 }}>
+        <div
+            className={cn(
+                "relative h-full min-h-[500px] w-full",
+                !showTiles && "bg-gradient-to-b from-[#c5dce8] via-[#b8cfd8] to-[#a8c4d4]",
+            )}
+        >
             <MapContainer
                 center={PH_CENTER}
                 zoom={PH_ZOOM}
                 zoomControl={false}
-                style={{ width: "100%", height: "100%", background: "var(--bg-parchment)" }}
-                scrollWheelZoom={true}
+                className={cn("h-full w-full", showTiles ? "bg-parchment" : "bg-transparent")}
+                scrollWheelZoom={interactive}
+                dragging={interactive}
+                doubleClickZoom={interactive}
+                touchZoom={interactive}
                 preferCanvas={true}
                 maxBounds={PH_MAX_BOUNDS}
                 maxBoundsViscosity={1}
                 maxZoom={14}
             >
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <ZoomControl position="bottomright" />
+                {showTiles && (
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                )}
+                {interactive && <ZoomControl position="bottomright" />}
                 <MapZoomLimits />
-                <MapBackgroundClickHandler onBackgroundClick={() => onSelectRef.current(null)} />
-                <FitBoundsOnSelect selectedDivision={selectedDivision} />
+                {interactive && (
+                    <MapBackgroundClickHandler onBackgroundClick={() => onSelectRef.current(null)} />
+                )}
+                {interactive && <FitBoundsOnSelect selectedDivision={selectedDivision} />}
                 {currentData.features.length > 0 && (
                     <GeoJSON
                         key={geoKey}

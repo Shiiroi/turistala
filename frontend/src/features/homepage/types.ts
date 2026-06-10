@@ -1,4 +1,5 @@
 import type { Geometry } from "geojson";
+import type { Journal } from "../../travel/types";
 
 export type MapMode = "region" | "province" | "municipality";
 
@@ -34,6 +35,8 @@ export type PanelBrowseTab = "explore" | "journals";
 export interface JournalDetailContext {
     journalId: string;
     placeId: string;
+    /** Shown immediately after create, before travel query refetches */
+    pendingJournal?: Journal;
 }
 
 export function divisionLevelLabel(level: MapMode): string {

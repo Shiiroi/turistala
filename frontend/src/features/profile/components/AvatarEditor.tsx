@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
+import { Label } from "../../../components/ui/Label";
+import { cn } from "../../../lib/cn";
 
 interface AvatarEditorProps {
     username: string;
@@ -44,7 +46,7 @@ export function AvatarEditor({
     }
 
     return (
-        <div className="avatar-editor">
+        <div className="flex flex-col gap-4">
             <Input
                 label="Username"
                 value={username}
@@ -52,15 +54,26 @@ export function AvatarEditor({
                 placeholder="Username"
             />
 
-            <div className="avatar-editor__row">
-                <div className="avatar-editor__preview-wrap">
+            <div className="flex items-start gap-4">
+                <div
+                    className={cn(
+                        "flex h-[72px] w-[72px] shrink-0 items-center justify-center overflow-hidden",
+                        "rounded-full border-2 border-border bg-border-light",
+                        "font-display text-[22px] font-semibold text-muted",
+                    )}
+                >
                     {sourceUrl ? (
-                        <img src={sourceUrl} alt="" style={{ transform: `scale(${zoom})` }} />
+                        <img
+                            src={sourceUrl}
+                            alt=""
+                            className="h-full w-full object-cover"
+                            style={{ transform: `scale(${zoom})` }}
+                        />
                     ) : (
                         initials
                     )}
                 </div>
-                <div style={{ flex: 1 }}>
+                <div className="flex-1">
                     <input
                         ref={fileRef}
                         type="file"
@@ -71,7 +84,7 @@ export function AvatarEditor({
                             if (file) handleFile(file);
                         }}
                     />
-                    <div className="avatar-editor__actions">
+                    <div className="flex flex-wrap gap-2">
                         <Button size="sm" onClick={() => fileRef.current?.click()}>
                             Choose image
                         </Button>
@@ -81,7 +94,7 @@ export function AvatarEditor({
                             </Button>
                         )}
                     </div>
-                    <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 8 }}>
+                    <p className="mt-2 text-xs text-muted">
                         Selected image uploads only when you press Save.
                     </p>
                 </div>
@@ -89,16 +102,24 @@ export function AvatarEditor({
 
             {sourceUrl && (
                 <>
-                    <div className="avatar-editor__crop">
+                    <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden rounded-[10px] border border-border bg-primary">
                         <img
                             src={sourceUrl}
                             alt=""
-                            style={{ transform: `scale(${zoom})`, maxHeight: "100%" }}
+                            className="max-w-none max-h-full origin-center"
+                            style={{ transform: `scale(${zoom})` }}
                         />
-                        <div className="avatar-editor__crop-mask" aria-hidden />
+                        <div
+                            className={cn(
+                                "pointer-events-none absolute inset-0 m-auto h-[140px] w-[140px]",
+                                "rounded-full border-2 border-dashed border-white/50",
+                                "shadow-[inset_0_0_0_9999px_rgba(44,36,22,0.55)]",
+                            )}
+                            aria-hidden
+                        />
                     </div>
                     <div>
-                        <div className="avatar-editor__zoom-label">Zoom</div>
+                        <Label className="mb-1 block">Zoom</Label>
                         <input
                             type="range"
                             min={1}
@@ -106,7 +127,7 @@ export function AvatarEditor({
                             step={0.05}
                             value={zoom}
                             onChange={(e) => onZoomChange(Number(e.target.value))}
-                            style={{ width: "100%" }}
+                            className="w-full"
                         />
                     </div>
                 </>

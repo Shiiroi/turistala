@@ -1,3 +1,6 @@
+import { Label } from "../../../components/ui/Label";
+import { cn } from "../../../lib/cn";
+
 interface ChildItem {
     id: number;
     name: string;
@@ -14,46 +17,21 @@ export function ChildDivisionList({ title, items, onSelect }: ChildDivisionListP
     if (items.length === 0) return null;
 
     return (
-        <div style={{ marginBottom: 20 }}>
-            <div className="label-mono" style={{ marginBottom: 8 }}>
-                {title}
-            </div>
-            <div
-                style={{
-                    maxHeight: 200,
-                    overflowY: "auto",
-                    border: "1px solid var(--border-light)",
-                    borderRadius: 8,
-                }}
-            >
+        <div className="mb-5">
+            <Label className="mb-2">{title}</Label>
+            <div className="max-h-[200px] overflow-y-auto rounded-lg border border-border-light">
                 {items.map((item) => (
                     <button
                         key={item.id}
                         type="button"
                         onClick={() => onSelect(item.id)}
-                        style={{
-                            display: "block",
-                            width: "100%",
-                            padding: "10px 14px",
-                            border: "none",
-                            borderBottom: "1px solid var(--border-light)",
-                            background: "transparent",
-                            textAlign: "left",
-                            cursor: "pointer",
-                            fontFamily: "var(--font-body)",
-                        }}
+                        className={cn(
+                            "block w-full cursor-pointer border-none border-b border-border-light bg-transparent px-3.5 py-2.5 text-left font-body last:border-b-0",
+                        )}
                     >
-                        <div style={{ fontSize: 14, fontWeight: 500 }}>{item.name}</div>
+                        <div className="text-sm font-medium text-primary">{item.name}</div>
                         {item.subtitle && (
-                            <div
-                                style={{
-                                    fontSize: 12,
-                                    color: "var(--text-muted)",
-                                    fontFamily: "var(--font-mono)",
-                                }}
-                            >
-                                {item.subtitle}
-                            </div>
+                            <div className="font-mono text-xs text-muted">{item.subtitle}</div>
                         )}
                     </button>
                 ))}

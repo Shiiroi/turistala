@@ -1,25 +1,60 @@
 import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../../components/ui/Button";
 import { Modal } from "../../../components/ui/Modal";
+import { cn } from "../../../lib/cn";
+import { useToast } from "../../../hooks/useToast";
+import { useAuthSession, useSignOut } from "../../auth/hooks/useAuthSession";
+import { fetchProfile, updateProfile } from "../../profile/services/profileApi";
 import {
     AvatarEditor,
     cropAvatarToDataUrl,
     getInitials,
 } from "../../profile/components/AvatarEditor";
+import { ImportDemoModal } from "../../auth/components/ImportDemoModal";
+import {
+    clearDemoMode,
+    clearImportDismissed,
+    getDemoDataForImport,
+    hasDemoData,
+} from "../../travel/demoStorage";
 
 interface ProfileMenuProps {
     onEditProfile?: () => void;
 }
 
 export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
+    const navigate = useNavigate();
+    const { data: session } = useAuthSession();
+    const signOut = useSignOut();
+    const queryClient = useQueryClient();
+    const { success: toastSuccess, error: toastError } = useToast();
+    const userId = session?.user.id;
+
+    const { data: profile } = useQuery({
+        queryKey: ["profile", userId],
+        queryFn: () => fetchProfile(userId!),
+        enabled: Boolean(userId),
+    });
+
     const [open, setOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const [importOpen, setImportOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
-    const [username, setUsername] = useState("traveler");
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const isDemo = !session;
+    const username = isDemo ? "Guest" : (profile?.username ?? session?.user.email?.split("@")[0] ?? "traveler");
+    const avatarUrl = isDemo ? null : (profile?.avatar_url ?? null);
+
+    const [editUsername, setEditUsername] = useState(username);
     const [editSourceUrl, setEditSourceUrl] = useState<string | null>(null);
     const [editZoom, setEditZoom] = useState(1);
+    const [isSaving, setIsSaving] = useState(false);
+
+    useEffect(() => {
+        setEditUsername(username);
+    }, [username]);
 
     useEffect(() => {
         function handleClick(e: MouseEvent) {
@@ -32,6 +67,10 @@ export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
     }, []);
 
     function openEdit() {
+        if (isDemo) {
+            navigate("/signup");
+            return;
+        }
         setOpen(false);
         setEditSourceUrl(avatarUrl);
         setEditZoom(1);
@@ -40,67 +79,104 @@ export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
     }
 
     async function handleSave() {
-        let finalAvatar = avatarUrl;
-        if (editSourceUrl) {
-            finalAvatar = await cropAvatarToDataUrl(editSourceUrl, editZoom);
-            setAvatarUrl(finalAvatar);
-        } else {
-            setAvatarUrl(null);
-            finalAvatar = null;
+        if (!userId || isSaving) return;
+        setIsSaving(true);
+        try {
+            let finalAvatar = avatarUrl;
+            if (editSourceUrl) {
+                finalAvatar = await cropAvatarToDataUrl(editSourceUrl, editZoom);
+            } else {
+                finalAvatar = null;
+            }
+            await updateProfile(userId, {
+                username: editUsername.trim() || null,
+                avatar_url: finalAvatar,
+            });
+            queryClient.invalidateQueries({ queryKey: ["profile", userId] });
+            toastSuccess("Profile updated");
+            setEditOpen(false);
+        } catch {
+            toastError("Could not save profile");
+        } finally {
+            setIsSaving(false);
         }
-        console.log({
-            action: "UPDATE_PROFILE",
-            username,
-            avatarUrl: finalAvatar,
-        });
-        setEditOpen(false);
+    }
+
+    async function handleSignOut() {
+        setOpen(false);
+        await signOut.mutateAsync();
+        clearDemoMode();
+        navigate("/");
     }
 
     const initials = getInitials(username);
+    const manualImportData = userId ? getDemoDataForImport() : null;
+    const showManualImport = Boolean(userId && manualImportData && hasDemoData());
+
+    function openManualImport() {
+        clearImportDismissed();
+        setOpen(false);
+        setImportOpen(true);
+    }
 
     return (
         <>
-            <div ref={ref} style={{ position: "relative" }}>
+            <div ref={ref} className="relative">
                 <button
                     type="button"
-                    className="profile-avatar-btn"
+                    className={cn(
+                        "flex size-9 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-border bg-accent p-0",
+                        "font-display text-sm font-semibold text-white",
+                    )}
                     onClick={() => setOpen(!open)}
                     aria-label="Profile menu"
                 >
                     {avatarUrl ? (
-                        <img src={avatarUrl} alt="" />
+                        <img src={avatarUrl} alt="" className="size-full object-cover" />
                     ) : (
                         initials.slice(0, 1)
                     )}
                 </button>
                 {open && (
                     <div
-                        style={{
-                            position: "absolute",
-                            top: 44,
-                            right: 0,
-                            minWidth: 160,
-                            background: "var(--bg-parchment)",
-                            border: "1px solid var(--border)",
-                            borderRadius: 8,
-                            boxShadow: "var(--shadow-lg)",
-                            overflow: "hidden",
-                            zIndex: 1100,
-                        }}
+                        className={cn(
+                            "absolute right-0 top-11 z-[1100] min-w-44 overflow-hidden rounded-lg border border-border bg-parchment shadow-[var(--shadow-lg)]",
+                        )}
                     >
-                        <button type="button" style={menuItemStyle} onClick={openEdit}>
-                            Edit Profile
-                        </button>
-                        <button
-                            type="button"
-                            style={menuItemStyle}
-                            onClick={() => {
-                                console.log({ action: "SIGN_OUT" });
-                                setOpen(false);
-                            }}
-                        >
-                            Sign Out
-                        </button>
+                        <div className="border-b border-border-light px-4 py-2.5 text-sm font-medium text-primary">
+                            {username}
+                        </div>
+                        {isDemo ? (
+                            <Link
+                                to="/signup"
+                                className={cn(menuItemClass, "text-accent no-underline")}
+                                onClick={() => setOpen(false)}
+                            >
+                                Sign up to save
+                            </Link>
+                        ) : (
+                            <button type="button" className={menuItemClass} onClick={openEdit}>
+                                Edit Profile
+                            </button>
+                        )}
+                        {showManualImport && (
+                            <button type="button" className={menuItemClass} onClick={openManualImport}>
+                                Import demo from this device
+                            </button>
+                        )}
+                        {isDemo ? (
+                            <Link
+                                to="/login"
+                                className={cn(menuItemClass, "no-underline")}
+                                onClick={() => setOpen(false)}
+                            >
+                                Sign in
+                            </Link>
+                        ) : (
+                            <button type="button" className={menuItemClass} onClick={handleSignOut}>
+                                Sign out
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
@@ -113,33 +189,35 @@ export function ProfileMenu({ onEditProfile }: ProfileMenuProps) {
                 size="md"
             >
                 <AvatarEditor
-                    username={username}
+                    username={editUsername}
                     sourceUrl={editSourceUrl}
                     zoom={editZoom}
-                    onUsernameChange={setUsername}
+                    onUsernameChange={setEditUsername}
                     onSourceUrlChange={setEditSourceUrl}
                     onZoomChange={setEditZoom}
                 />
-                <div className="profile-edit-footer">
+                <div className="mt-4 flex justify-end gap-2">
                     <Button variant="secondary" onClick={() => setEditOpen(false)}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSave}>Save</Button>
+                    <Button onClick={handleSave} loading={isSaving} disabled={isSaving}>
+                        Save
+                    </Button>
                 </div>
             </Modal>
+
+            {userId && manualImportData && (
+                <ImportDemoModal
+                    isOpen={importOpen}
+                    userId={userId}
+                    demoData={manualImportData}
+                    onDone={() => setImportOpen(false)}
+                />
+            )}
         </>
     );
 }
 
-const menuItemStyle: React.CSSProperties = {
-    display: "block",
-    width: "100%",
-    padding: "10px 16px",
-    border: "none",
-    background: "transparent",
-    textAlign: "left",
-    cursor: "pointer",
-    fontFamily: "var(--font-body)",
-    fontSize: 14,
-    color: "var(--text-primary)",
-};
+const menuItemClass = cn(
+    "block w-full cursor-pointer border-none bg-transparent px-4 py-2.5 text-left font-body text-sm text-primary",
+);

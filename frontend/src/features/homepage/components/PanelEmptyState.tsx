@@ -1,31 +1,10 @@
 export function PanelEmptyState() {
     return (
-        <div
-            style={{
-                padding: "48px 32px",
-                textAlign: "center",
-            }}
-        >
-            <h2
-                style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: 24,
-                    marginBottom: 12,
-                }}
-            >
-                Your Philippine Journal
-            </h2>
-            <p
-                style={{
-                    color: "var(--text-muted)",
-                    fontSize: 15,
-                    lineHeight: 1.6,
-                    maxWidth: 320,
-                    margin: "0 auto",
-                }}
-            >
-                Explore the Philippines — click a region, province, or municipality to begin
-                your journal.
+        <div className="px-8 py-12 text-center">
+            <h2 className="mb-3 font-display text-2xl text-primary">Your Philippine Journal</h2>
+            <p className="mx-auto max-w-[320px] text-[15px] leading-relaxed text-muted">
+                Explore the Philippines — click a region, province, or municipality to begin your
+                journal.
             </p>
         </div>
     );

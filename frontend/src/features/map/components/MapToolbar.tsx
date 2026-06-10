@@ -1,6 +1,7 @@
 import { Camera, Search } from "lucide-react";
 import { FaArrowUpFromBracket } from "react-icons/fa6";
 import { IconButton } from "../../../components/ui/IconButton";
+import { cn } from "../../../lib/cn";
 import { ProfileMenu } from "./ProfileMenu";
 
 interface MapToolbarProps {
@@ -9,17 +10,7 @@ interface MapToolbarProps {
 
 export function MapToolbar({ onSearchClick }: MapToolbarProps) {
     return (
-        <div
-            style={{
-                position: "absolute",
-                top: 16,
-                right: 16,
-                zIndex: 1000,
-                display: "flex",
-                gap: 8,
-                alignItems: "center",
-            }}
-        >
+        <div className={cn("absolute right-4 top-4 z-[1000] flex items-center gap-2")}>
             <IconButton icon={Search} label="Search" onClick={onSearchClick} />
             <IconButton
                 icon={Camera}

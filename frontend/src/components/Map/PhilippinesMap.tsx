@@ -2,6 +2,7 @@ import { useMemo, useState, useCallback } from "react";
 import { MapContainer, TileLayer, GeoJSON, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import type { Feature, Geometry } from "geojson";
+import { cn } from "../../lib/cn";
 
 const PH_CENTER: [number, number] = [12.8797, 121.774];
 const PH_ZOOM = 6;
@@ -82,47 +83,36 @@ export function PhilippinesMap({ provinces = [], regions = [], municities = [], 
     const modes: MapMode[] = ["region", "province", "municipality"];
 
     return (
-        <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 500 }}>
-            <div
-                style={{
-                    position: "absolute",
-                    top: 10,
-                    left: 10,
-                    zIndex: 1000,
-                    background: "white",
-                    borderRadius: 8,
-                    padding: "6px 10px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                    display: "flex",
-                    gap: 6,
-                    fontSize: 13,
-                }}
-            >
-                {modes.map((m) => (
-                    <button
-                        key={m}
-                        onClick={() => setMode(m)}
-                        style={{
-                            padding: "4px 12px",
-                            cursor: "pointer",
-                            border: mode === m ? `2px solid ${MODE_STYLES[m].color}` : "1px solid #ccc",
-                            borderRadius: 4,
-                            background: mode === m ? MODE_STYLES[m].color : "white",
-                            color: mode === m ? "white" : "#333",
-                            fontWeight: mode === m ? 600 : 400,
-                            textTransform: "capitalize",
-                        }}
-                    >
-                        {m}
-                    </button>
-                ))}
+        <div className="relative h-full min-h-[500px] w-full">
+            <div className="absolute left-2.5 top-2.5 z-[1000] flex gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-[13px] shadow-[0_2px_8px_rgba(0,0,0,0.15)]">
+                {modes.map((m) => {
+                    const isActive = mode === m;
+                    const modeColor = MODE_STYLES[m].color;
+                    return (
+                        <button
+                            key={m}
+                            onClick={() => setMode(m)}
+                            className={cn(
+                                "cursor-pointer rounded px-3 py-1 capitalize",
+                                isActive ? "border-2 font-semibold text-white" : "border border-gray-300 bg-white font-normal text-gray-700",
+                            )}
+                            style={
+                                isActive
+                                    ? { borderColor: modeColor, background: modeColor }
+                                    : undefined
+                            }
+                        >
+                            {m}
+                        </button>
+                    );
+                })}
             </div>
 
             <MapContainer
                 center={PH_CENTER}
                 zoom={PH_ZOOM}
                 zoomControl={false}
-                style={{ width: "100%", height: "100%" }}
+                className="h-full w-full"
                 scrollWheelZoom={true}
                 preferCanvas={true}
             >

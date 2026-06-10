@@ -47,7 +47,7 @@ export function useMapLayers(mapMode: MapMode): UseMapLayersReturn {
             }),
         staleTime: 20 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
-        enabled: mapMode === "municipality",
+        enabled: mapLayersReady,
         retry: 1,
     });
 
@@ -62,7 +62,7 @@ export function useMapLayers(mapMode: MapMode): UseMapLayersReturn {
         provincesQuery.error ??
         municityMetaQuery.error ??
         regionsQuery.error ??
-        (mapMode === "municipality" ? municitiesGeometryQuery.error : null);
+        municitiesGeometryQuery.error;
 
     return {
         provinces: provincesQuery.data ?? [],

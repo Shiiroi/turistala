@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { Button } from "../../../components/ui/Button";
+import { cn } from "../../../lib/cn";
 import type { Division, PanelBrowseTab } from "../types";
 import { placesInDivision, resolveRegionId } from "../utils/divisionPlaces";
 import { DivisionSummary } from "./DivisionSummary";
@@ -12,7 +13,7 @@ import {
 } from "./DivisionExploreSection";
 import { PanelJournalsView } from "./PanelJournalsView";
 import type { PlaceFilterTab } from "../../travel/components/PlaceActions";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import type { TravelStore } from "../../travel/types";
 import { fetchMunicitiesMetaByProvince } from "../../map/services/mapApi";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
 
@@ -22,7 +23,7 @@ interface PanelBrowseViewProps {
     provinces: ProvinceGeoJSON[];
     municities: MunicityGeoJSON[];
     municityMeta: MunicityMeta[];
-    travelStore: MockTravelStore;
+    travelStore: TravelStore;
     browseTab: PanelBrowseTab;
     onBrowseTabChange: (tab: PanelBrowseTab) => void;
     viewTab: ExploreViewTab;
@@ -169,30 +170,43 @@ export function PanelBrowseView({
                 onClose={onClose}
             />
 
-            <div className="panel-tab-bar">
+            <div className="mb-4 mt-1 flex border-b border-border-light">
                 <button
                     type="button"
-                    className={browseTab === "explore" ? "active" : ""}
+                    className={cn(
+                        "-mb-px inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-none border-b-2 border-transparent bg-transparent py-2.5 font-body text-sm text-muted transition-[color,border-color] duration-150",
+                        browseTab === "explore" && "border-b-accent font-semibold text-primary",
+                    )}
                     onClick={() => onBrowseTabChange("explore")}
                 >
                     Explore
                 </button>
                 <button
                     type="button"
-                    className={browseTab === "journals" ? "active" : ""}
+                    className={cn(
+                        "-mb-px inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-none border-b-2 border-transparent bg-transparent py-2.5 font-body text-sm text-muted transition-[color,border-color] duration-150",
+                        browseTab === "journals" && "border-b-accent font-semibold text-primary",
+                    )}
                     onClick={() => onBrowseTabChange("journals")}
                 >
                     Journals
                     {journalCount > 0 && (
-                        <span className="panel-tab-bar__badge">{journalCount}</span>
+                        <span
+                            className={cn(
+                                "inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-border-light px-[5px] font-mono text-[10px] font-medium text-muted",
+                                browseTab === "journals" && "bg-accent/12 text-accent-dark",
+                            )}
+                        >
+                            {journalCount}
+                        </span>
                     )}
                 </button>
             </div>
 
             {browseTab === "explore" ? (
                 <>
-                    <Button onClick={onAddPlace} style={{ width: "100%", marginBottom: 20 }}>
-                        <Plus size={16} style={{ marginRight: 6, verticalAlign: "middle" }} />
+                    <Button onClick={onAddPlace} className="mb-5 w-full">
+                        <Plus size={16} className="mr-1.5" />
                         Add a place
                     </Button>
 

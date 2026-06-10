@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { Modal } from "../../../components/ui/Modal";
 import type { Division, JournalDetailContext, PanelBrowseTab, PanelMode } from "../types";
 import { PanelHeader } from "./PanelHeader";
@@ -8,7 +9,8 @@ import { AddPlaceWizard } from "./AddPlaceWizard";
 import { JournalDetailView } from "./JournalDetailView";
 import { QuickJournalForm } from "../../travel/components/JournalPreviewList";
 import type { PlaceFilterTab } from "../../travel/components/PlaceActions";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import type { TravelStore } from "../../travel/types";
+import type { Journal } from "../../travel/types";
 import type { ExploreViewTab } from "./DivisionExploreSection";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
 
@@ -22,7 +24,7 @@ interface DetailPanelProps {
     onExploreViewTabChange: (tab: ExploreViewTab) => void;
     onSelectDivision: (division: Division) => void;
     onClose: () => void;
-    travelStore: MockTravelStore;
+    travelStore: TravelStore;
 }
 
 export function DetailPanel({
@@ -66,7 +68,9 @@ export function DetailPanel({
 
     const journalEntry =
         journalContext != null
-            ? travelStore.journals.find((j) => j.id === journalContext.journalId)
+            ? travelStore.journals.find((j) => j.id === journalContext.journalId) ??
+              journalContext.pendingJournal ??
+              null
             : null;
     const journalPlace =
         journalContext != null
@@ -76,9 +80,9 @@ export function DetailPanel({
         ? travelStore.places.find((p) => p.id === newJournalPlaceId)
         : null;
 
-    function handleOpenJournal(journalId: string, placeId: string) {
+    function handleOpenJournal(journalId: string, placeId: string, pendingJournal?: Journal) {
         setReturnBrowseTab(browseTab);
-        setJournalContext({ journalId, placeId });
+        setJournalContext({ journalId, placeId, pendingJournal });
         setPanelMode("journalDetail");
         setNewJournalPlaceId(null);
     }
@@ -90,7 +94,7 @@ export function DetailPanel({
     }
 
     return (
-        <div className="detail-panel-inner" style={{ padding: "24px 28px" }}>
+        <div className="px-7 py-6 max-md:pb-[max(24px,env(safe-area-inset-bottom))]">
             {panelMode === "browse" && (
                 <PanelBrowseView
                     selectedDivision={selectedDivision}
@@ -113,19 +117,26 @@ export function DetailPanel({
                 />
             )}
 
-            {panelMode === "journalDetail" && journalEntry && journalPlace && (
+            {panelMode === "journalDetail" && journalContext && (
                 <>
                     <PanelHeader
                         onBack={handleBackFromJournal}
                         backLabel="Back"
                         onClose={onClose}
                     />
-                    <JournalDetailView
-                        journal={journalEntry}
-                        place={journalPlace}
-                        store={travelStore}
-                        onBack={handleBackFromJournal}
-                    />
+                    {journalEntry && journalPlace ? (
+                        <JournalDetailView
+                            journal={journalEntry}
+                            place={journalPlace}
+                            store={travelStore}
+                            onBack={handleBackFromJournal}
+                        />
+                    ) : (
+                        <div className="flex flex-col items-center justify-center gap-3 py-20 text-muted">
+                            <Loader2 size={28} className="animate-spin text-accent" />
+                            <p className="text-sm">Loading journal…</p>
+                        </div>
+                    )}
                 </>
             )}
 
@@ -159,9 +170,8 @@ export function DetailPanel({
                         place={newJournalPlace}
                         store={travelStore}
                         hideHeading
-                        onCreated={(journalId) => {
-                            setNewJournalPlaceId(null);
-                            handleOpenJournal(journalId, newJournalPlace.id);
+                        onCreated={(journal) => {
+                            handleOpenJournal(journal.id, newJournalPlace.id, journal);
                         }}
                         onCancel={() => setNewJournalPlaceId(null)}
                     />

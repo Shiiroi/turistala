@@ -1,4 +1,5 @@
 import type { RegionBadge } from "../types";
+import { cn } from "../../../lib/cn";
 
 interface RegionBadgeGridProps {
     badges: RegionBadge[];
@@ -6,26 +7,27 @@ interface RegionBadgeGridProps {
 }
 
 export function RegionBadgeGrid({ badges, loading }: RegionBadgeGridProps) {
-    if (loading) return <div>Loading badges…</div>;
+    if (loading) {
+        return <div className="text-sm text-muted">Loading badges…</div>;
+    }
 
     return (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
             {badges.map((badge) => (
                 <div
                     key={badge.regionId}
-                    style={{
-                        padding: 16,
-                        borderRadius: 8,
-                        background: badge.badgeEarned ? "#d4edda" : "#f8f9fa",
-                        border: `2px solid ${badge.badgeEarned ? "#28a745" : "#dee2e6"}`,
-                        textAlign: "center",
-                    }}
+                    className={cn(
+                        "rounded-lg border-2 p-4 text-center",
+                        badge.badgeEarned
+                            ? "border-green-500 bg-green-100"
+                            : "border-gray-300 bg-gray-50",
+                    )}
                 >
-                    <div>{badge.regionName}</div>
-                    <div style={{ fontSize: 12, color: "#666" }}>
+                    <div className="font-medium">{badge.regionName}</div>
+                    <div className="text-xs text-gray-500">
                         {badge.visitedProvinces}/{badge.totalProvinces} provinces
                     </div>
-                    {badge.badgeEarned && <div style={{ fontSize: 24 }}>🏆</div>}
+                    {badge.badgeEarned && <div className="text-2xl">🏆</div>}
                 </div>
             ))}
         </div>

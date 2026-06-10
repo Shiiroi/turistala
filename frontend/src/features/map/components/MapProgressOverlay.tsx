@@ -1,3 +1,6 @@
+import { Label } from "../../../components/ui/Label";
+import { SegmentedControl } from "../../../components/ui/SegmentedControl";
+import { cn } from "../../../lib/cn";
 import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
 
 interface MapProgressOverlayProps {
@@ -15,24 +18,20 @@ export function MapProgressOverlay({
 }: MapProgressOverlayProps) {
     return (
         <>
-            <div className="label-mono map-tools-section__label">Color map by</div>
+            <Label className={cn("mb-1.5")}>Color map by</Label>
             {tabs.length > 1 ? (
-                <div className="segmented-control">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab}
-                            type="button"
-                            className={progressBy === tab ? "active" : ""}
-                            onClick={() => onProgressByChange(tab)}
-                        >
-                            {tabLabels[tab]}
-                        </button>
-                    ))}
-                </div>
+                <SegmentedControl
+                    value={progressBy}
+                    onChange={onProgressByChange}
+                    options={tabs.map((tab) => ({
+                        value: tab,
+                        label: tabLabels[tab],
+                    }))}
+                />
             ) : (
-                <div className="map-progress-hint">Places</div>
+                <div className="font-mono text-[11px] leading-snug text-muted">Places</div>
             )}
-            <p className="map-progress-hint">
+            <p className="mt-2 font-mono text-[11px] leading-snug text-muted">
                 Heatmap reflects visited{" "}
                 {progressBy === "provinces"
                     ? "provinces"

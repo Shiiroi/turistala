@@ -1,4 +1,7 @@
 import { ChevronDown } from "lucide-react";
+import { CloseButton } from "../../../components/ui/CloseButton";
+import { Label } from "../../../components/ui/Label";
+import { cn } from "../../../lib/cn";
 import type { MapMode } from "../../homepage/types";
 import {
     getAvailableViewTabs,
@@ -38,20 +41,20 @@ export function MapToolsPanel({
     const progressTabs = getAvailableViewTabs(mapMode);
 
     return (
-        <div className="map-tools-panel">
-            <div className="map-tools-panel__header">
-                <span className="label-mono">Map tools</span>
-                <button
-                    type="button"
-                    className="map-tools-panel__close"
-                    onClick={onClose}
-                    aria-label="Hide map tools"
-                >
+        <div
+            className={cn(
+                "min-w-[240px] rounded-xl border border-[rgba(200,190,175,0.55)] bg-[rgba(250,246,238,0.94)] px-3.5 py-3",
+                "shadow-[0_2px_12px_rgba(44,36,22,0.08)] backdrop-blur-[10px]",
+            )}
+        >
+            <div className="mb-2.5 flex items-center justify-between">
+                <Label as="span">Map tools</Label>
+                <CloseButton onClick={onClose} ariaLabel="Hide map tools">
                     <ChevronDown size={16} />
-                </button>
+                </CloseButton>
             </div>
 
-            <div className="map-tools-section">
+            <div className="py-1">
                 <ViewModeControl
                     mode={mapMode}
                     municitiesLoading={municitiesLoading}
@@ -59,9 +62,9 @@ export function MapToolsPanel({
                 />
             </div>
 
-            <div className="map-tools-divider" />
+            <div className="my-2 h-px bg-[rgba(200,190,175,0.45)]" />
 
-            <div className="map-tools-section">
+            <div className="py-1">
                 <MapProgressOverlay
                     progressBy={progressBy}
                     onProgressByChange={onProgressByChange}
@@ -70,9 +73,9 @@ export function MapToolsPanel({
                 />
             </div>
 
-            <div className="map-tools-divider" />
+            <div className="my-2 h-px bg-[rgba(200,190,175,0.45)]" />
 
-            <div className="map-tools-section">
+            <div className="py-1">
                 <HeatmapLegend
                     accentColor={accentColor}
                     onAccentColorChange={onAccentColorChange}

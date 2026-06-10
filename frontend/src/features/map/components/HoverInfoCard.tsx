@@ -1,3 +1,4 @@
+import { cn } from "../../../lib/cn";
 import type { Division } from "../../homepage/types";
 import { divisionLevelLabel } from "../../homepage/types";
 
@@ -5,44 +6,27 @@ interface HoverInfoCardProps {
     hoveredDivision: Division | null;
 }
 
-const textShadow =
-    "0 1px 3px rgba(251, 247, 240, 1), 0 0 12px rgba(251, 247, 240, 0.95), 0 2px 4px rgba(44, 36, 22, 0.15)";
+const textShadowClass =
+    "[text-shadow:0_1px_3px_rgba(251,247,240,1),0_0_12px_rgba(251,247,240,0.95),0_2px_4px_rgba(44,36,22,0.15)]";
 
 export function HoverInfoCard({ hoveredDivision }: HoverInfoCardProps) {
     return (
-        <div
-            style={{
-                position: "absolute",
-                top: 16,
-                left: 16,
-                zIndex: 1000,
-                maxWidth: 360,
-                pointerEvents: "none",
-            }}
-        >
+        <div className="pointer-events-none absolute left-4 top-4 z-[1000] max-w-[360px]">
             {hoveredDivision ? (
                 <>
                     <div
-                        className="label-mono"
-                        style={{
-                            textShadow,
-                            fontSize: 13,
-                            letterSpacing: "0.06em",
-                            color: "var(--text-primary)",
-                        }}
+                        className={cn(
+                            "font-mono text-[13px] uppercase tracking-[0.06em] text-primary",
+                            textShadowClass,
+                        )}
                     >
                         {divisionLevelLabel(hoveredDivision.level)}
                     </div>
                     <div
-                        style={{
-                            fontFamily: "var(--font-display)",
-                            fontSize: 26,
-                            fontWeight: 700,
-                            marginTop: 6,
-                            lineHeight: 1.15,
-                            color: "var(--text-primary)",
-                            textShadow,
-                        }}
+                        className={cn(
+                            "mt-1.5 font-display text-[26px] font-bold leading-[1.15] text-primary",
+                            textShadowClass,
+                        )}
                     >
                         {hoveredDivision.name}
                     </div>
@@ -50,26 +34,18 @@ export function HoverInfoCard({ hoveredDivision }: HoverInfoCardProps) {
             ) : (
                 <>
                     <div
-                        className="label-mono"
-                        style={{
-                            textShadow,
-                            fontSize: 13,
-                            letterSpacing: "0.06em",
-                            color: "var(--text-primary)",
-                        }}
+                        className={cn(
+                            "font-mono text-[13px] uppercase tracking-[0.06em] text-primary",
+                            textShadowClass,
+                        )}
                     >
                         Turistala
                     </div>
                     <div
-                        style={{
-                            fontFamily: "var(--font-display)",
-                            fontSize: 22,
-                            fontWeight: 600,
-                            marginTop: 6,
-                            lineHeight: 1.2,
-                            color: "var(--text-primary)",
-                            textShadow,
-                        }}
+                        className={cn(
+                            "mt-1.5 font-display text-[22px] font-semibold leading-tight text-primary",
+                            textShadowClass,
+                        )}
                     >
                         Explore the Philippines
                     </div>

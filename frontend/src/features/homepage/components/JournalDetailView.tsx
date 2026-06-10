@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
 import { Calendar, Pencil, Trash2 } from "lucide-react";
+import { Badge } from "../../../components/ui/Badge";
 import { Button } from "../../../components/ui/Button";
 import { Modal } from "../../../components/ui/Modal";
+import { cn } from "../../../lib/cn";
+import { useSaveFeedback, useToast } from "../../../hooks/useToast";
 import type { MockJournal, MockPlace } from "../../travel/types";
-import type { MockTravelStore } from "../../travel/hooks/useMockTravelStore";
+import type { TravelStore } from "../../travel/types";
 import {
     JournalPhotoPicker,
-    localPhotosToStorePhotos,
+    localPhotosToJournalInput,
     type LocalPhoto,
 } from "../../travel/components/JournalPhotoPicker";
+import { useAuthSession } from "../../auth/hooks/useAuthSession";
+import { useUserStorageUsage } from "../../journal/hooks/useUserStorageUsage";
 
 interface JournalDetailViewProps {
     journal: MockJournal;
     place: MockPlace;
-    store: MockTravelStore;
+    store: TravelStore;
     onBack: () => void;
 }
+
+const inputClassName =
+    "w-full rounded-md border border-border bg-surface px-2.5 py-2 font-body text-sm text-primary outline-none";
 
 function formatJournalDate(isoDate: string): string {
     try {
@@ -35,12 +43,20 @@ function journalPhotosToLocal(photos: MockJournal["photos"]): LocalPhoto[] {
 }
 
 export function JournalDetailView({ journal: initialJournal, place, store, onBack }: JournalDetailViewProps) {
+    const showSaved = useSaveFeedback();
+    const { error: toastError } = useToast();
+    const { data: session } = useAuthSession();
+    const { data: storageBytesUsed = 0 } = useUserStorageUsage(
+        store.isDemo ? undefined : session?.user?.id,
+    );
     const [editOpen, setEditOpen] = useState(false);
     const [title, setTitle] = useState(initialJournal.title);
     const [content, setContent] = useState(initialJournal.content);
     const [visitDate, setVisitDate] = useState(initialJournal.visit_date);
     const [editPhotos, setEditPhotos] = useState<LocalPhoto[]>([]);
     const [deleteOpen, setDeleteOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const journal = store.journals.find((j) => j.id === initialJournal.id) ?? initialJournal;
 
@@ -58,47 +74,75 @@ export function JournalDetailView({ journal: initialJournal, place, store, onBac
         setEditOpen(true);
     }
 
-    function handleSave() {
-        store.updateJournal(journal.id, {
-            title,
-            content,
-            visit_date: visitDate,
-            photos: localPhotosToStorePhotos(editPhotos),
-        });
-        setEditOpen(false);
+    async function handleSave() {
+        if (isSaving || !title.trim()) return;
+        setIsSaving(true);
+        try {
+            await Promise.resolve(
+                store.updateJournal(journal.id, {
+                    title,
+                    content,
+                    visit_date: visitDate,
+                    photos: localPhotosToJournalInput(editPhotos),
+                }),
+            );
+            showSaved(store.isDemo);
+            setEditOpen(false);
+        } catch {
+            toastError("Could not save journal");
+        } finally {
+            setIsSaving(false);
+        }
     }
 
-    function handleDelete() {
-        store.deleteJournal(journal.id);
-        setDeleteOpen(false);
-        onBack();
+    async function handleDelete() {
+        if (isDeleting) return;
+        setIsDeleting(true);
+        try {
+            await Promise.resolve(store.deleteJournal(journal.id));
+            setDeleteOpen(false);
+            onBack();
+        } catch {
+            toastError("Could not delete journal");
+        } finally {
+            setIsDeleting(false);
+        }
     }
 
     return (
-        <div className="journal-page">
-            <div className="journal-page__meta">
+        <div
+            className={cn(
+                "rounded-xl border border-border px-[22px] pb-5 pt-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),var(--shadow)]",
+                "bg-[#faf4e8] bg-[repeating-linear-gradient(transparent,transparent_27px,rgba(192,98,47,0.07)_27px,rgba(192,98,47,0.07)_28px)] bg-[length:100%_28px] bg-[position:0_24px]",
+            )}
+        >
+            <div className="mb-3.5 flex flex-wrap items-center gap-2 font-mono text-xs text-muted">
                 <Calendar size={14} />
                 <span>{formatJournalDate(journal.visit_date)}</span>
                 <span>·</span>
-                <span className="badge">{place.name}</span>
+                <Badge>{place.name}</Badge>
             </div>
 
-            <h2 className="journal-page__title">{journal.title}</h2>
+            <h2 className="mb-4 border-b border-border-light pb-3 font-display text-[28px] leading-tight text-primary">
+                {journal.title}
+            </h2>
 
             {journal.content ? (
-                <p className="journal-page__body">{journal.content}</p>
+                <p className="mb-5 min-h-20 whitespace-pre-wrap text-base leading-[1.75] text-primary">
+                    {journal.content}
+                </p>
             ) : (
-                <p className="journal-page__body" style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
+                <p className="mb-5 min-h-20 whitespace-pre-wrap text-base italic leading-[1.75] text-muted">
                     No written entry yet.
                 </p>
             )}
 
             {journal.photos.length > 0 && (
-                <div className="journal-page__photos">
+                <div className="mb-5 grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-2.5">
                     {journal.photos.map((p) => (
                         <img
                             key={p.id}
-                            className="journal-page__photo"
+                            className="aspect-square w-full rounded-lg border border-border object-cover"
                             src={p.preview_url}
                             alt=""
                         />
@@ -106,13 +150,13 @@ export function JournalDetailView({ journal: initialJournal, place, store, onBac
                 </div>
             )}
 
-            <div className="journal-page__actions">
+            <div className="flex flex-wrap gap-2 border-t border-border-light pt-3">
                 <Button size="sm" onClick={openEdit}>
-                    <Pencil size={14} style={{ marginRight: 6 }} />
+                    <Pencil size={14} className="mr-1.5" />
                     Edit
                 </Button>
                 <Button size="sm" variant="danger" onClick={() => setDeleteOpen(true)}>
-                    <Trash2 size={14} style={{ marginRight: 6 }} />
+                    <Trash2 size={14} className="mr-1.5" />
                     Delete
                 </Button>
             </div>
@@ -126,40 +170,50 @@ export function JournalDetailView({ journal: initialJournal, place, store, onBac
                 <input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    style={inputStyle}
+                    className={inputClassName}
                     placeholder="Title"
                 />
                 <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     rows={8}
-                    style={{ ...inputStyle, marginTop: 8, resize: "vertical" }}
+                    className={cn(inputClassName, "mt-2 resize-y")}
                     placeholder="Write about your visit…"
                 />
                 <input
                     type="date"
                     value={visitDate}
                     onChange={(e) => setVisitDate(e.target.value)}
-                    style={{ ...inputStyle, marginTop: 8 }}
+                    className={cn(inputClassName, "mt-2")}
                 />
-                <JournalPhotoPicker photos={editPhotos} onChange={setEditPhotos} />
-                <div style={{ display: "flex", gap: 8, marginTop: 16, justifyContent: "flex-end" }}>
+                <JournalPhotoPicker
+                    photos={editPhotos}
+                    onChange={setEditPhotos}
+                    disabled={store.isDemo}
+                    storageBytesUsed={storageBytesUsed}
+                />
+                <div className="mt-4 flex justify-end gap-2">
                     <Button size="sm" variant="secondary" onClick={() => setEditOpen(false)}>
                         Cancel
                     </Button>
-                    <Button size="sm" onClick={handleSave} disabled={!title.trim()}>
+                    <Button
+                        size="sm"
+                        onClick={handleSave}
+                        loading={isSaving}
+                        disabled={!title.trim() || isSaving}
+                    >
                         Save
                     </Button>
                 </div>
             </Modal>
 
             <Modal isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} title="Delete journal entry?" size="sm">
-                <p style={{ marginBottom: 16, fontSize: 14 }}>This cannot be undone.</p>
-                <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                <p className="mb-4 text-sm text-primary">This cannot be undone.</p>
+                <div className="flex justify-end gap-2">
                     <Button variant="secondary" onClick={() => setDeleteOpen(false)}>
                         Cancel
                     </Button>
-                    <Button variant="danger" onClick={handleDelete}>
+                    <Button variant="danger" onClick={handleDelete} loading={isDeleting} disabled={isDeleting}>
                         Delete
                     </Button>
                 </div>
@@ -167,13 +221,3 @@ export function JournalDetailView({ journal: initialJournal, place, store, onBac
         </div>
     );
 }
-
-const inputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "8px 10px",
-    borderRadius: 6,
-    border: "1px solid var(--border)",
-    background: "var(--surface)",
-    fontFamily: "var(--font-body)",
-    fontSize: 14,
-};
