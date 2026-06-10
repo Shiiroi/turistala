@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bdc7391716b64d92be9daf950008d2ea305a752c7e382dfef3f946a2fe790431
-size 8579254
+id,code,name
+1,1300000000,National Capital Region (NCR)
+2,1400000000,Cordillera Administrative Region (CAR)
+3,100000000,Region I (Ilocos Region)
+4,200000000,Region II (Cagayan Valley)
+5,300000000,Region III (Central Luzon)
+6,400000000,Region IV-A (CALABARZON)
+7,1700000000,MIMAROPA Region
+8,500000000,Region V (Bicol Region)
+9,600000000,Region VI (Western Visayas)
+10,1800000000,Negros Island Region (NIR)
+11,700000000,Region VII (Central Visayas)
+12,800000000,Region VIII (Eastern Visayas)
+13,900000000,Region IX (Zamboanga Peninsula)
+14,1000000000,Region X (Northern Mindanao)
+15,1100000000,Region XI (Davao Region)
+16,1200000000,Region XII (SOCCSKSARGEN)
+17,1600000000,Region XIII (Caraga)
+18,1900000000,Bangsamoro Autonomous Region In Muslim Mindanao (BARMM)

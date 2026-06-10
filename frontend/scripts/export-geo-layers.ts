@@ -1,5 +1,5 @@
 /**
- * Export regions/provinces/municities GeoJSON from CSV to frontend/public/geo.
+ * Export regions/provinces/municities GeoJSON from CSV metadata + public/geo shapes.
  * Same layout as the Supabase geo bucket. For cloud: pnpm upload:geo
  */
 import * as fs from "fs";
@@ -7,6 +7,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import {
     loadMunicitiesGroupedByProvince,
+    loadMunicitiesMetaFromCsv,
     loadProvincesFromCsv,
     loadRegionsFromCsv,
 } from "./geoLayersFromCsv";
@@ -27,10 +28,11 @@ async function main() {
     writeJson("regions.json", await loadRegionsFromCsv());
     writeJson("provinces.json", await loadProvincesFromCsv());
 
-    console.log("Loading municities from CSV (this may take a minute)…");
-    const { meta, byProvince } = await loadMunicitiesGroupedByProvince();
+    console.log("Rebuilding municities meta from CSV…");
+    const meta = await loadMunicitiesMetaFromCsv();
     writeJson("municities/meta.json", meta);
 
+    const { byProvince } = await loadMunicitiesGroupedByProvince();
     const provinceIds = Array.from(byProvince.keys()).sort((a, b) => a - b);
     writeJson("municities/manifest.json", { provinceIds });
 

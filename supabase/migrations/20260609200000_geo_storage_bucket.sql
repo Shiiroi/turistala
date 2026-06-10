@@ -13,6 +13,7 @@ ON CONFLICT (id) DO UPDATE SET
   allowed_mime_types = EXCLUDED.allowed_mime_types;
 
 -- Public read for map tiles / geojson assets
+DROP POLICY IF EXISTS "geo_public_read" ON storage.objects;
 CREATE POLICY "geo_public_read"
 ON storage.objects FOR SELECT
 TO public

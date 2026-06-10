@@ -25,8 +25,6 @@ function mapRegion(row: any) {
         id: Number(row.id),
         code: row.code,
         name: row.name,
-        geometry: row.geometry || null,
-        geojson: row.geojson ? (typeof row.geojson === "string" ? JSON.parse(row.geojson) : row.geojson) : null,
     };
 }
 
@@ -36,8 +34,6 @@ function mapProvince(row: any) {
         code: row.code,
         name: row.name,
         region_id: Number(row.region_id),
-        geometry: row.geometry || null,
-        geojson: row.geojson ? (typeof row.geojson === "string" ? JSON.parse(row.geojson) : row.geojson) : null,
     };
 }
 
@@ -49,8 +45,6 @@ function mapMunicity(row: any) {
         type: row.type,
         province_id: row.province_id ? Number(row.province_id) : null,
         region_id: row.region_id ? Number(row.region_id) : null,
-        geometry: row.geometry || null,
-        geojson: row.geojson ? (typeof row.geojson === "string" ? JSON.parse(row.geojson) : row.geojson) : null,
     };
 }
 

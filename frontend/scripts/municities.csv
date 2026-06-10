@@ -1,3 +1,1643 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:13b9d5b46c24fa7cca836078c9e7625b4d780d8028319f0a729bf93ef76ef432
-size 108191207
+id,name,code,province_id,region_id,type
+1,Adams,0102801000,2,1,municipality
+2,Bacarra,0102802000,2,1,municipality
+3,Badoc,0102803000,2,1,municipality
+4,Bangui,0102804000,2,1,municipality
+5,City of Batac,0102805000,2,1,city
+6,Carasi,0102807000,2,1,municipality
+7,Currimao,0102808000,2,1,municipality
+8,Dingras,0102809000,2,1,municipality
+9,Dumalneg,0102810000,2,1,municipality
+10,Banna,0102811000,2,1,municipality
+11,Laoag City,0102812000,2,1,city
+12,Marcos,0102813000,2,1,municipality
+13,Nueva Era,0102814000,2,1,municipality
+14,Pagudpud,0102815000,2,1,municipality
+15,Paoay,0102816000,2,1,municipality
+16,Pasuquin,0102817000,2,1,municipality
+17,Piddig,0102818000,2,1,municipality
+18,Pinili,0102819000,2,1,municipality
+19,San Nicolas,0102820000,2,1,municipality
+20,Sarrat,0102821000,2,1,municipality
+21,Solsona,0102822000,2,1,municipality
+22,Vintar,0102823000,2,1,municipality
+23,Burgos,0102806000,2,1,municipality
+24,Alilem,0102901000,3,1,municipality
+25,Banayoyo,0102902000,3,1,municipality
+26,Bantay,0102903000,3,1,municipality
+27,Burgos,0102904000,3,1,municipality
+28,Cabugao,0102905000,3,1,municipality
+29,City of Candon,0102906000,3,1,city
+30,Caoayan,0102907000,3,1,municipality
+31,Cervantes,0102908000,3,1,municipality
+32,Galimuyod,0102909000,3,1,municipality
+33,Gregorio del Pilar,0102910000,3,1,municipality
+34,Lidlidda,0102911000,3,1,municipality
+35,Magsingal,0102912000,3,1,municipality
+36,Nagbukel,0102913000,3,1,municipality
+37,Narvacan,0102914000,3,1,municipality
+38,Quirino,0102915000,3,1,municipality
+39,Salcedo,0102916000,3,1,municipality
+40,San Emilio,0102917000,3,1,municipality
+41,San Esteban,0102918000,3,1,municipality
+42,San Ildefonso,0102919000,3,1,municipality
+43,San Juan,0102920000,3,1,municipality
+44,San Vicente,0102921000,3,1,municipality
+45,Santa,0102922000,3,1,municipality
+46,Santa Catalina,0102923000,3,1,municipality
+47,Santa Cruz,0102924000,3,1,municipality
+48,Santa Lucia,0102925000,3,1,municipality
+49,Santa Maria,0102926000,3,1,municipality
+50,Santiago,0102927000,3,1,municipality
+51,Santo Domingo,0102928000,3,1,municipality
+52,Sigay,0102929000,3,1,municipality
+53,Sinait,0102930000,3,1,municipality
+54,Sugpon,0102931000,3,1,municipality
+55,Suyo,0102932000,3,1,municipality
+56,Tagudin,0102933000,3,1,municipality
+57,City of Vigan,0102934000,3,1,city
+58,Agoo,0103301000,4,1,municipality
+59,Aringay,0103302000,4,1,municipality
+60,Bacnotan,0103303000,4,1,municipality
+61,Bagulin,0103304000,4,1,municipality
+62,Balaoan,0103305000,4,1,municipality
+63,Bangar,0103306000,4,1,municipality
+64,Bauang,0103307000,4,1,municipality
+65,Burgos,0103308000,4,1,municipality
+66,Caba,0103309000,4,1,municipality
+67,Luna,0103310000,4,1,municipality
+68,Naguilian,0103311000,4,1,municipality
+69,Pugo,0103312000,4,1,municipality
+70,Rosario,0103313000,4,1,municipality
+71,City of San Fernando,0103314000,4,1,city
+72,San Gabriel,0103315000,4,1,municipality
+73,San Juan,0103316000,4,1,municipality
+74,Santo Tomas,0103317000,4,1,municipality
+75,Santol,0103318000,4,1,municipality
+76,Sudipen,0103319000,4,1,municipality
+77,Tubao,0103320000,4,1,municipality
+78,Agno,0105501000,5,1,municipality
+79,Aguilar,0105502000,5,1,municipality
+80,City of Alaminos,0105503000,5,1,city
+81,Alcala,0105504000,5,1,municipality
+82,Anda,0105505000,5,1,municipality
+83,Asingan,0105506000,5,1,municipality
+84,Balungao,0105507000,5,1,municipality
+85,Bani,0105508000,5,1,municipality
+86,Basista,0105509000,5,1,municipality
+87,Bautista,0105510000,5,1,municipality
+88,Bayambang,0105511000,5,1,municipality
+89,Binalonan,0105512000,5,1,municipality
+90,Binmaley,0105513000,5,1,municipality
+91,Bolinao,0105514000,5,1,municipality
+92,Bugallon,0105515000,5,1,municipality
+93,Burgos,0105516000,5,1,municipality
+94,Calasiao,0105517000,5,1,municipality
+95,Dagupan City,0105518000,5,1,city
+96,Dasol,0105519000,5,1,municipality
+97,Infanta,0105520000,5,1,municipality
+98,Labrador,0105521000,5,1,municipality
+99,Lingayen,0105522000,5,1,municipality
+100,Mabini,0105523000,5,1,municipality
+101,Malasiqui,0105524000,5,1,municipality
+102,Manaoag,0105525000,5,1,municipality
+103,Mangaldan,0105526000,5,1,municipality
+104,Mangatarem,0105527000,5,1,municipality
+105,Mapandan,0105528000,5,1,municipality
+106,Natividad,0105529000,5,1,municipality
+107,Pozorrubio,0105530000,5,1,municipality
+108,Rosales,0105531000,5,1,municipality
+109,San Carlos City,0105532000,5,1,city
+110,San Fabian,0105533000,5,1,municipality
+111,San Jacinto,0105534000,5,1,municipality
+112,San Manuel,0105535000,5,1,municipality
+113,San Nicolas,0105536000,5,1,municipality
+114,San Quintin,0105537000,5,1,municipality
+115,Santa Barbara,0105538000,5,1,municipality
+116,Santa Maria,0105539000,5,1,municipality
+117,Santo Tomas,0105540000,5,1,municipality
+118,Sison,0105541000,5,1,municipality
+119,Sual,0105542000,5,1,municipality
+120,Tayug,0105543000,5,1,municipality
+121,Umingan,0105544000,5,1,municipality
+122,Urbiztondo,0105545000,5,1,municipality
+123,City of Urdaneta,0105546000,5,1,city
+124,Villasis,0105547000,5,1,municipality
+125,Laoac,0105548000,5,1,municipality
+126,Basco,0200901000,6,2,municipality
+127,Itbayat,0200902000,6,2,municipality
+128,Ivana,0200903000,6,2,municipality
+129,Mahatao,0200904000,6,2,municipality
+130,Sabtang,0200905000,6,2,municipality
+131,Uyugan,0200906000,6,2,municipality
+132,Abulug,0201501000,7,2,municipality
+133,Alcala,0201502000,7,2,municipality
+134,Allacapan,0201503000,7,2,municipality
+135,Amulung,0201504000,7,2,municipality
+136,Aparri,0201505000,7,2,municipality
+137,Baggao,0201506000,7,2,municipality
+138,Ballesteros,0201507000,7,2,municipality
+139,Buguey,0201508000,7,2,municipality
+140,Calayan,0201509000,7,2,municipality
+141,Camalaniugan,0201510000,7,2,municipality
+142,Claveria,0201511000,7,2,municipality
+143,Enrile,0201512000,7,2,municipality
+144,Gattaran,0201513000,7,2,municipality
+145,Gonzaga,0201514000,7,2,municipality
+146,Iguig,0201515000,7,2,municipality
+147,Lal-Lo,0201516000,7,2,municipality
+148,Lasam,0201517000,7,2,municipality
+149,Pamplona,0201518000,7,2,municipality
+150,Peñablanca,0201519000,7,2,municipality
+151,Piat,0201520000,7,2,municipality
+152,Rizal,0201521000,7,2,municipality
+153,Sanchez-Mira,0201522000,7,2,municipality
+154,Santa Ana,0201523000,7,2,municipality
+155,Santa Praxedes,0201524000,7,2,municipality
+156,Santa Teresita,0201525000,7,2,municipality
+157,Santo Niño,0201526000,7,2,municipality
+158,Solana,0201527000,7,2,municipality
+159,Tuao,0201528000,7,2,municipality
+160,Tuguegarao City,0201529000,7,2,city
+161,Alicia,0203101000,8,2,municipality
+162,Angadanan,0203102000,8,2,municipality
+163,Aurora,0203103000,8,2,municipality
+164,Benito Soliven,0203104000,8,2,municipality
+165,Burgos,0203105000,8,2,municipality
+166,Cabagan,0203106000,8,2,municipality
+167,Cabatuan,0203107000,8,2,municipality
+168,City of Cauayan,0203108000,8,2,city
+169,Cordon,0203109000,8,2,municipality
+170,Dinapigue,0203110000,8,2,municipality
+171,Divilacan,0203111000,8,2,municipality
+172,Echague,0203112000,8,2,municipality
+173,Gamu,0203113000,8,2,municipality
+174,Ilagan City,0203114000,8,2,city
+175,Jones,0203115000,8,2,municipality
+176,Luna,0203116000,8,2,municipality
+177,Maconacon,0203117000,8,2,municipality
+178,Delfin Albano,0203118000,8,2,municipality
+179,Mallig,0203119000,8,2,municipality
+180,Naguilian,0203120000,8,2,municipality
+181,Palanan,0203121000,8,2,municipality
+182,Quezon,0203122000,8,2,municipality
+183,Quirino,0203123000,8,2,municipality
+184,Ramon,0203124000,8,2,municipality
+185,Reina Mercedes,0203125000,8,2,municipality
+186,Roxas,0203126000,8,2,municipality
+187,San Agustin,0203127000,8,2,municipality
+188,San Guillermo,0203128000,8,2,municipality
+189,San Isidro,0203129000,8,2,municipality
+190,San Manuel,0203130000,8,2,municipality
+191,San Mariano,0203131000,8,2,municipality
+192,San Mateo,0203132000,8,2,municipality
+193,San Pablo,0203133000,8,2,municipality
+194,Santa Maria,0203134000,8,2,municipality
+195,City of Santiago,0203135000,8,2,city
+196,Santo Tomas,0203136000,8,2,municipality
+197,Tumauini,0203137000,8,2,municipality
+198,Ambaguio,0205001000,9,2,municipality
+199,Aritao,0205002000,9,2,municipality
+200,Bagabag,0205003000,9,2,municipality
+201,Bambang,0205004000,9,2,municipality
+202,Bayombong,0205005000,9,2,municipality
+203,Diadi,0205006000,9,2,municipality
+204,Dupax del Norte,0205007000,9,2,municipality
+205,Dupax del Sur,0205008000,9,2,municipality
+206,Kasibu,0205009000,9,2,municipality
+207,Kayapa,0205010000,9,2,municipality
+208,Quezon,0205011000,9,2,municipality
+209,Santa Fe,0205012000,9,2,municipality
+210,Solano,0205013000,9,2,municipality
+211,Villaverde,0205014000,9,2,municipality
+212,Alfonso Castaneda,0205015000,9,2,municipality
+213,Aglipay,0205701000,10,2,municipality
+214,Cabarroguis,0205702000,10,2,municipality
+215,Diffun,0205703000,10,2,municipality
+216,Maddela,0205704000,10,2,municipality
+217,Saguday,0205705000,10,2,municipality
+218,Nagtipunan,0205706000,10,2,municipality
+219,Abucay,0300801000,11,3,municipality
+220,Bagac,0300802000,11,3,municipality
+221,City of Balanga,0300803000,11,3,city
+222,Dinalupihan,0300804000,11,3,municipality
+223,Hermosa,0300805000,11,3,municipality
+224,Limay,0300806000,11,3,municipality
+225,Mariveles,0300807000,11,3,municipality
+226,Morong,0300808000,11,3,municipality
+227,Orani,0300809000,11,3,municipality
+228,Orion,0300810000,11,3,municipality
+229,Pilar,0300811000,11,3,municipality
+230,Samal,0300812000,11,3,municipality
+231,Angat,0301401000,12,3,municipality
+232,Balagtas,0301402000,12,3,municipality
+233,Baliuag,0301403000,12,3,municipality
+234,Bocaue,0301404000,12,3,municipality
+235,Bulacan,0301405000,12,3,municipality
+236,Bustos,0301406000,12,3,municipality
+237,Calumpit,0301407000,12,3,municipality
+238,Guiguinto,0301408000,12,3,municipality
+239,Hagonoy,0301409000,12,3,municipality
+240,City of Malolos,0301410000,12,3,city
+241,Marilao,0301411000,12,3,municipality
+242,City of Meycauayan,0301412000,12,3,city
+243,Norzagaray,0301413000,12,3,municipality
+244,Obando,0301414000,12,3,municipality
+245,Pandi,0301415000,12,3,municipality
+246,Paombong,0301416000,12,3,municipality
+247,Plaridel,0301417000,12,3,municipality
+248,Pulilan,0301418000,12,3,municipality
+249,San Ildefonso,0301419000,12,3,municipality
+250,City of San Jose del Monte,0301420000,12,3,city
+251,San Miguel,0301421000,12,3,municipality
+252,San Rafael,0301422000,12,3,municipality
+253,Santa Maria,0301423000,12,3,municipality
+254,Doña Remedios Trinidad,0301424000,12,3,municipality
+255,Aliaga,0304901000,13,3,municipality
+256,Bongabon,0304902000,13,3,municipality
+257,Cabanatuan City,0304903000,13,3,city
+258,Cabiao,0304904000,13,3,municipality
+259,Carranglan,0304905000,13,3,municipality
+260,Cuyapo,0304906000,13,3,municipality
+261,Gabaldon,0304907000,13,3,municipality
+262,City of Gapan,0304908000,13,3,city
+263,General Mamerto Natividad,0304909000,13,3,municipality
+264,General Tinio,0304910000,13,3,municipality
+265,Guimba,0304911000,13,3,municipality
+266,Jaen,0304912000,13,3,municipality
+267,Laur,0304913000,13,3,municipality
+268,Licab,0304914000,13,3,municipality
+269,Llanera,0304915000,13,3,municipality
+270,Lupao,0304916000,13,3,municipality
+271,Science City of Muñoz,0304917000,13,3,city
+272,Nampicuan,0304918000,13,3,municipality
+273,Palayan City,0304919000,13,3,city
+274,Pantabangan,0304920000,13,3,municipality
+275,Peñaranda,0304921000,13,3,municipality
+276,Quezon,0304922000,13,3,municipality
+277,Rizal,0304923000,13,3,municipality
+278,San Antonio,0304924000,13,3,municipality
+279,San Isidro,0304925000,13,3,municipality
+280,San Jose City,0304926000,13,3,city
+281,San Leonardo,0304927000,13,3,municipality
+282,Santa Rosa,0304928000,13,3,municipality
+283,Santo Domingo,0304929000,13,3,municipality
+284,Talavera,0304930000,13,3,municipality
+285,Talugtug,0304931000,13,3,municipality
+286,Zaragoza,0304932000,13,3,municipality
+287,Angeles City,0330100000,14,3,city
+288,Apalit,0305402000,14,3,municipality
+289,Arayat,0305403000,14,3,municipality
+290,Bacolor,0305404000,14,3,municipality
+291,Candaba,0305405000,14,3,municipality
+292,Floridablanca,0305406000,14,3,municipality
+293,Guagua,0305407000,14,3,municipality
+294,Lubao,0305408000,14,3,municipality
+295,Mabalacat City,0305409000,14,3,city
+296,Macabebe,0305410000,14,3,municipality
+297,Magalang,0305411000,14,3,municipality
+298,Masantol,0305412000,14,3,municipality
+299,Mexico,0305413000,14,3,municipality
+300,Minalin,0305414000,14,3,municipality
+301,Porac,0305415000,14,3,municipality
+302,City of San Fernando,0305416000,14,3,city
+303,San Luis,0305417000,14,3,municipality
+304,San Simon,0305418000,14,3,municipality
+305,Santa Ana,0305419000,14,3,municipality
+306,Santa Rita,0305420000,14,3,municipality
+307,Santo Tomas,0305421000,14,3,municipality
+308,Sasmuan,0305422000,14,3,municipality
+309,Anao,0306901000,15,3,municipality
+310,Bamban,0306902000,15,3,municipality
+311,Camiling,0306903000,15,3,municipality
+312,Capas,0306904000,15,3,municipality
+313,Concepcion,0306905000,15,3,municipality
+314,Gerona,0306906000,15,3,municipality
+315,La Paz,0306907000,15,3,municipality
+316,Mayantoc,0306908000,15,3,municipality
+317,Moncada,0306909000,15,3,municipality
+318,Paniqui,0306910000,15,3,municipality
+319,Pura,0306911000,15,3,municipality
+320,Ramos,0306912000,15,3,municipality
+321,San Clemente,0306913000,15,3,municipality
+322,San Manuel,0306914000,15,3,municipality
+323,Santa Ignacia,0306915000,15,3,municipality
+324,City of Tarlac,0306916000,15,3,city
+325,Victoria,0306917000,15,3,municipality
+326,San Jose,0306918000,15,3,municipality
+327,Botolan,0307101000,16,3,municipality
+328,Cabangan,0307102000,16,3,municipality
+329,Candelaria,0307103000,16,3,municipality
+330,Castillejos,0307104000,16,3,municipality
+331,Iba,0307105000,16,3,municipality
+332,Masinloc,0307106000,16,3,municipality
+333,Olongapo City,0331400000,16,3,city
+334,Palauig,0307108000,16,3,municipality
+335,San Antonio,0307109000,16,3,municipality
+336,San Felipe,0307110000,16,3,municipality
+337,San Marcelino,0307111000,16,3,municipality
+338,San Narciso,0307112000,16,3,municipality
+339,Santa Cruz,0307113000,16,3,municipality
+340,Subic,0307114000,16,3,municipality
+341,Baler,0307701000,17,3,municipality
+342,Casiguran,0307702000,17,3,municipality
+343,Dilasag,0307703000,17,3,municipality
+344,Dinalungan,0307704000,17,3,municipality
+345,Dingalan,0307705000,17,3,municipality
+346,Dipaculao,0307706000,17,3,municipality
+347,Maria Aurora,0307707000,17,3,municipality
+348,San Luis,0307708000,17,3,municipality
+349,Agoncillo,0401001000,18,4,municipality
+350,Alitagtag,0401002000,18,4,municipality
+351,Balayan,0401003000,18,4,municipality
+352,Balete,0401004000,18,4,municipality
+353,Batangas City,0401005000,18,4,city
+354,Bauan,0401006000,18,4,municipality
+355,Calaca,0401007000,18,4,municipality
+356,Calatagan,0401008000,18,4,municipality
+357,Cuenca,0401009000,18,4,municipality
+358,Ibaan,0401010000,18,4,municipality
+359,Laurel,0401011000,18,4,municipality
+360,Lemery,0401012000,18,4,municipality
+361,Lian,0401013000,18,4,municipality
+362,Lipa City,0401014000,18,4,city
+363,Lobo,0401015000,18,4,municipality
+364,Mabini,0401016000,18,4,municipality
+365,Malvar,0401017000,18,4,municipality
+366,Mataasnakahoy,0401018000,18,4,municipality
+367,Nasugbu,0401019000,18,4,municipality
+368,Padre Garcia,0401020000,18,4,municipality
+369,Rosario,0401021000,18,4,municipality
+370,San Jose,0401022000,18,4,municipality
+371,San Juan,0401023000,18,4,municipality
+372,San Luis,0401024000,18,4,municipality
+373,San Nicolas,0401025000,18,4,municipality
+374,San Pascual,0401026000,18,4,municipality
+375,Santa Teresita,0401027000,18,4,municipality
+376,Santo Tomas,0401028000,18,4,municipality
+377,Taal,0401029000,18,4,municipality
+378,Talisay,0401030000,18,4,municipality
+379,City of Tanauan,0401031000,18,4,city
+380,Taysan,0401032000,18,4,municipality
+381,Tingloy,0401033000,18,4,municipality
+382,Tuy,0401034000,18,4,municipality
+383,Alfonso,0402101000,19,4,municipality
+384,Amadeo,0402102000,19,4,municipality
+385,Bacoor City,0402103000,19,4,city
+386,Carmona,0402104000,19,4,municipality
+387,Cavite City,0402105000,19,4,city
+388,City of Dasmariñas,0402106000,19,4,city
+389,General Emilio Aguinaldo,0402107000,19,4,municipality
+390,City of General Trias,0402108000,19,4,city
+391,Imus City,0402109000,19,4,city
+392,Indang,0402110000,19,4,municipality
+393,Kawit,0402111000,19,4,municipality
+394,Magallanes,0402112000,19,4,municipality
+395,Maragondon,0402113000,19,4,municipality
+396,Mendez,0402114000,19,4,municipality
+397,Naic,0402115000,19,4,municipality
+398,Noveleta,0402116000,19,4,municipality
+399,Rosario,0402117000,19,4,municipality
+400,Silang,0402118000,19,4,municipality
+401,Tagaytay City,0402119000,19,4,city
+402,Tanza,0402120000,19,4,municipality
+403,Ternate,0402121000,19,4,municipality
+404,Trece Martires City,0402122000,19,4,city
+405,Gen. Mariano Alvarez,0402123000,19,4,municipality
+406,Alaminos,0403401000,20,4,municipality
+407,Bay,0403402000,20,4,municipality
+408,City of Biñan,0403403000,20,4,city
+409,Cabuyao City,0403404000,20,4,city
+410,City of Calamba,0403405000,20,4,city
+411,Calauan,0403406000,20,4,municipality
+412,Cavinti,0403407000,20,4,municipality
+413,Famy,0403408000,20,4,municipality
+414,Kalayaan,0403409000,20,4,municipality
+415,Liliw,0403410000,20,4,municipality
+416,Los Baños,0403411000,20,4,municipality
+417,Luisiana,0403412000,20,4,municipality
+418,Lumban,0403413000,20,4,municipality
+419,Mabitac,0403414000,20,4,municipality
+420,Magdalena,0403415000,20,4,municipality
+421,Majayjay,0403416000,20,4,municipality
+422,Nagcarlan,0403417000,20,4,municipality
+423,Paete,0403418000,20,4,municipality
+424,Pagsanjan,0403419000,20,4,municipality
+425,Pakil,0403420000,20,4,municipality
+426,Pangil,0403421000,20,4,municipality
+427,Pila,0403422000,20,4,municipality
+428,Rizal,0403423000,20,4,municipality
+429,San Pablo City,0403424000,20,4,city
+430,City of San Pedro,0403425000,20,4,city
+431,Santa Cruz,0403426000,20,4,municipality
+432,Santa Maria,0403427000,20,4,municipality
+433,City of Santa Rosa,0403428000,20,4,city
+434,Siniloan,0403429000,20,4,municipality
+435,Victoria,0403430000,20,4,municipality
+436,Agdangan,0405601000,21,4,municipality
+437,Alabat,0405602000,21,4,municipality
+438,Atimonan,0405603000,21,4,municipality
+439,Buenavista,0405605000,21,4,municipality
+440,Burdeos,0405606000,21,4,municipality
+441,Calauag,0405607000,21,4,municipality
+442,Candelaria,0405608000,21,4,municipality
+443,Catanauan,0405610000,21,4,municipality
+444,Dolores,0405615000,21,4,municipality
+445,General Luna,0405616000,21,4,municipality
+446,General Nakar,0405617000,21,4,municipality
+447,Guinayangan,0405618000,21,4,municipality
+448,Gumaca,0405619000,21,4,municipality
+449,Infanta,0405620000,21,4,municipality
+450,Jomalig,0405621000,21,4,municipality
+451,Lopez,0405622000,21,4,municipality
+452,Lucban,0405623000,21,4,municipality
+453,Lucena City,0431200000,21,4,city
+454,Macalelon,0405625000,21,4,municipality
+455,Mauban,0405627000,21,4,municipality
+456,Mulanay,0405628000,21,4,municipality
+457,Padre Burgos,0405629000,21,4,municipality
+458,Pagbilao,0405630000,21,4,municipality
+459,Panukulan,0405631000,21,4,municipality
+460,Patnanungan,0405632000,21,4,municipality
+461,Perez,0405633000,21,4,municipality
+462,Pitogo,0405634000,21,4,municipality
+463,Plaridel,0405635000,21,4,municipality
+464,Polillo,0405636000,21,4,municipality
+465,Quezon,0405637000,21,4,municipality
+466,Real,0405638000,21,4,municipality
+467,Sampaloc,0405639000,21,4,municipality
+468,San Andres,0405640000,21,4,municipality
+469,San Antonio,0405641000,21,4,municipality
+470,San Francisco,0405642000,21,4,municipality
+471,San Narciso,0405644000,21,4,municipality
+472,Sariaya,0405645000,21,4,municipality
+473,Tagkawayan,0405646000,21,4,municipality
+474,City of Tayabas,0405647000,21,4,city
+475,Tiaong,0405648000,21,4,municipality
+476,Unisan,0405649000,21,4,municipality
+477,Angono,0405801000,22,4,municipality
+478,City of Antipolo,0405802000,22,4,city
+479,Baras,0405803000,22,4,municipality
+480,Binangonan,0405804000,22,4,municipality
+481,Cainta,0405805000,22,4,municipality
+482,Cardona,0405806000,22,4,municipality
+483,Jala-Jala,0405807000,22,4,municipality
+484,Rodriguez,0405808000,22,4,municipality
+485,Morong,0405809000,22,4,municipality
+486,Pililla,0405810000,22,4,municipality
+487,San Mateo,0405811000,22,4,municipality
+488,Tanay,0405812000,22,4,municipality
+489,Taytay,0405813000,22,4,municipality
+490,Teresa,0405814000,22,4,municipality
+491,Bacacay,0500501000,28,5,municipality
+492,Camalig,0500502000,28,5,municipality
+493,Daraga,0500503000,28,5,municipality
+494,Guinobatan,0500504000,28,5,municipality
+495,Jovellar,0500505000,28,5,municipality
+496,Legazpi City,0500506000,28,5,city
+497,Libon,0500507000,28,5,municipality
+498,City of Ligao,0500508000,28,5,city
+499,Malilipot,0500509000,28,5,municipality
+500,Malinao,0500510000,28,5,municipality
+501,Manito,0500511000,28,5,municipality
+502,Oas,0500512000,28,5,municipality
+503,Pio Duran,0500513000,28,5,municipality
+504,Polangui,0500514000,28,5,municipality
+505,Rapu-Rapu,0500515000,28,5,municipality
+506,Santo Domingo,0500516000,28,5,municipality
+507,City of Tabaco,0500517000,28,5,city
+508,Tiwi,0500518000,28,5,municipality
+509,Basud,0501601000,29,5,municipality
+510,Capalonga,0501602000,29,5,municipality
+511,Daet,0501603000,29,5,municipality
+512,San Lorenzo Ruiz,0501604000,29,5,municipality
+513,Jose Panganiban,0501605000,29,5,municipality
+514,Labo,0501606000,29,5,municipality
+515,Mercedes,0501607000,29,5,municipality
+516,Paracale,0501608000,29,5,municipality
+517,San Vicente,0501609000,29,5,municipality
+518,Santa Elena,0501610000,29,5,municipality
+519,Talisay,0501611000,29,5,municipality
+520,Vinzons,0501612000,29,5,municipality
+521,Baao,0501701000,30,5,municipality
+522,Balatan,0501702000,30,5,municipality
+523,Bato,0501703000,30,5,municipality
+524,Bombon,0501704000,30,5,municipality
+525,Buhi,0501705000,30,5,municipality
+526,Bula,0501706000,30,5,municipality
+527,Cabusao,0501707000,30,5,municipality
+528,Calabanga,0501708000,30,5,municipality
+529,Camaligan,0501709000,30,5,municipality
+530,Canaman,0501710000,30,5,municipality
+531,Caramoan,0501711000,30,5,municipality
+532,Del Gallego,0501712000,30,5,municipality
+533,Gainza,0501713000,30,5,municipality
+534,Garchitorena,0501714000,30,5,municipality
+535,Goa,0501715000,30,5,municipality
+536,Iriga City,0501716000,30,5,city
+537,Lagonoy,0501717000,30,5,municipality
+538,Libmanan,0501718000,30,5,municipality
+539,Lupi,0501719000,30,5,municipality
+540,Magarao,0501720000,30,5,municipality
+541,Milaor,0501721000,30,5,municipality
+542,Minalabac,0501722000,30,5,municipality
+543,Nabua,0501723000,30,5,municipality
+544,Naga City,0501724000,30,5,city
+545,Ocampo,0501725000,30,5,municipality
+546,Pamplona,0501726000,30,5,municipality
+547,Pasacao,0501727000,30,5,municipality
+548,Pili,0501728000,30,5,municipality
+549,Presentacion,0501729000,30,5,municipality
+550,Ragay,0501730000,30,5,municipality
+551,Sagñay,0501731000,30,5,municipality
+552,San Fernando,0501732000,30,5,municipality
+553,San Jose,0501733000,30,5,municipality
+554,Sipocot,0501734000,30,5,municipality
+555,Siruma,0501735000,30,5,municipality
+556,Tigaon,0501736000,30,5,municipality
+557,Tinambac,0501737000,30,5,municipality
+558,Bagamanoc,0502001000,31,5,municipality
+559,Baras,0502002000,31,5,municipality
+560,Bato,0502003000,31,5,municipality
+561,Caramoran,0502004000,31,5,municipality
+562,Gigmoto,0502005000,31,5,municipality
+563,Pandan,0502006000,31,5,municipality
+564,Panganiban,0502007000,31,5,municipality
+565,San Andres,0502008000,31,5,municipality
+566,San Miguel,0502009000,31,5,municipality
+567,Viga,0502010000,31,5,municipality
+568,Virac,0502011000,31,5,municipality
+569,Aroroy,0504101000,32,5,municipality
+570,Baleno,0504102000,32,5,municipality
+571,Balud,0504103000,32,5,municipality
+572,Batuan,0504104000,32,5,municipality
+573,Cataingan,0504105000,32,5,municipality
+574,Cawayan,0504106000,32,5,municipality
+575,Claveria,0504107000,32,5,municipality
+576,Dimasalang,0504108000,32,5,municipality
+577,Esperanza,0504109000,32,5,municipality
+578,Mandaon,0504110000,32,5,municipality
+579,City of Masbate,0504111000,32,5,city
+580,Milagros,0504112000,32,5,municipality
+581,Mobo,0504113000,32,5,municipality
+582,Monreal,0504114000,32,5,municipality
+583,Palanas,0504115000,32,5,municipality
+584,Pio V. Corpuz,0504116000,32,5,municipality
+585,Placer,0504117000,32,5,municipality
+586,San Fernando,0504118000,32,5,municipality
+587,San Jacinto,0504119000,32,5,municipality
+588,San Pascual,0504120000,32,5,municipality
+589,Uson,0504121000,32,5,municipality
+590,Barcelona,0506202000,33,5,municipality
+591,Bulan,0506203000,33,5,municipality
+592,Bulusan,0506204000,33,5,municipality
+593,Casiguran,0506205000,33,5,municipality
+594,Castilla,0506206000,33,5,municipality
+595,Donsol,0506207000,33,5,municipality
+596,Gubat,0506208000,33,5,municipality
+597,Irosin,0506209000,33,5,municipality
+598,Juban,0506210000,33,5,municipality
+599,Magallanes,0506211000,33,5,municipality
+600,Matnog,0506212000,33,5,municipality
+601,Pilar,0506213000,33,5,municipality
+602,Prieto Diaz,0506214000,33,5,municipality
+603,Santa Magdalena,0506215000,33,5,municipality
+604,City of Sorsogon,0506216000,33,5,city
+605,Altavas,0600401000,34,6,municipality
+606,Balete,0600402000,34,6,municipality
+607,Banga,0600403000,34,6,municipality
+608,Batan,0600404000,34,6,municipality
+609,Buruanga,0600405000,34,6,municipality
+610,Ibajay,0600406000,34,6,municipality
+611,Kalibo,0600407000,34,6,municipality
+612,Lezo,0600408000,34,6,municipality
+613,Libacao,0600409000,34,6,municipality
+614,Madalag,0600410000,34,6,municipality
+615,Makato,0600411000,34,6,municipality
+616,Malay,0600412000,34,6,municipality
+617,Malinao,0600413000,34,6,municipality
+618,Nabas,0600414000,34,6,municipality
+619,New Washington,0600415000,34,6,municipality
+620,Numancia,0600416000,34,6,municipality
+621,Tangalan,0600417000,34,6,municipality
+622,Anini-Y,0600601000,35,6,municipality
+623,Barbaza,0600602000,35,6,municipality
+624,Belison,0600603000,35,6,municipality
+625,Bugasong,0600604000,35,6,municipality
+626,Caluya,0600605000,35,6,municipality
+627,Culasi,0600606000,35,6,municipality
+628,Tobias Fornier,0600607000,35,6,municipality
+629,Hamtic,0600608000,35,6,municipality
+630,Laua-An,0600609000,35,6,municipality
+631,Libertad,0600610000,35,6,municipality
+632,Pandan,0600611000,35,6,municipality
+633,Patnongon,0600612000,35,6,municipality
+634,San Jose,0600613000,35,6,municipality
+635,San Remigio,0600614000,35,6,municipality
+636,Sebaste,0600615000,35,6,municipality
+637,Sibalom,0600616000,35,6,municipality
+638,Tibiao,0600617000,35,6,municipality
+639,Valderrama,0600618000,35,6,municipality
+640,Cuartero,0601901000,36,6,municipality
+641,Dao,0601902000,36,6,municipality
+642,Dumalag,0601903000,36,6,municipality
+643,Dumarao,0601904000,36,6,municipality
+644,Ivisan,0601905000,36,6,municipality
+645,Jamindan,0601906000,36,6,municipality
+646,Ma-Ayon,0601907000,36,6,municipality
+647,Mambusao,0601908000,36,6,municipality
+648,Panay,0601909000,36,6,municipality
+649,Panitan,0601910000,36,6,municipality
+650,Pilar,0601911000,36,6,municipality
+651,Pontevedra,0601912000,36,6,municipality
+652,President Roxas,0601913000,36,6,municipality
+653,Roxas City,0601914000,36,6,city
+654,Sapi-An,0601915000,36,6,municipality
+655,Sigma,0601916000,36,6,municipality
+656,Tapaz,0601917000,36,6,municipality
+657,Ajuy,0603001000,37,6,municipality
+658,Alimodian,0603002000,37,6,municipality
+659,Anilao,0603003000,37,6,municipality
+660,Badiangan,0603004000,37,6,municipality
+661,Balasan,0603005000,37,6,municipality
+662,Banate,0603006000,37,6,municipality
+663,Barotac Nuevo,0603007000,37,6,municipality
+664,Barotac Viejo,0603008000,37,6,municipality
+665,Batad,0603009000,37,6,municipality
+666,Bingawan,0603010000,37,6,municipality
+667,Cabatuan,0603012000,37,6,municipality
+668,Calinog,0603013000,37,6,municipality
+669,Carles,0603014000,37,6,municipality
+670,Concepcion,0603015000,37,6,municipality
+671,Dingle,0603016000,37,6,municipality
+672,Dueñas,0603017000,37,6,municipality
+673,Dumangas,0603018000,37,6,municipality
+674,Estancia,0603019000,37,6,municipality
+675,Guimbal,0603020000,37,6,municipality
+676,Igbaras,0603021000,37,6,municipality
+677,Iloilo City,0631000000,37,6,city
+678,Janiuay,0603023000,37,6,municipality
+679,Lambunao,0603025000,37,6,municipality
+680,Leganes,0603026000,37,6,municipality
+681,Lemery,0603027000,37,6,municipality
+682,Leon,0603028000,37,6,municipality
+683,Maasin,0603029000,37,6,municipality
+684,Miagao,0603030000,37,6,municipality
+685,Mina,0603031000,37,6,municipality
+686,New Lucena,0603032000,37,6,municipality
+687,Oton,0603034000,37,6,municipality
+688,City of Passi,0603035000,37,6,city
+689,Pavia,0603036000,37,6,municipality
+690,Pototan,0603037000,37,6,municipality
+691,San Dionisio,0603038000,37,6,municipality
+692,San Enrique,0603039000,37,6,municipality
+693,San Joaquin,0603040000,37,6,municipality
+694,San Miguel,0603041000,37,6,municipality
+695,San Rafael,0603042000,37,6,municipality
+696,Santa Barbara,0603043000,37,6,municipality
+697,Sara,0603044000,37,6,municipality
+698,Tigbauan,0603045000,37,6,municipality
+699,Tubungan,0603046000,37,6,municipality
+700,Zarraga,0603047000,37,6,municipality
+701,Buenavista,0607901000,39,6,municipality
+702,Jordan,0607902000,39,6,municipality
+703,Nueva Valencia,0607903000,39,6,municipality
+704,San Lorenzo,0607904000,39,6,municipality
+705,Sibunag,0607905000,39,6,municipality
+706,Alburquerque,0701201000,40,7,municipality
+707,Alicia,0701202000,40,7,municipality
+708,Anda,0701203000,40,7,municipality
+709,Antequera,0701204000,40,7,municipality
+710,Baclayon,0701205000,40,7,municipality
+711,Balilihan,0701206000,40,7,municipality
+712,Batuan,0701207000,40,7,municipality
+713,Bilar,0701208000,40,7,municipality
+714,Buenavista,0701209000,40,7,municipality
+715,Calape,0701210000,40,7,municipality
+716,Candijay,0701211000,40,7,municipality
+717,Carmen,0701212000,40,7,municipality
+718,Catigbian,0701213000,40,7,municipality
+719,Clarin,0701214000,40,7,municipality
+720,Corella,0701215000,40,7,municipality
+721,Cortes,0701216000,40,7,municipality
+722,Dagohoy,0701217000,40,7,municipality
+723,Danao,0701218000,40,7,municipality
+724,Dauis,0701219000,40,7,municipality
+725,Dimiao,0701220000,40,7,municipality
+726,Duero,0701221000,40,7,municipality
+727,Garcia Hernandez,0701222000,40,7,municipality
+728,Guindulman,0701223000,40,7,municipality
+729,Inabanga,0701224000,40,7,municipality
+730,Jagna,0701225000,40,7,municipality
+731,Getafe,0701226000,40,7,municipality
+732,Lila,0701227000,40,7,municipality
+733,Loay,0701228000,40,7,municipality
+734,Loboc,0701229000,40,7,municipality
+735,Loon,0701230000,40,7,municipality
+736,Mabini,0701231000,40,7,municipality
+737,Maribojoc,0701232000,40,7,municipality
+738,Panglao,0701233000,40,7,municipality
+739,Pilar,0701234000,40,7,municipality
+740,Pres. Carlos P. Garcia,0701235000,40,7,municipality
+741,Sagbayan,0701236000,40,7,municipality
+742,San Isidro,0701237000,40,7,municipality
+743,San Miguel,0701238000,40,7,municipality
+744,Sevilla,0701239000,40,7,municipality
+745,Sierra Bullones,0701240000,40,7,municipality
+746,Sikatuna,0701241000,40,7,municipality
+747,Tagbilaran City,0701242000,40,7,city
+748,Talibon,0701243000,40,7,municipality
+749,Trinidad,0701244000,40,7,municipality
+750,Tubigon,0701245000,40,7,municipality
+751,Ubay,0701246000,40,7,municipality
+752,Valencia,0701247000,40,7,municipality
+753,Bien Unido,0701248000,40,7,municipality
+754,Alcantara,0702201000,41,7,municipality
+755,Alcoy,0702202000,41,7,municipality
+756,Alegria,0702203000,41,7,municipality
+757,Aloguinsan,0702204000,41,7,municipality
+758,Argao,0702205000,41,7,municipality
+759,Asturias,0702206000,41,7,municipality
+760,Badian,0702207000,41,7,municipality
+761,Balamban,0702208000,41,7,municipality
+762,Bantayan,0702209000,41,7,municipality
+763,Barili,0702210000,41,7,municipality
+764,City of Bogo,0702211000,41,7,city
+765,Boljoon,0702212000,41,7,municipality
+766,Borbon,0702213000,41,7,municipality
+767,City of Carcar,0702214000,41,7,city
+768,Carmen,0702215000,41,7,municipality
+769,Catmon,0702216000,41,7,municipality
+770,Cebu City,0730600000,41,7,city
+771,Compostela,0702218000,41,7,municipality
+772,Consolacion,0702219000,41,7,municipality
+773,Cordova,0702220000,41,7,municipality
+774,Daanbantayan,0702221000,41,7,municipality
+775,Dalaguete,0702222000,41,7,municipality
+776,Danao City,0702223000,41,7,city
+777,Dumanjug,0702224000,41,7,municipality
+778,Ginatilan,0702225000,41,7,municipality
+779,Lapu-Lapu City,0731100000,41,7,city
+780,Liloan,0702227000,41,7,municipality
+781,Madridejos,0702228000,41,7,municipality
+782,Malabuyoc,0702229000,41,7,municipality
+783,Mandaue City,0731300000,41,7,city
+784,Medellin,0702231000,41,7,municipality
+785,Minglanilla,0702232000,41,7,municipality
+786,Moalboal,0702233000,41,7,municipality
+787,City of Naga,0702234000,41,7,city
+788,Oslob,0702235000,41,7,municipality
+789,Pilar,0702236000,41,7,municipality
+790,Pinamungahan,0702237000,41,7,municipality
+791,Poro,0702238000,41,7,municipality
+792,Ronda,0702239000,41,7,municipality
+793,Samboan,0702240000,41,7,municipality
+794,San Fernando,0702241000,41,7,municipality
+795,San Francisco,0702242000,41,7,municipality
+796,San Remigio,0702243000,41,7,municipality
+797,Santa Fe,0702244000,41,7,municipality
+798,Santander,0702245000,41,7,municipality
+799,Sibonga,0702246000,41,7,municipality
+800,Sogod,0702247000,41,7,municipality
+801,Tabogon,0702248000,41,7,municipality
+802,Tabuelan,0702249000,41,7,municipality
+803,City of Talisay,0702250000,41,7,city
+804,Toledo City,0702251000,41,7,city
+805,Tuburan,0702252000,41,7,municipality
+806,Tudela,0702253000,41,7,municipality
+807,Enrique Villanueva,1806101000,43,7,municipality
+808,Larena,1806102000,43,7,municipality
+809,Lazi,1806103000,43,7,municipality
+810,Maria,1806104000,43,7,municipality
+811,San Juan,1806105000,43,7,municipality
+812,Siquijor,1806106000,43,7,municipality
+813,Arteche,0802601000,44,8,municipality
+814,Balangiga,0802602000,44,8,municipality
+815,Balangkayan,0802603000,44,8,municipality
+816,City of Borongan,0802604000,44,8,city
+817,Can-Avid,0802605000,44,8,municipality
+818,Dolores,0802606000,44,8,municipality
+819,General Macarthur,0802607000,44,8,municipality
+820,Giporlos,0802608000,44,8,municipality
+821,Guiuan,0802609000,44,8,municipality
+822,Hernani,0802610000,44,8,municipality
+823,Jipapad,0802611000,44,8,municipality
+824,Lawaan,0802612000,44,8,municipality
+825,Llorente,0802613000,44,8,municipality
+826,Maslog,0802614000,44,8,municipality
+827,Maydolong,0802615000,44,8,municipality
+828,Mercedes,0802616000,44,8,municipality
+829,Oras,0802617000,44,8,municipality
+830,Quinapondan,0802618000,44,8,municipality
+831,Salcedo,0802619000,44,8,municipality
+832,San Julian,0802620000,44,8,municipality
+833,San Policarpo,0802621000,44,8,municipality
+834,Sulat,0802622000,44,8,municipality
+835,Taft,0802623000,44,8,municipality
+836,Abuyog,0803701000,45,8,municipality
+837,Alangalang,0803702000,45,8,municipality
+838,Albuera,0803703000,45,8,municipality
+839,Babatngon,0803705000,45,8,municipality
+840,Barugo,0803706000,45,8,municipality
+841,Bato,0803707000,45,8,municipality
+842,City of Baybay,0803708000,45,8,city
+843,Burauen,0803710000,45,8,municipality
+844,Calubian,0803713000,45,8,municipality
+845,Capoocan,0803714000,45,8,municipality
+846,Carigara,0803715000,45,8,municipality
+847,Dagami,0803717000,45,8,municipality
+848,Dulag,0803718000,45,8,municipality
+849,Hilongos,0803719000,45,8,municipality
+850,Hindang,0803720000,45,8,municipality
+851,Inopacan,0803721000,45,8,municipality
+852,Isabel,0803722000,45,8,municipality
+853,Jaro,0803723000,45,8,municipality
+854,Javier,0803724000,45,8,municipality
+855,Julita,0803725000,45,8,municipality
+856,Kananga,0803726000,45,8,municipality
+857,La Paz,0803728000,45,8,municipality
+858,Leyte,0803729000,45,8,municipality
+859,Macarthur,0803730000,45,8,municipality
+860,Mahaplag,0803731000,45,8,municipality
+861,Matag-Ob,0803733000,45,8,municipality
+862,Matalom,0803734000,45,8,municipality
+863,Mayorga,0803735000,45,8,municipality
+864,Merida,0803736000,45,8,municipality
+865,Ormoc City,0803738000,45,8,city
+866,Palo,0803739000,45,8,municipality
+867,Palompon,0803740000,45,8,municipality
+868,Pastrana,0803741000,45,8,municipality
+869,San Isidro,0803742000,45,8,municipality
+870,San Miguel,0803743000,45,8,municipality
+871,Santa Fe,0803744000,45,8,municipality
+872,Tabango,0803745000,45,8,municipality
+873,Tabontabon,0803746000,45,8,municipality
+874,Tacloban City,0831600000,45,8,city
+875,Tanauan,0803748000,45,8,municipality
+876,Tolosa,0803749000,45,8,municipality
+877,Tunga,0803750000,45,8,municipality
+878,Villaba,0803751000,45,8,municipality
+879,Allen,0804801000,46,8,municipality
+880,Biri,0804802000,46,8,municipality
+881,Bobon,0804803000,46,8,municipality
+882,Capul,0804804000,46,8,municipality
+883,Catarman,0804805000,46,8,municipality
+884,Catubig,0804806000,46,8,municipality
+885,Gamay,0804807000,46,8,municipality
+886,Laoang,0804808000,46,8,municipality
+887,Lapinig,0804809000,46,8,municipality
+888,Las Navas,0804810000,46,8,municipality
+889,Lavezares,0804811000,46,8,municipality
+890,Mapanas,0804812000,46,8,municipality
+891,Mondragon,0804813000,46,8,municipality
+892,Palapag,0804814000,46,8,municipality
+893,Pambujan,0804815000,46,8,municipality
+894,Rosario,0804816000,46,8,municipality
+895,San Antonio,0804817000,46,8,municipality
+896,San Isidro,0804818000,46,8,municipality
+897,San Jose,0804819000,46,8,municipality
+898,San Roque,0804820000,46,8,municipality
+899,San Vicente,0804821000,46,8,municipality
+900,Silvino Lobos,0804822000,46,8,municipality
+901,Victoria,0804823000,46,8,municipality
+902,Lope de Vega,0804824000,46,8,municipality
+903,Almagro,0806001000,47,8,municipality
+904,Basey,0806002000,47,8,municipality
+905,Calbayog City,0806003000,47,8,city
+906,Calbiga,0806004000,47,8,municipality
+907,City of Catbalogan,0806005000,47,8,city
+908,Daram,0806006000,47,8,municipality
+909,Gandara,0806007000,47,8,municipality
+910,Hinabangan,0806008000,47,8,municipality
+911,Jiabong,0806009000,47,8,municipality
+912,Marabut,0806010000,47,8,municipality
+913,Matuguinao,0806011000,47,8,municipality
+914,Motiong,0806012000,47,8,municipality
+915,Pinabacdao,0806013000,47,8,municipality
+916,San Jose de Buan,0806014000,47,8,municipality
+917,San Sebastian,0806015000,47,8,municipality
+918,Santa Margarita,0806016000,47,8,municipality
+919,Santa Rita,0806017000,47,8,municipality
+920,Santo Niño,0806018000,47,8,municipality
+921,Talalora,0806019000,47,8,municipality
+922,Tarangnan,0806020000,47,8,municipality
+923,Villareal,0806021000,47,8,municipality
+924,Paranas,0806022000,47,8,municipality
+925,Zumarraga,0806023000,47,8,municipality
+926,Tagapul-An,0806024000,47,8,municipality
+927,San Jorge,0806025000,47,8,municipality
+928,Pagsanghan,0806026000,47,8,municipality
+929,Anahawan,0806401000,48,8,municipality
+930,Bontoc,0806402000,48,8,municipality
+931,Hinunangan,0806403000,48,8,municipality
+932,Hinundayan,0806404000,48,8,municipality
+933,Libagon,0806405000,48,8,municipality
+934,Liloan,0806406000,48,8,municipality
+935,City of Maasin,0806407000,48,8,city
+936,Macrohon,0806408000,48,8,municipality
+937,Malitbog,0806409000,48,8,municipality
+938,Padre Burgos,0806410000,48,8,municipality
+939,Pintuyan,0806411000,48,8,municipality
+940,Saint Bernard,0806412000,48,8,municipality
+941,San Francisco,0806413000,48,8,municipality
+942,San Juan,0806414000,48,8,municipality
+943,San Ricardo,0806415000,48,8,municipality
+944,Silago,0806416000,48,8,municipality
+945,Sogod,0806417000,48,8,municipality
+946,Tomas Oppus,0806418000,48,8,municipality
+947,Limasawa,0806419000,48,8,municipality
+948,Almeria,0807801000,49,8,municipality
+949,Biliran,0807802000,49,8,municipality
+950,Cabucgayan,0807803000,49,8,municipality
+951,Caibiran,0807804000,49,8,municipality
+952,Culaba,0807805000,49,8,municipality
+953,Kawayan,0807806000,49,8,municipality
+954,Maripipi,0807807000,49,8,municipality
+955,Naval,0807808000,49,8,municipality
+956,Dapitan City,0907201000,50,9,city
+957,Dipolog City,0907202000,50,9,city
+958,Katipunan,0907203000,50,9,municipality
+959,La Libertad,0907204000,50,9,municipality
+960,Labason,0907205000,50,9,municipality
+961,Liloy,0907206000,50,9,municipality
+962,Manukan,0907207000,50,9,municipality
+963,Mutia,0907208000,50,9,municipality
+964,Piñan,0907209000,50,9,municipality
+965,Polanco,0907210000,50,9,municipality
+966,Pres. Manuel A. Roxas,0907211000,50,9,municipality
+967,Rizal,0907212000,50,9,municipality
+968,Salug,0907213000,50,9,municipality
+969,Sergio Osmeña Sr.,0907214000,50,9,municipality
+970,Siayan,0907215000,50,9,municipality
+971,Sibuco,0907216000,50,9,municipality
+972,Sibutad,0907217000,50,9,municipality
+973,Sindangan,0907218000,50,9,municipality
+974,Siocon,0907219000,50,9,municipality
+975,Sirawai,0907220000,50,9,municipality
+976,Tampilisan,0907221000,50,9,municipality
+977,Jose Dalman,0907222000,50,9,municipality
+978,Gutalac,0907223000,50,9,municipality
+979,Baliguian,0907224000,50,9,municipality
+980,Godod,0907225000,50,9,municipality
+981,Bacungan,0907226000,50,9,municipality
+982,Kalawit,0907227000,50,9,municipality
+983,Aurora,0907302000,51,9,municipality
+984,Bayog,0907303000,51,9,municipality
+985,Dimataling,0907305000,51,9,municipality
+986,Dinas,0907306000,51,9,municipality
+987,Dumalinao,0907307000,51,9,municipality
+988,Dumingag,0907308000,51,9,municipality
+989,Kumalarang,0907311000,51,9,municipality
+990,Labangan,0907312000,51,9,municipality
+991,Lapuyan,0907313000,51,9,municipality
+992,Mahayag,0907315000,51,9,municipality
+993,Margosatubig,0907317000,51,9,municipality
+994,Midsalip,0907318000,51,9,municipality
+995,Molave,0907319000,51,9,municipality
+996,Pagadian City,0907322000,51,9,city
+997,Ramon Magsaysay,0907323000,51,9,municipality
+998,San Miguel,0907324000,51,9,municipality
+999,San Pablo,0907325000,51,9,municipality
+1000,Tabina,0907327000,51,9,municipality
+1001,Tambulig,0907328000,51,9,municipality
+1002,Tukuran,0907330000,51,9,municipality
+1003,Zamboanga City,0931700000,51,9,city
+1004,Lakewood,0907333000,51,9,municipality
+1005,Josefina,0907337000,51,9,municipality
+1006,Pitogo,0907338000,51,9,municipality
+1007,Sominot,0907340000,51,9,municipality
+1008,Vincenzo A. Sagun,0907341000,51,9,municipality
+1009,Guipos,0907343000,51,9,municipality
+1010,Tigbao,0907344000,51,9,municipality
+1011,Alicia,0908301000,52,9,municipality
+1012,Buug,0908302000,52,9,municipality
+1013,Diplahan,0908303000,52,9,municipality
+1014,Imelda,0908304000,52,9,municipality
+1015,Ipil,0908305000,52,9,municipality
+1016,Kabasalan,0908306000,52,9,municipality
+1017,Mabuhay,0908307000,52,9,municipality
+1018,Malangas,0908308000,52,9,municipality
+1019,Naga,0908309000,52,9,municipality
+1020,Olutanga,0908310000,52,9,municipality
+1021,Payao,0908311000,52,9,municipality
+1022,Roseller Lim,0908312000,52,9,municipality
+1023,Siay,0908313000,52,9,municipality
+1024,Talusan,0908314000,52,9,municipality
+1025,Titay,0908315000,52,9,municipality
+1026,Tungawan,0908316000,52,9,municipality
+1027,City of Isabela,0990101000,73,9,city
+1028,Baungon,1001301000,53,10,municipality
+1029,Damulog,1001302000,53,10,municipality
+1030,Dangcagan,1001303000,53,10,municipality
+1031,Don Carlos,1001304000,53,10,municipality
+1032,Impasug-Ong,1001305000,53,10,municipality
+1033,Kadingilan,1001306000,53,10,municipality
+1034,Kalilangan,1001307000,53,10,municipality
+1035,Kibawe,1001308000,53,10,municipality
+1036,Kitaotao,1001309000,53,10,municipality
+1037,Lantapan,1001310000,53,10,municipality
+1038,Libona,1001311000,53,10,municipality
+1039,City of Malaybalay,1001312000,53,10,city
+1040,Malitbog,1001313000,53,10,municipality
+1041,Manolo Fortich,1001314000,53,10,municipality
+1042,Maramag,1001315000,53,10,municipality
+1043,Pangantucan,1001316000,53,10,municipality
+1044,Quezon,1001317000,53,10,municipality
+1045,San Fernando,1001318000,53,10,municipality
+1046,Sumilao,1001319000,53,10,municipality
+1047,Talakag,1001320000,53,10,municipality
+1048,City of Valencia,1001321000,53,10,city
+1049,Cabanglasan,1001322000,53,10,municipality
+1050,Catarman,1001801000,54,10,municipality
+1051,Guinsiliban,1001802000,54,10,municipality
+1052,Mahinog,1001803000,54,10,municipality
+1053,Mambajao,1001804000,54,10,municipality
+1054,Sagay,1001805000,54,10,municipality
+1055,Bacolod,1003501000,55,10,municipality
+1056,Baloi,1003502000,55,10,municipality
+1057,Baroy,1003503000,55,10,municipality
+1058,Iligan City,1030900000,55,10,city
+1059,Kapatagan,1003505000,55,10,municipality
+1060,Sultan Naga Dimaporo,1003506000,55,10,municipality
+1061,Kauswagan,1003507000,55,10,municipality
+1062,Kolambugan,1003508000,55,10,municipality
+1063,Lala,1003509000,55,10,municipality
+1064,Linamon,1003510000,55,10,municipality
+1065,Magsaysay,1003511000,55,10,municipality
+1066,Maigo,1003512000,55,10,municipality
+1067,Matungao,1003513000,55,10,municipality
+1068,Munai,1003514000,55,10,municipality
+1069,Nunungan,1003515000,55,10,municipality
+1070,Pantao Ragat,1003516000,55,10,municipality
+1071,Poona Piagapo,1003517000,55,10,municipality
+1072,Salvador,1003518000,55,10,municipality
+1073,Sapad,1003519000,55,10,municipality
+1074,Tagoloan,1003520000,55,10,municipality
+1075,Tangcal,1003521000,55,10,municipality
+1076,Tubod,1003522000,55,10,municipality
+1077,Pantar,1003523000,55,10,municipality
+1078,Aloran,1004201000,56,10,municipality
+1079,Baliangao,1004202000,56,10,municipality
+1080,Bonifacio,1004203000,56,10,municipality
+1081,Calamba,1004204000,56,10,municipality
+1082,Clarin,1004205000,56,10,municipality
+1083,Concepcion,1004206000,56,10,municipality
+1084,Jimenez,1004207000,56,10,municipality
+1085,Lopez Jaena,1004208000,56,10,municipality
+1086,Oroquieta City,1004209000,56,10,city
+1087,Ozamis City,1004210000,56,10,city
+1088,Panaon,1004211000,56,10,municipality
+1089,Plaridel,1004212000,56,10,municipality
+1090,Sapang Dalaga,1004213000,56,10,municipality
+1091,Sinacaban,1004214000,56,10,municipality
+1092,Tangub City,1004215000,56,10,city
+1093,Tudela,1004216000,56,10,municipality
+1094,Don Victoriano Chiongbian,1004217000,56,10,municipality
+1095,Alubijid,1004301000,57,10,municipality
+1096,Balingasag,1004302000,57,10,municipality
+1097,Balingoan,1004303000,57,10,municipality
+1098,Binuangan,1004304000,57,10,municipality
+1099,Cagayan de Oro City,1030500000,57,10,city
+1100,Claveria,1004306000,57,10,municipality
+1101,City of El Salvador,1004307000,57,10,city
+1102,Gingoog City,1004308000,57,10,city
+1103,Gitagum,1004309000,57,10,municipality
+1104,Initao,1004310000,57,10,municipality
+1105,Jasaan,1004311000,57,10,municipality
+1106,Kinoguitan,1004312000,57,10,municipality
+1107,Lagonglong,1004313000,57,10,municipality
+1108,Laguindingan,1004314000,57,10,municipality
+1109,Libertad,1004315000,57,10,municipality
+1110,Lugait,1004316000,57,10,municipality
+1111,Magsaysay,1004317000,57,10,municipality
+1112,Manticao,1004318000,57,10,municipality
+1113,Medina,1004319000,57,10,municipality
+1114,Naawan,1004320000,57,10,municipality
+1115,Opol,1004321000,57,10,municipality
+1116,Salay,1004322000,57,10,municipality
+1117,Sugbongcogon,1004323000,57,10,municipality
+1118,Tagoloan,1004324000,57,10,municipality
+1119,Talisayan,1004325000,57,10,municipality
+1120,Villanueva,1004326000,57,10,municipality
+1121,Asuncion,1102301000,58,11,municipality
+1122,Carmen,1102303000,58,11,municipality
+1123,Kapalong,1102305000,58,11,municipality
+1124,New Corella,1102314000,58,11,municipality
+1125,City of Panabo,1102315000,58,11,city
+1126,Island Garden City of Samal,1102317000,58,11,city
+1127,Santo Tomas,1102318000,58,11,municipality
+1128,City of Tagum,1102319000,58,11,city
+1129,Talaingod,1102322000,58,11,municipality
+1130,Braulio E. Dujali,1102323000,58,11,municipality
+1131,San Isidro,1102324000,58,11,municipality
+1132,Bansalan,1102401000,59,11,municipality
+1133,Davao City,1130700000,59,11,city
+1134,City of Digos,1102403000,59,11,city
+1135,Hagonoy,1102404000,59,11,municipality
+1136,Kiblawan,1102406000,59,11,municipality
+1137,Magsaysay,1102407000,59,11,municipality
+1138,Malalag,1102408000,59,11,municipality
+1139,Matanao,1102410000,59,11,municipality
+1140,Padada,1102411000,59,11,municipality
+1141,Santa Cruz,1102412000,59,11,municipality
+1142,Sulop,1102414000,59,11,municipality
+1143,Baganga,1102501000,60,11,municipality
+1144,Banaybanay,1102502000,60,11,municipality
+1145,Boston,1102503000,60,11,municipality
+1146,Caraga,1102504000,60,11,municipality
+1147,Cateel,1102505000,60,11,municipality
+1148,Governor Generoso,1102506000,60,11,municipality
+1149,Lupon,1102507000,60,11,municipality
+1150,Manay,1102508000,60,11,municipality
+1151,City of Mati,1102509000,60,11,city
+1152,San Isidro,1102510000,60,11,municipality
+1153,Tarragona,1102511000,60,11,municipality
+1154,Compostela,1108201000,61,11,municipality
+1155,Laak,1108202000,61,11,municipality
+1156,Mabini,1108203000,61,11,municipality
+1157,Maco,1108204000,61,11,municipality
+1158,Maragusan,1108205000,61,11,municipality
+1159,Mawab,1108206000,61,11,municipality
+1160,Monkayo,1108207000,61,11,municipality
+1161,Montevista,1108208000,61,11,municipality
+1162,Nabunturan,1108209000,61,11,municipality
+1163,New Bataan,1108210000,61,11,municipality
+1164,Pantukan,1108211000,61,11,municipality
+1165,Don Marcelino,1108601000,62,11,municipality
+1166,Jose Abad Santos,1108602000,62,11,municipality
+1167,Malita,1108603000,62,11,municipality
+1168,Santa Maria,1108604000,62,11,municipality
+1169,Sarangani,1108605000,62,11,municipality
+1170,Alamada,1204701000,63,12,municipality
+1171,Carmen,1204702000,63,12,municipality
+1172,Kabacan,1204703000,63,12,municipality
+1173,City of Kidapawan,1204704000,63,12,city
+1174,Libungan,1204705000,63,12,municipality
+1175,Magpet,1204706000,63,12,municipality
+1176,Makilala,1204707000,63,12,municipality
+1177,Matalam,1204708000,63,12,municipality
+1178,Midsayap,1204709000,63,12,municipality
+1179,M'Lang,1204710000,63,12,municipality
+1180,Pigkawayan,1204711000,63,12,municipality
+1181,Pikit,1204712000,63,12,municipality
+1182,President Roxas,1204713000,63,12,municipality
+1183,Tulunan,1204714000,63,12,municipality
+1184,Antipas,1204715000,63,12,municipality
+1185,Banisilan,1204716000,63,12,municipality
+1186,Aleosan,1204717000,63,12,municipality
+1187,Arakan,1204718000,63,12,municipality
+1188,Banga,1206302000,64,12,municipality
+1189,General Santos City,1230800000,64,12,city
+1190,City of Koronadal,1206306000,64,12,city
+1191,Norala,1206311000,64,12,municipality
+1192,Polomolok,1206312000,64,12,municipality
+1193,Surallah,1206313000,64,12,municipality
+1194,Tampakan,1206314000,64,12,municipality
+1195,Tantangan,1206315000,64,12,municipality
+1196,T'Boli,1206316000,64,12,municipality
+1197,Tupi,1206317000,64,12,municipality
+1198,Santo Niño,1206318000,64,12,municipality
+1199,Lake Sebu,1206319000,64,12,municipality
+1200,Bagumbayan,1206501000,65,12,municipality
+1201,Columbio,1206502000,65,12,municipality
+1202,Esperanza,1206503000,65,12,municipality
+1203,Isulan,1206504000,65,12,municipality
+1204,Kalamansig,1206505000,65,12,municipality
+1205,Lebak,1206506000,65,12,municipality
+1206,Lutayan,1206507000,65,12,municipality
+1207,Lambayong,1206508000,65,12,municipality
+1208,Palimbang,1206509000,65,12,municipality
+1209,President Quirino,1206510000,65,12,municipality
+1210,City of Tacurong,1206511000,65,12,city
+1211,Sen. Ninoy Aquino,1206512000,65,12,municipality
+1212,Alabel,1208001000,66,12,municipality
+1213,Glan,1208002000,66,12,municipality
+1214,Kiamba,1208003000,66,12,municipality
+1215,Maasim,1208004000,66,12,municipality
+1216,Maitum,1208005000,66,12,municipality
+1217,Malapatan,1208006000,66,12,municipality
+1218,Malungon,1208007000,66,12,municipality
+1219,Cotabato City,1908703000,63,16,city
+1220,City of Manila,1380600000,1,1,city
+1221,City of Mandaluyong,1380500000,1,1,city
+1222,City of Marikina,1380700000,1,1,city
+1223,City of Pasig,1381200000,1,1,city
+1224,Quezon City,1381300000,1,1,city
+1225,City of San Juan,1381400000,1,1,city
+1226,Caloocan City,1380100000,1,1,city
+1227,City of Malabon,1380400000,1,1,city
+1228,City of Navotas,1380900000,1,1,city
+1229,City of Valenzuela,1381600000,1,1,city
+1230,City of Las Piñas,1380200000,1,1,city
+1231,City of Makati,1380300000,1,1,city
+1232,City of Muntinlupa,1380800000,1,1,city
+1233,City of Parañaque,1381000000,1,1,city
+1234,Pasay City,1381100000,1,1,city
+1235,Pateros,1381701000,1,1,municipality
+1236,Taguig City,1381500000,1,1,city
+1237,Bangued,1400101000,67,14,municipality
+1238,Boliney,1400102000,67,14,municipality
+1239,Bucay,1400103000,67,14,municipality
+1240,Bucloc,1400104000,67,14,municipality
+1241,Daguioman,1400105000,67,14,municipality
+1242,Danglas,1400106000,67,14,municipality
+1243,Dolores,1400107000,67,14,municipality
+1244,La Paz,1400108000,67,14,municipality
+1245,Lacub,1400109000,67,14,municipality
+1246,Lagangilang,1400110000,67,14,municipality
+1247,Lagayan,1400111000,67,14,municipality
+1248,Langiden,1400112000,67,14,municipality
+1249,Licuan-Baay,1400113000,67,14,municipality
+1250,Luba,1400114000,67,14,municipality
+1251,Malibcong,1400115000,67,14,municipality
+1252,Manabo,1400116000,67,14,municipality
+1253,Peñarrubia,1400117000,67,14,municipality
+1254,Pidigan,1400118000,67,14,municipality
+1255,Pilar,1400119000,67,14,municipality
+1256,Sallapadan,1400120000,67,14,municipality
+1257,San Isidro,1400121000,67,14,municipality
+1258,San Juan,1400122000,67,14,municipality
+1259,San Quintin,1400123000,67,14,municipality
+1260,Tayum,1400124000,67,14,municipality
+1261,Tineg,1400125000,67,14,municipality
+1262,Tubo,1400126000,67,14,municipality
+1263,Villaviciosa,1400127000,67,14,municipality
+1264,Atok,1401101000,68,14,municipality
+1265,Baguio City,1430300000,68,14,city
+1266,Bakun,1401103000,68,14,municipality
+1267,Bokod,1401104000,68,14,municipality
+1268,Buguias,1401105000,68,14,municipality
+1269,Itogon,1401106000,68,14,municipality
+1270,Kabayan,1401107000,68,14,municipality
+1271,Kapangan,1401108000,68,14,municipality
+1272,Kibungan,1401109000,68,14,municipality
+1273,La Trinidad,1401110000,68,14,municipality
+1274,Mankayan,1401111000,68,14,municipality
+1275,Sablan,1401112000,68,14,municipality
+1276,Tuba,1401113000,68,14,municipality
+1277,Tublay,1401114000,68,14,municipality
+1278,Banaue,1402701000,69,14,municipality
+1279,Hungduan,1402702000,69,14,municipality
+1280,Kiangan,1402703000,69,14,municipality
+1281,Lagawe,1402704000,69,14,municipality
+1282,Lamut,1402705000,69,14,municipality
+1283,Mayoyao,1402706000,69,14,municipality
+1284,Alfonso Lista,1402707000,69,14,municipality
+1285,Aguinaldo,1402708000,69,14,municipality
+1286,Hingyon,1402709000,69,14,municipality
+1287,Tinoc,1402710000,69,14,municipality
+1288,Asipulo,1402711000,69,14,municipality
+1289,Balbalan,1403201000,70,14,municipality
+1290,Lubuagan,1403206000,70,14,municipality
+1291,Pasil,1403208000,70,14,municipality
+1292,Pinukpuk,1403209000,70,14,municipality
+1293,Rizal,1403211000,70,14,municipality
+1294,City of Tabuk,1403213000,70,14,city
+1295,Tanudan,1403214000,70,14,municipality
+1296,Tinglayan,1403215000,70,14,municipality
+1297,Barlig,1404401000,71,14,municipality
+1298,Bauko,1404402000,71,14,municipality
+1299,Besao,1404403000,71,14,municipality
+1300,Bontoc,1404404000,71,14,municipality
+1301,Natonin,1404405000,71,14,municipality
+1302,Paracelis,1404406000,71,14,municipality
+1303,Sabangan,1404407000,71,14,municipality
+1304,Sadanga,1404408000,71,14,municipality
+1305,Sagada,1404409000,71,14,municipality
+1306,Tadian,1404410000,71,14,municipality
+1307,Calanasan,1408101000,72,14,municipality
+1308,Conner,1408102000,72,14,municipality
+1309,Flora,1408103000,72,14,municipality
+1310,Kabugao,1408104000,72,14,municipality
+1311,Luna,1408105000,72,14,municipality
+1312,Pudtol,1408106000,72,14,municipality
+1313,Santa Marcela,1408107000,72,14,municipality
+1314,City of Lamitan,1900702000,73,15,city
+1315,Lantawan,1900703000,73,15,municipality
+1316,Maluso,1900704000,73,15,municipality
+1317,Sumisip,1900705000,73,15,municipality
+1318,Tipo-Tipo,1900706000,73,15,municipality
+1319,Tuburan,1900707000,73,15,municipality
+1320,Akbar,1900708000,73,15,municipality
+1321,Al-Barka,1900709000,73,15,municipality
+1322,Hadji Mohammad Ajul,1900710000,73,15,municipality
+1323,Ungkaya Pukan,1900711000,73,15,municipality
+1324,Hadji Muhtamad,1900712000,73,15,municipality
+1325,Tabuan-Lasa,1900713000,73,15,municipality
+1326,Bacolod-Kalawi,1903601000,74,15,municipality
+1327,Balabagan,1903602000,74,15,municipality
+1328,Balindong,1903603000,74,15,municipality
+1329,Bayang,1903604000,74,15,municipality
+1330,Binidayan,1903605000,74,15,municipality
+1331,Bubong,1903606000,74,15,municipality
+1332,Butig,1903607000,74,15,municipality
+1333,Ganassi,1903609000,74,15,municipality
+1334,Kapai,1903610000,74,15,municipality
+1335,Lumba-Bayabao,1903611000,74,15,municipality
+1336,Lumbatan,1903612000,74,15,municipality
+1337,Madalum,1903613000,74,15,municipality
+1338,Madamba,1903614000,74,15,municipality
+1339,Malabang,1903615000,74,15,municipality
+1340,Marantao,1903616000,74,15,municipality
+1341,Marawi City,1903617000,74,15,city
+1342,Masiu,1903618000,74,15,municipality
+1343,Mulondo,1903619000,74,15,municipality
+1344,Pagayawan,1903620000,74,15,municipality
+1345,Piagapo,1903621000,74,15,municipality
+1346,Poona Bayabao,1903622000,74,15,municipality
+1347,Pualas,1903623000,74,15,municipality
+1348,Ditsaan-Ramain,1903624000,74,15,municipality
+1349,Saguiaran,1903625000,74,15,municipality
+1350,Tamparan,1903626000,74,15,municipality
+1351,Taraka,1903627000,74,15,municipality
+1352,Tubaran,1903628000,74,15,municipality
+1353,Tugaya,1903629000,74,15,municipality
+1354,Wao,1903630000,74,15,municipality
+1355,Marogong,1903631000,74,15,municipality
+1356,Calanogas,1903632000,74,15,municipality
+1357,Buadiposo-Buntong,1903633000,74,15,municipality
+1358,Maguing,1903634000,74,15,municipality
+1359,Picong,1903635000,74,15,municipality
+1360,Lumbayanague,1903636000,74,15,municipality
+1361,Bumbaran,1903637000,74,15,municipality
+1362,Tagoloan II,1903638000,74,15,municipality
+1363,Kapatagan,1903639000,74,15,municipality
+1364,Sultan Dumalondong,1903640000,74,15,municipality
+1365,Lumbaca-Unayan,1903641000,74,15,municipality
+1366,Ampatuan,1908801000,76,15,municipality
+1367,Buldon,1908702000,75,15,municipality
+1368,Buluan,1908802000,76,15,municipality
+1369,Datu Paglas,1908806000,76,15,municipality
+1370,Datu Piang,1908807000,76,15,municipality
+1371,Datu Odin Sinsuat,1908705000,75,15,municipality
+1372,Shariff Aguak,1908820000,76,15,municipality
+1373,Matanog,1908707000,75,15,municipality
+1374,Pagalungan,1908816000,76,15,municipality
+1375,Parang,1908709000,75,15,municipality
+1376,Sultan Kudarat,1908710000,75,15,municipality
+1377,Sultan Sa Barongis,1908823000,76,15,municipality
+1378,Kabuntalan,1908706000,75,15,municipality
+1379,Upi,1908713000,75,15,municipality
+1380,Talayan,1908824000,76,15,municipality
+1381,South Upi,1908822000,76,15,municipality
+1382,Barira,1908701000,75,15,municipality
+1383,Gen. S.K. Pendatun,1908811000,76,15,municipality
+1384,Mamasapano,1908813000,76,15,municipality
+1385,Talitay,1908712000,75,15,municipality
+1386,Pagagawan,1908815000,76,15,municipality
+1387,Paglat,1908817000,76,15,municipality
+1388,Sultan Mastura,1908711000,75,15,municipality
+1389,Guindulungan,1908812000,76,15,municipality
+1390,Datu Saudi-Ampatuan,1908809000,76,18,municipality
+1391,Datu Unsay,1908810000,76,15,municipality
+1392,Datu Abdullah Sangki,1908803000,76,15,municipality
+1393,Rajah Buayan,1908819000,76,15,municipality
+1394,Datu Blah T. Sinsuat,1908704000,75,15,municipality
+1395,Datu Anggal Midtimbang,1908804000,76,15,municipality
+1396,Mangudadatu,1908814000,76,15,municipality
+1397,Pandag,1908818000,76,15,municipality
+1398,Northern Kabuntalan,1908708000,75,15,municipality
+1399,Datu Hoffer Ampatuan,1908805000,76,15,municipality
+1400,Datu Salibo,1908808000,76,15,municipality
+1401,Shariff Saydona Mustapha,1908821000,76,15,municipality
+1402,Indanan,0906601000,77,15,municipality
+1403,Jolo,0906602000,77,15,municipality
+1404,Kalingalan Caluang,0906603000,77,15,municipality
+1405,Luuk,0906604000,77,15,municipality
+1406,Maimbung,0906605000,77,15,municipality
+1407,Hadji Panglima Tahil,0906606000,77,15,municipality
+1408,Old Panamao,0906607000,77,15,municipality
+1409,Pangutaran,0906608000,77,15,municipality
+1410,Parang,0906609000,75,15,municipality
+1411,Pata,0906610000,77,15,municipality
+1412,Patikul,0906611000,77,15,municipality
+1413,Siasi,0906612000,77,15,municipality
+1414,Talipao,0906613000,77,15,municipality
+1415,Tapul,0906614000,77,15,municipality
+1416,Tongkil,0906615000,77,15,municipality
+1417,Panglima Estino,0906616000,77,15,municipality
+1418,Lugus,0906617000,77,15,municipality
+1419,Pandami,0906618000,77,15,municipality
+1420,Omar,0906619000,77,15,municipality
+1421,Panglima Sugala,1907001000,78,15,municipality
+1422,Bongao,1907002000,78,15,municipality
+1423,Mapun,1907003000,78,15,municipality
+1424,Simunul,1907004000,78,15,municipality
+1425,Sitangkai,1907005000,78,15,municipality
+1426,South Ubian,1907006000,78,15,municipality
+1427,Tandubas,1907007000,78,15,municipality
+1428,Turtle Islands,1907008000,78,15,municipality
+1429,Languyan,1907009000,78,15,municipality
+1430,Sapa-Sapa,1907010000,78,15,municipality
+1431,Sibutu,1907011000,78,15,municipality
+1432,Buenavista,1600201000,79,16,municipality
+1433,Butuan City,1630400000,79,16,city
+1434,City of Cabadbaran,1600203000,79,16,city
+1435,Carmen,1600204000,79,16,municipality
+1436,Jabonga,1600205000,79,16,municipality
+1437,Kitcharao,1600206000,79,16,municipality
+1438,Las Nieves,1600207000,79,16,municipality
+1439,Magallanes,1600208000,79,16,municipality
+1440,Nasipit,1600209000,79,16,municipality
+1441,Santiago,1600210000,79,16,municipality
+1442,Tubay,1600211000,79,16,municipality
+1443,Remedios T. Romualdez,1600212000,79,16,municipality
+1444,City of Bayugan,1600301000,80,16,city
+1445,Bunawan,1600302000,80,16,municipality
+1446,Esperanza,1600303000,80,16,municipality
+1447,La Paz,1600304000,80,16,municipality
+1448,Loreto,1600305000,80,16,municipality
+1449,Prosperidad,1600306000,80,16,municipality
+1450,Rosario,1600307000,80,16,municipality
+1451,San Francisco,1600308000,80,16,municipality
+1452,San Luis,1600309000,80,16,municipality
+1453,Santa Josefa,1600310000,80,16,municipality
+1454,Talacogon,1600311000,80,16,municipality
+1455,Trento,1600312000,80,16,municipality
+1456,Veruela,1600313000,80,16,municipality
+1457,Sibagat,1600314000,80,16,municipality
+1458,Alegria,1606701000,81,16,municipality
+1459,Bacuag,1606702000,81,16,municipality
+1460,Burgos,1606704000,81,16,municipality
+1461,Claver,1606706000,81,16,municipality
+1462,Dapa,1606707000,81,16,municipality
+1463,Del Carmen,1606708000,81,16,municipality
+1464,General Luna,1606710000,81,16,municipality
+1465,Gigaquit,1606711000,81,16,municipality
+1466,Mainit,1606714000,81,16,municipality
+1467,Malimono,1606715000,81,16,municipality
+1468,Pilar,1606716000,81,16,municipality
+1469,Placer,1606717000,81,16,municipality
+1470,San Benito,1606718000,81,16,municipality
+1471,San Francisco,1606719000,81,16,municipality
+1472,San Isidro,1606720000,81,16,municipality
+1473,Santa Monica,1606721000,81,16,municipality
+1474,Sison,1606722000,81,16,municipality
+1475,Socorro,1606723000,81,16,municipality
+1476,Surigao City,1606724000,81,16,city
+1477,Tagana-An,1606725000,81,16,municipality
+1478,Tubod,1606727000,81,16,municipality
+1479,Barobo,1606801000,82,16,municipality
+1480,Bayabas,1606802000,82,16,municipality
+1481,City of Bislig,1606803000,82,16,city
+1482,Cagwait,1606804000,82,16,municipality
+1483,Cantilan,1606805000,82,16,municipality
+1484,Carmen,1606806000,82,16,municipality
+1485,Carrascal,1606807000,82,16,municipality
+1486,Cortes,1606808000,82,16,municipality
+1487,Hinatuan,1606809000,82,16,municipality
+1488,Lanuza,1606810000,82,16,municipality
+1489,Lianga,1606811000,82,16,municipality
+1490,Lingig,1606812000,82,16,municipality
+1491,Madrid,1606813000,82,16,municipality
+1492,Marihatag,1606814000,82,16,municipality
+1493,San Agustin,1606815000,82,16,municipality
+1494,San Miguel,1606816000,82,16,municipality
+1495,Tagbina,1606817000,82,16,municipality
+1496,Tago,1606818000,82,16,municipality
+1497,City of Tandag,1606819000,82,16,city
+1498,Basilisa,1608501000,83,16,municipality
+1499,Cagdianao,1608502000,83,16,municipality
+1500,Dinagat,1608503000,83,16,municipality
+1501,Libjo,1608504000,83,16,municipality
+1502,Loreto,1608505000,83,16,municipality
+1503,San Jose,1608506000,83,16,municipality
+1504,Tubajon,1608507000,83,16,municipality
+1505,Boac,1704001000,23,17,municipality
+1506,Buenavista,1704002000,23,17,municipality
+1507,Gasan,1704003000,23,17,municipality
+1508,Mogpog,1704004000,23,17,municipality
+1509,Santa Cruz,1704005000,23,17,municipality
+1510,Torrijos,1704006000,23,17,municipality
+1511,Abra de Ilog,1705101000,24,17,municipality
+1512,Calintaan,1705102000,24,17,municipality
+1513,Looc,1705103000,24,17,municipality
+1514,Lubang,1705104000,24,17,municipality
+1515,Magsaysay,1705105000,24,17,municipality
+1516,Mamburao,1705106000,24,17,municipality
+1517,Paluan,1705107000,24,17,municipality
+1518,Rizal,1705108000,24,17,municipality
+1519,Sablayan,1705109000,24,17,municipality
+1520,San Jose,1705110000,24,17,municipality
+1521,Santa Cruz,1705111000,24,17,municipality
+1522,Baco,1705201000,25,17,municipality
+1523,Bansud,1705202000,25,17,municipality
+1524,Bongabong,1705203000,25,17,municipality
+1525,Bulalacao,1705204000,25,17,municipality
+1526,City of Calapan,1705205000,25,17,city
+1527,Gloria,1705206000,25,17,municipality
+1528,Mansalay,1705207000,25,17,municipality
+1529,Naujan,1705208000,25,17,municipality
+1530,Pinamalayan,1705209000,25,17,municipality
+1531,Pola,1705210000,25,17,municipality
+1532,Puerto Galera,1705211000,25,17,municipality
+1533,Roxas,1705212000,25,17,municipality
+1534,San Teodoro,1705213000,25,17,municipality
+1535,Socorro,1705214000,25,17,municipality
+1536,Victoria,1705215000,25,17,municipality
+1537,Aborlan,1705301000,26,17,municipality
+1538,Agutaya,1705302000,26,17,municipality
+1539,Araceli,1705303000,26,17,municipality
+1540,Balabac,1705304000,26,17,municipality
+1541,Bataraza,1705305000,26,17,municipality
+1542,Brooke's Point,1705306000,26,17,municipality
+1543,Busuanga,1705307000,26,17,municipality
+1544,Cagayancillo,1705308000,26,17,municipality
+1545,Coron,1705309000,26,17,municipality
+1546,Cuyo,1705310000,26,17,municipality
+1547,Dumaran,1705311000,26,17,municipality
+1548,El Nido,1705312000,26,17,municipality
+1549,Linapacan,1705313000,26,17,municipality
+1550,Magsaysay,1705314000,26,17,municipality
+1551,Narra,1705315000,26,17,municipality
+1552,Puerto Princesa City,1731500000,26,17,city
+1553,Quezon,1705317000,26,17,municipality
+1554,Roxas,1705318000,26,17,municipality
+1555,San Vicente,1705319000,26,17,municipality
+1556,Taytay,1705320000,26,17,municipality
+1557,Kalayaan,1705321000,26,17,municipality
+1558,Culion,1705322000,26,17,municipality
+1559,Rizal,1705323000,26,17,municipality
+1560,Sofronio Espanola,1705324000,26,17,municipality
+1561,Alcantara,1705901000,27,17,municipality
+1562,Banton,1705902000,27,17,municipality
+1563,Cajidiocan,1705903000,27,17,municipality
+1564,Calatrava,1705904000,27,17,municipality
+1565,Concepcion,1705905000,27,17,municipality
+1566,Corcuera,1705906000,27,17,municipality
+1567,Looc,1705907000,27,17,municipality
+1568,Magdiwang,1705908000,27,17,municipality
+1569,Odiongan,1705909000,27,17,municipality
+1570,Romblon,1705910000,27,17,municipality
+1571,San Agustin,1705911000,27,17,municipality
+1572,San Andres,1705912000,27,17,municipality
+1573,San Fernando,1705913000,27,17,municipality
+1574,San Jose,1705914000,27,17,municipality
+1575,Santa Fe,1705915000,27,17,municipality
+1576,Ferrol,1705916000,27,17,municipality
+1577,Santa Maria,1705917000,27,17,municipality
+1578,Bacolod City,1830200000,38,18,city
+1579,Bago City,1804502000,38,18,city
+1580,Binalbagan,1804503000,38,18,municipality
+1581,Cadiz City,1804504000,38,18,city
+1582,Calatrava,1804505000,38,18,municipality
+1583,Candoni,1804506000,38,18,municipality
+1584,Cauayan,1804507000,38,18,municipality
+1585,Enrique B. Magalona,1804508000,38,18,municipality
+1586,City of Escalante,1804509000,38,18,city
+1587,City of Himamaylan,1804510000,38,18,city
+1588,Hinigaran,1804511000,38,18,municipality
+1589,Hinoba-An,1804512000,38,18,municipality
+1590,Ilog,1804513000,38,18,municipality
+1591,Isabela,1804514000,38,18,municipality
+1592,City of Kabankalan,1804515000,38,18,city
+1593,La Carlota City,1804516000,38,18,city
+1594,La Castellana,1804517000,38,18,municipality
+1595,Manapla,1804518000,38,18,municipality
+1596,Moises Padilla,1804519000,38,18,municipality
+1597,Murcia,1804520000,38,18,municipality
+1598,Pontevedra,1804521000,38,18,municipality
+1599,Pulupandan,1804522000,38,18,municipality
+1600,Sagay City,1804523000,38,18,city
+1601,San Carlos City,1804524000,38,18,city
+1602,San Enrique,1804525000,38,18,municipality
+1603,Silay City,1804526000,38,18,city
+1604,City of Sipalay,1804527000,38,18,city
+1605,City of Talisay,1804528000,38,18,city
+1606,Toboso,1804529000,38,18,municipality
+1607,Valladolid,1804530000,38,18,municipality
+1608,City of Victorias,1804531000,38,18,city
+1609,Salvador Benedicto,1804532000,38,18,municipality
+1610,Amlan,1804601000,42,18,municipality
+1611,Ayungon,1804602000,42,18,municipality
+1612,Bacong,1804603000,42,18,municipality
+1613,Bais City,1804604000,42,18,city
+1614,Basay,1804605000,42,18,municipality
+1615,City of Bayawan,1804606000,42,18,city
+1616,Bindoy,1804607000,42,18,municipality
+1617,Canlaon City,1804608000,42,18,city
+1618,Dauin,1804609000,42,18,municipality
+1619,Dumaguete City,1804610000,42,18,city
+1620,City of Guihulngan,1804611000,42,18,city
+1621,Jimalalud,1804612000,42,18,municipality
+1622,La Libertad,1804613000,42,18,municipality
+1623,Mabinay,1804614000,42,18,municipality
+1624,Manjuyod,1804615000,42,18,municipality
+1625,Pamplona,1804616000,42,18,municipality
+1626,San Jose,1804617000,42,18,municipality
+1627,Santa Catalina,1804618000,42,18,municipality
+1628,Siaton,1804619000,42,18,municipality
+1629,Sibulan,1804620000,42,18,municipality
+1630,City of Tanjay,1804621000,42,18,city
+1631,Tayasan,1804622000,42,18,municipality
+1632,Valencia,1804623000,42,18,municipality
+1633,Vallehermoso,1804624000,42,18,municipality
+1634,Zamboanguita,1804625000,42,18,municipality
+1635,Kapalawan,1999901000,84,18,municipality
+1636,Old Kaabakan,1999902000,84,18,municipality
+1637,Kadayangan,1999903000,84,18,municipality
+1638,Nabalawag,1999904000,84,18,municipality
+1639,Pahamuddin,1999905000,84,18,municipality
+1640,Malidegao,1999906000,84,18,municipality
+1641,Ligawasan,1999907000,84,18,municipality
+1642,Tugunan,1999908000,84,18,municipality
