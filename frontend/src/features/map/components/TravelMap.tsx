@@ -4,6 +4,7 @@ import L from "leaflet";
 import type { Feature, Geometry } from "geojson";
 import type { Division, MapMode } from "../../homepage/types";
 import type { MunicityGeoJSON, ProvinceGeoJSON, Region } from "../types";
+import { MapScreenshotBridge } from "../hooks/useMapScreenshot";
 import { cn } from "../../../lib/cn";
 
 const PH_CENTER: [number, number] = [12.8797, 121.774];
@@ -415,6 +416,7 @@ function TravelMapInner({
                     <MapBackgroundClickHandler onBackgroundClick={() => onSelectRef.current(null)} />
                 )}
                 {interactive && <FitBoundsOnSelect selectedDivision={selectedDivision} />}
+                {interactive && <MapScreenshotBridge />}
                 {currentData.features.length > 0 && (
                     <GeoJSON
                         key={geoKey}

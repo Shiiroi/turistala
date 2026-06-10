@@ -21,6 +21,7 @@
         "csv-stringify": "^6.7.0",
         "fast-csv": "^5.0.7",
         "h3-js": "^4.4.0",
+        "html2canvas": "^1.4.1",
         "leaflet": "^1.9.4",
         "lucide-react": "^1.17.0",
         "pg": "^8.21.0",

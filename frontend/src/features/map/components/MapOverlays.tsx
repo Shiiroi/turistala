@@ -17,6 +17,8 @@ interface MapOverlaysProps {
     municitiesLoadProgress?: number | null;
     onModeChange: (mode: MapMode) => void;
     onSearchClick: () => void;
+    onScreenshotClick: () => void;
+    isCapturing?: boolean;
     mapProgressBy: ExploreViewTab;
     onMapProgressByChange: (tab: ExploreViewTab) => void;
     mapAccentColor: string;
@@ -35,6 +37,8 @@ export function MapOverlays({
     municitiesLoadProgress,
     onModeChange,
     onSearchClick,
+    onScreenshotClick,
+    isCapturing,
     mapProgressBy,
     onMapProgressByChange,
     mapAccentColor,
@@ -52,6 +56,8 @@ export function MapOverlays({
             <HoverInfoCard hoveredDivision={hoveredDivision} />
             <MapToolbar
                 onSearchClick={onSearchClick}
+                onScreenshotClick={onScreenshotClick}
+                isCapturing={isCapturing}
                 travelStore={travelStore}
                 regions={regions}
                 provinces={provinces}

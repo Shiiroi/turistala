@@ -9,6 +9,8 @@ import { ProfileMenu } from "./ProfileMenu";
 
 interface MapToolbarProps {
     onSearchClick: () => void;
+    onScreenshotClick: () => void;
+    isCapturing?: boolean;
     travelStore: TravelStore;
     regions: Region[];
     provinces: ProvinceGeoJSON[];
@@ -18,6 +20,8 @@ interface MapToolbarProps {
 
 export function MapToolbar({
     onSearchClick,
+    onScreenshotClick,
+    isCapturing = false,
     travelStore,
     regions,
     provinces,
@@ -30,7 +34,8 @@ export function MapToolbar({
             <IconButton
                 icon={Camera}
                 label="Screenshot map"
-                onClick={() => console.log({ action: "SCREENSHOT_MAP" })}
+                onClick={onScreenshotClick}
+                disabled={isCapturing}
             />
             <IconButton
                 iconNode={<FaArrowUpFromBracket size={16} />}

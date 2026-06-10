@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { TravelMap } from "../features/map/components/TravelMap";
 import { MapOverlays } from "../features/map/components/MapOverlays";
+import { MapScreenshotModal } from "../features/map/components/MapScreenshotModal";
 import { SearchModal } from "../features/map/components/SearchModal";
+import { MapScreenshotProvider, useMapScreenshotCapture } from "../features/map/hooks/useMapScreenshot";
 import { useMapLayers } from "../features/map/hooks/useMapLayers";
 import { HomePageLayout } from "../features/homepage/components/HomePageLayout";
 import { DetailPanel } from "../features/homepage/components/DetailPanel";
 import { municityToDivision, useMapSelection } from "../features/homepage/hooks/useMapSelection";
 import type { Division, MapMode } from "../features/homepage/types";
+import { divisionLevelLabel } from "../features/homepage/types";
 import { useTravelStore } from "../features/travel/hooks/useTravelStore";
 import { useProgressHeatmapColors } from "../features/travel/hooks/useProgressHeatmapColors";
 import { useMapAccentColor } from "../features/profile/hooks/useMapAccentColor";
@@ -14,12 +17,135 @@ import { getDefaultViewTab, type ExploreViewTab } from "../features/homepage/com
 import { DemoBanner, ImportDemoModal } from "../features/auth/components/ImportDemoModal";
 import { useDemoImportPrompt } from "../features/auth/hooks/useDemoImportPrompt";
 import { useAuthSession } from "../features/auth/hooks/useAuthSession";
+import { useToast } from "../hooks/useToast";
 import { cn } from "../lib/cn";
 
 const mapOverlayCardClasses = cn(
     "rounded-[10px] border border-[rgba(200,190,175,0.55)] bg-[rgba(250,246,238,0.94)]",
     "px-3 py-2 text-primary shadow-[0_2px_10px_rgba(44,36,22,0.06)] backdrop-blur-[10px]",
 );
+
+const PROGRESS_BY_UNIT: Record<ExploreViewTab, string> = {
+    provinces: "province",
+    municipalities: "municipality",
+    places: "place",
+};
+
+interface HomePageMapSectionProps {
+    session: ReturnType<typeof useAuthSession>["data"];
+    travelStore: ReturnType<typeof useTravelStore>;
+    provinces: ReturnType<typeof useMapLayers>["provinces"];
+    regions: ReturnType<typeof useMapLayers>["regions"];
+    municities: ReturnType<typeof useMapLayers>["municities"];
+    municityMeta: ReturnType<typeof useMapLayers>["municityMeta"];
+    municitiesLoading: boolean;
+    municitiesLoadProgress: number | null | undefined;
+    mapMode: MapMode;
+    selectedDivision: Division | null;
+    hoveredDivision: Division | null;
+    heatmapColors: Map<number, string>;
+    goalProvinceIds: Set<number>;
+    goalRegionIds: Set<number>;
+    mapProgressBy: ExploreViewTab;
+    mapAccentColor: string;
+    onMapProgressByChange: (tab: ExploreViewTab) => void;
+    onMapAccentColorChange: (color: string) => void;
+    onModeChange: (mode: MapMode) => void;
+    onSearchClick: () => void;
+    onHover: (division: Division | null) => void;
+    onSelect: (division: Division | null) => void;
+    onViewOnMap: (division: Division, mode: MapMode) => void;
+}
+
+function HomePageMapSection({
+    session,
+    travelStore,
+    provinces,
+    regions,
+    municities,
+    municityMeta,
+    municitiesLoading,
+    municitiesLoadProgress,
+    mapMode,
+    selectedDivision,
+    hoveredDivision,
+    heatmapColors,
+    goalProvinceIds,
+    goalRegionIds,
+    mapProgressBy,
+    mapAccentColor,
+    onMapProgressByChange,
+    onMapAccentColorChange,
+    onModeChange,
+    onSearchClick,
+    onHover,
+    onSelect,
+    onViewOnMap,
+}: HomePageMapSectionProps) {
+    const captureScreenshot = useMapScreenshotCapture();
+    const { error: toastError, success: toastSuccess } = useToast();
+    const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+    const [isCapturing, setIsCapturing] = useState(false);
+
+    const screenshotCaption = `${divisionLevelLabel(mapMode)} view · progress by ${PROGRESS_BY_UNIT[mapProgressBy]}`;
+
+    async function handleScreenshot() {
+        setIsCapturing(true);
+        try {
+            const dataUrl = await captureScreenshot();
+            setScreenshotPreview(dataUrl);
+        } catch {
+            toastError("Could not capture map — try again");
+        } finally {
+            setIsCapturing(false);
+        }
+    }
+
+    return (
+        <>
+            {travelStore.isDemo && !session && <DemoBanner />}
+            <TravelMap
+                provinces={provinces}
+                regions={regions}
+                municities={municities}
+                mode={mapMode}
+                selectedDivision={selectedDivision}
+                heatmapColors={heatmapColors}
+                goalMunicityIds={travelStore.goalMunicityIds}
+                goalProvinceIds={goalProvinceIds}
+                goalRegionIds={goalRegionIds}
+                onHover={onHover}
+                onSelect={onSelect}
+            />
+            <MapOverlays
+                hoveredDivision={hoveredDivision}
+                mapMode={mapMode}
+                municitiesLoading={municitiesLoading}
+                municitiesLoadProgress={municitiesLoadProgress}
+                onModeChange={onModeChange}
+                onSearchClick={onSearchClick}
+                onScreenshotClick={handleScreenshot}
+                isCapturing={isCapturing}
+                mapProgressBy={mapProgressBy}
+                onMapProgressByChange={onMapProgressByChange}
+                mapAccentColor={mapAccentColor}
+                onMapAccentColorChange={onMapAccentColorChange}
+                travelStore={travelStore}
+                regions={regions}
+                provinces={provinces}
+                municityMeta={municityMeta}
+                onViewOnMap={onViewOnMap}
+            />
+            <MapScreenshotModal
+                isOpen={screenshotPreview != null}
+                imageUrl={screenshotPreview}
+                caption={screenshotCaption}
+                onClose={() => setScreenshotPreview(null)}
+                onSaved={() => toastSuccess("Saved as PNG")}
+            />
+        </>
+    );
+}
 
 export default function HomePage() {
     const { data: session } = useAuthSession();
@@ -117,39 +243,33 @@ export default function HomePage() {
             <HomePageLayout
                 panelOpen={selectedDivision !== null}
                 mapSection={
-                    <>
-                        {travelStore.isDemo && !session && <DemoBanner />}
-                        <TravelMap
+                    <MapScreenshotProvider>
+                        <HomePageMapSection
+                            session={session}
+                            travelStore={travelStore}
                             provinces={provinces}
                             regions={regions}
                             municities={municities}
-                            mode={mapMode}
-                            selectedDivision={selectedDivision}
-                            heatmapColors={heatmapColors}
-                            goalMunicityIds={travelStore.goalMunicityIds}
-                            goalProvinceIds={goalProvinceIds}
-                            goalRegionIds={goalRegionIds}
-                            onHover={hoverDivision}
-                            onSelect={selectDivision}
-                        />
-                        <MapOverlays
-                            hoveredDivision={hoveredDivision}
-                            mapMode={mapMode}
+                            municityMeta={municityMeta}
                             municitiesLoading={municitiesLoading}
                             municitiesLoadProgress={municitiesLoadProgress}
+                            mapMode={mapMode}
+                            selectedDivision={selectedDivision}
+                            hoveredDivision={hoveredDivision}
+                            heatmapColors={heatmapColors}
+                            goalProvinceIds={goalProvinceIds}
+                            goalRegionIds={goalRegionIds}
+                            mapProgressBy={mapProgressBy}
+                            mapAccentColor={mapAccentColor}
+                            onMapProgressByChange={setMapProgressBy}
+                            onMapAccentColorChange={onMapAccentColorChange}
                             onModeChange={setMapMode}
                             onSearchClick={() => setSearchOpen(true)}
-                            mapProgressBy={mapProgressBy}
-                            onMapProgressByChange={setMapProgressBy}
-                            mapAccentColor={mapAccentColor}
-                            onMapAccentColorChange={onMapAccentColorChange}
-                            travelStore={travelStore}
-                            regions={regions}
-                            provinces={provinces}
-                            municityMeta={municityMeta}
+                            onHover={hoverDivision}
+                            onSelect={selectDivision}
                             onViewOnMap={handleViewOnMap}
                         />
-                    </>
+                    </MapScreenshotProvider>
                 }
                 detailPanel={
                     <DetailPanel
