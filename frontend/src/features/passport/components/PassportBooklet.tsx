@@ -102,22 +102,28 @@ export function PassportBooklet({
                     </div>
                 </div>
 
-                <div className="relative flex flex-col items-center justify-center border-l border-[#c8beb0]/60 pl-4">
+                <div className="relative flex flex-col justify-center border-l border-[#c8beb0]/60 pl-4">
                     <StylizedSunMark
                         size={64}
                         className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 opacity-25"
                     />
-                    <div className="relative w-full space-y-0.5 text-center">
+                    <div className="relative w-full space-y-1">
                         {progressLines.map((line) => (
-                            <p key={line.label} className="text-sm text-muted">
-                                {line.visited} / {line.total} {line.label}
+                            <div
+                                key={line.label}
+                                className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 text-sm"
+                            >
+                                <span className="text-muted">
+                                    {line.visited} / {line.total} {line.label}
+                                </span>
                                 {line.pct != null ? (
-                                    <>
-                                        {" · "}
-                                        <span className="font-semibold text-accent">{line.pct}%</span>
-                                    </>
-                                ) : null}
-                            </p>
+                                    <span className="font-semibold tabular-nums text-accent">
+                                        {line.pct}%
+                                    </span>
+                                ) : (
+                                    <span />
+                                )}
+                            </div>
                         ))}
                     </div>
                 </div>

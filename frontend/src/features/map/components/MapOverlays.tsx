@@ -18,7 +18,9 @@ interface MapOverlaysProps {
     onModeChange: (mode: MapMode) => void;
     onSearchClick: () => void;
     onScreenshotClick: () => void;
+    onExportClick: () => void;
     isCapturing?: boolean;
+    isExporting?: boolean;
     mapProgressBy: ExploreViewTab;
     onMapProgressByChange: (tab: ExploreViewTab) => void;
     mapAccentColor: string;
@@ -38,7 +40,9 @@ export function MapOverlays({
     onModeChange,
     onSearchClick,
     onScreenshotClick,
+    onExportClick,
     isCapturing,
+    isExporting,
     mapProgressBy,
     onMapProgressByChange,
     mapAccentColor,
@@ -57,7 +61,9 @@ export function MapOverlays({
             <MapToolbar
                 onSearchClick={onSearchClick}
                 onScreenshotClick={onScreenshotClick}
+                onExportClick={onExportClick}
                 isCapturing={isCapturing}
+                isExporting={isExporting}
                 travelStore={travelStore}
                 regions={regions}
                 provinces={provinces}

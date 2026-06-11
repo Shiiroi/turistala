@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TravelMap } from "../features/map/components/TravelMap";
 import { MapOverlays } from "../features/map/components/MapOverlays";
 import { MapScreenshotModal } from "../features/map/components/MapScreenshotModal";
+import { MapExportModal } from "../features/map/components/MapExportModal";
+import { MapExportPreviewModal } from "../features/map/components/MapExportPreviewModal";
+import { HiddenMapExportHost } from "../features/map/components/HiddenMapExportHost";
 import { SearchModal } from "../features/map/components/SearchModal";
 import { MapScreenshotProvider, useMapScreenshotCapture } from "../features/map/hooks/useMapScreenshot";
 import { useMapLayers } from "../features/map/hooks/useMapLayers";
@@ -19,6 +22,9 @@ import { useDemoImportPrompt } from "../features/auth/hooks/useDemoImportPrompt"
 import { useAuthSession } from "../features/auth/hooks/useAuthSession";
 import { useToast } from "../hooks/useToast";
 import { cn } from "../lib/cn";
+import type { MapExportConfig, ExportPngJob } from "../features/map/types/mapExport";
+import { resolveExportScope } from "../features/map/utils/resolveExportScope";
+import { downloadTravelExport } from "../features/map/utils/buildTravelExportJson";
 
 const mapOverlayCardClasses = cn(
     "rounded-[10px] border border-[rgba(200,190,175,0.55)] bg-[rgba(250,246,238,0.94)]",
@@ -86,8 +92,73 @@ function HomePageMapSection({
     const { error: toastError, success: toastSuccess } = useToast();
     const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
     const [isCapturing, setIsCapturing] = useState(false);
+    const [exportModalOpen, setExportModalOpen] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+    const [pngExportJob, setPngExportJob] = useState<ExportPngJob | null>(null);
+    const [exportPreviewUrl, setExportPreviewUrl] = useState<string | null>(null);
+    const [exportPreviewCaption, setExportPreviewCaption] = useState("");
+    const [exportPreviewFilename, setExportPreviewFilename] = useState("turistala-map.png");
 
     const screenshotCaption = `${divisionLevelLabel(mapMode)} view · progress by ${PROGRESS_BY_UNIT[mapProgressBy]}`;
+
+    const handlePngExportComplete = useCallback(
+        (dataUrl: string) => {
+            setPngExportJob(null);
+            setIsExporting(false);
+            setExportPreviewUrl(dataUrl);
+        },
+        [],
+    );
+
+    const handlePngExportError = useCallback(
+        (err: Error) => {
+            setPngExportJob(null);
+            setIsExporting(false);
+            toastError(err.message || "Could not export map — try again");
+        },
+        [toastError],
+    );
+
+    async function handleExport(config: MapExportConfig) {
+        const resolved = resolveExportScope(
+            config.level,
+            config.scope,
+            regions,
+            provinces,
+            municityMeta,
+        );
+
+        if (resolved.entityIds.length === 0 && config.scope.kind !== "all") {
+            toastError("Nothing selected to export");
+            return;
+        }
+
+        if (config.format === "json") {
+            setIsExporting(true);
+            try {
+                downloadTravelExport(travelStore, config, resolved);
+                toastSuccess("Export saved as JSON");
+                setExportModalOpen(false);
+            } finally {
+                setIsExporting(false);
+            }
+            return;
+        }
+
+        setIsExporting(true);
+        setExportModalOpen(false);
+        const date = new Date().toISOString().slice(0, 10);
+        setExportPreviewCaption(`${resolved.label} · progress by ${PROGRESS_BY_UNIT[config.progressBy]}`);
+        setExportPreviewFilename(`turistala-map-${resolved.slug}-${date}.png`);
+        setPngExportJob({
+            level: config.level,
+            progressBy: config.progressBy,
+            scope: config.scope,
+            entityIds: resolved.entityIds,
+            label: resolved.label,
+            slug: resolved.slug,
+        });
+    }
 
     async function handleScreenshot() {
         setIsCapturing(true);
@@ -125,7 +196,9 @@ function HomePageMapSection({
                 onModeChange={onModeChange}
                 onSearchClick={onSearchClick}
                 onScreenshotClick={handleScreenshot}
+                onExportClick={() => setExportModalOpen(true)}
                 isCapturing={isCapturing}
+                isExporting={isExporting}
                 mapProgressBy={mapProgressBy}
                 onMapProgressByChange={onMapProgressByChange}
                 mapAccentColor={mapAccentColor}
@@ -141,6 +214,36 @@ function HomePageMapSection({
                 imageUrl={screenshotPreview}
                 caption={screenshotCaption}
                 onClose={() => setScreenshotPreview(null)}
+                onSaved={() => toastSuccess("Saved as PNG")}
+            />
+            <MapExportModal
+                isOpen={exportModalOpen}
+                onClose={() => setExportModalOpen(false)}
+                regions={regions}
+                provinces={provinces}
+                municityMeta={municityMeta}
+                onExport={handleExport}
+                exporting={isExporting}
+            />
+            {pngExportJob && (
+                <HiddenMapExportHost
+                    job={pngExportJob}
+                    regions={regions}
+                    provinces={provinces}
+                    municityMeta={municityMeta}
+                    cachedMunicities={municities}
+                    travelStore={travelStore}
+                    accentColor={mapAccentColor}
+                    onComplete={handlePngExportComplete}
+                    onError={handlePngExportError}
+                />
+            )}
+            <MapExportPreviewModal
+                isOpen={exportPreviewUrl != null}
+                imageUrl={exportPreviewUrl}
+                caption={exportPreviewCaption}
+                filename={exportPreviewFilename}
+                onClose={() => setExportPreviewUrl(null)}
                 onSaved={() => toastSuccess("Saved as PNG")}
             />
         </>

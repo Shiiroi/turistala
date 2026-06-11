@@ -38,9 +38,13 @@ function escapeXml(s: string): string {
         .replace(/"/g, "&quot;");
 }
 
-function progressLineText(line: PassportProgressLine): string {
-    if (line.pct == null) return `${line.visited} / ${line.total} ${line.label}`;
-    return `${line.visited} / ${line.total} ${line.label} · ${line.pct}%`;
+function progressLineSvg(line: PassportProgressLine, y: number, leftX: number, rightX: number): string {
+    const fraction = `${line.visited} / ${line.total} ${line.label}`;
+    const pct =
+        line.pct != null
+            ? `<text x="${rightX}" y="${y}" text-anchor="end" font-family="sans-serif" font-size="11" font-weight="600" fill="#c0622f">${line.pct}%</text>`
+            : "";
+    return `<text x="${leftX}" y="${y}" text-anchor="start" font-family="sans-serif" font-size="11" fill="#6b5c4a">${escapeXml(fraction)}</text>${pct}`;
 }
 
 function renderPhOutline(x: number, y: number, size: number, geometries: Geometry[]): string {
@@ -63,16 +67,17 @@ export function buildPassportCoverSvg(options: ExportCoverOptions): string {
     const bearerH = height - headerH;
     const avatarY = headerH + (bearerH - avatarSize) / 2;
     const colSplit = 200;
-    const progressColCenter = colSplit + (width - colSplit) / 2;
+    const progressLeftX = colSplit + 16;
+    const progressRightX = width - 16;
     const progressBlockH = lineCount * 16;
     const progressStartY = headerH + (bearerH - progressBlockH) / 2 + 12;
-    const sunX = width - 36;
+    const sunSize = 64;
+    const sunX = width - sunSize / 2 - 8;
     const sunY = headerH + bearerH / 2;
 
     const progressSvg = progressLines
-        .map(
-            (line, i) =>
-                `<text x="${progressColCenter}" y="${progressStartY + i * 16}" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#6b5c4a">${escapeXml(progressLineText(line))}</text>`,
+        .map((line, i) =>
+            progressLineSvg(line, progressStartY + i * 16, progressLeftX, progressRightX),
         )
         .join("\n  ");
 
@@ -101,8 +106,8 @@ export function buildPassportCoverSvg(options: ExportCoverOptions): string {
   ${avatarBlock}
   <text x="88" y="${nameY - 8}" font-family="monospace" font-size="9" fill="#9a8b78">BEARER</text>
   <text x="88" y="${nameY + 10}" font-family="Georgia,serif" font-size="18" font-weight="600" fill="#2c2416">${escapeXml(username)}</text>
+  ${stylizedSunSvg(sunX, sunY, sunSize)}
   ${progressSvg}
-  ${stylizedSunSvg(sunX, sunY, 80)}
 </svg>`;
 }
 

@@ -6,6 +6,8 @@ import type { Division, MapMode } from "../../homepage/types";
 import type { MunicityGeoJSON, ProvinceGeoJSON, Region } from "../types";
 import { MapScreenshotBridge } from "../hooks/useMapScreenshot";
 import { cn } from "../../../lib/cn";
+import type { MapExportCaptureProps } from "./MapExportCapture";
+import { MapExportCapture } from "./MapExportCapture";
 
 const PH_CENTER: [number, number] = [12.8797, 121.774];
 const PH_ZOOM = 6;
@@ -18,6 +20,13 @@ const PH_BOUNDS = L.latLngBounds(PH_MAX_BOUNDS);
 
 /** One shared canvas renderer for the entire layer — never create per feature */
 const SHARED_RENDERER = L.canvas({ padding: 0.5 });
+
+const BASE_FILL = "#ede3d2";
+const DEFAULT_BORDER = "#a89880";
+const HIGHLIGHT_BORDER = "#c0622f";
+const BORDER_WEIGHT_BASE = 1.5;
+const BORDER_WEIGHT_EMPHASIS = 2.75;
+const EXPORT_BORDER_WEIGHT = 1.5;
 
 interface TravelMapProps {
     provinces?: ProvinceGeoJSON[];
@@ -33,6 +42,7 @@ interface TravelMapProps {
     onSelect: (division: Division | null) => void;
     interactive?: boolean;
     showTiles?: boolean;
+    exportCapture?: MapExportCaptureProps;
 }
 
 function divisionFromFeature(feature: Feature): Division | null {
@@ -65,39 +75,34 @@ function divisionFromFeature(feature: Feature): Division | null {
 function getBaseStyle(
     feature: Feature,
     heatmapColors: Map<number, string>,
-    goalMunicityIds: Set<number>,
-    goalProvinceIds: Set<number>,
-    goalRegionIds: Set<number>,
-    mode: MapMode,
+    forExport = false,
 ): L.PathOptions {
     const id = feature.properties?.id as number;
-    const isGoal =
-        (mode === "municipality" && goalMunicityIds.has(id)) ||
-        (mode === "province" && goalProvinceIds.has(id)) ||
-        (mode === "region" && goalRegionIds.has(id));
+    const fillColor = heatmapColors.get(id) ?? BASE_FILL;
+    const visited = fillColor !== BASE_FILL;
+    const color = forExport ? DEFAULT_BORDER : visited ? HIGHLIGHT_BORDER : DEFAULT_BORDER;
+
+    if (forExport) {
+        return {
+            color: DEFAULT_BORDER,
+            weight: EXPORT_BORDER_WEIGHT,
+            fillColor,
+            fillOpacity: 0.62,
+        };
+    }
 
     return {
-        color: isGoal ? "#c0622f" : "#a89880",
-        weight: isGoal ? 2 : 0.8,
-        fillColor: heatmapColors.get(id) ?? "#ede3d2",
+        color,
+        weight: BORDER_WEIGHT_BASE,
+        fillColor,
         fillOpacity: 0.3,
-        dashArray: isGoal ? "6 4" : undefined,
     };
 }
 
-function getSelectedStyle(base: L.PathOptions): L.PathOptions {
+function getEmphasisStyle(base: L.PathOptions): L.PathOptions {
     return {
         ...base,
-        color: "#c0622f",
-        weight: 2.5,
-        fillOpacity: 0.55,
-    };
-}
-
-function getHoverStyle(base: L.PathOptions): L.PathOptions {
-    return {
-        ...base,
-        weight: 2,
+        weight: BORDER_WEIGHT_EMPHASIS,
         fillOpacity: 0.45,
     };
 }
@@ -173,6 +178,7 @@ function TravelMapInner({
     onSelect,
     interactive = true,
     showTiles = true,
+    exportCapture,
 }: TravelMapProps) {
     const layerMapRef = useRef<Map<number, L.Path>>(new Map());
     const selectedIdRef = useRef<number | null>(null);
@@ -185,6 +191,12 @@ function TravelMapInner({
     const goalRegionIdsRef = useRef(goalRegionIds);
     const modeRef = useRef(mode);
     const geoKeyRef = useRef("");
+    const exportRendererRef = useRef<L.Canvas | null>(null);
+    if (exportCapture && !exportRendererRef.current) {
+        exportRendererRef.current = L.canvas({ padding: 0.5 });
+    }
+    const pathRenderer = exportCapture ? exportRendererRef.current! : SHARED_RENDERER;
+    const forExport = !!exportCapture;
 
     onHoverRef.current = onHover;
     onSelectRef.current = onSelect;
@@ -247,41 +259,32 @@ function TravelMapInner({
     const selectedId = selectedDivision?.id ?? null;
 
     const styleForFeature = useCallback((feature?: Feature): L.PathOptions => {
-        if (!feature) return { renderer: SHARED_RENDERER };
+        if (!feature) return { renderer: pathRenderer };
         return {
-            ...getBaseStyle(
-                feature,
-                heatmapColorsRef.current,
-                goalIdsRef.current,
-                goalProvinceIdsRef.current,
-                goalRegionIdsRef.current,
-                modeRef.current,
-            ),
-            renderer: SHARED_RENDERER,
+            ...getBaseStyle(feature, heatmapColorsRef.current, forExport),
+            renderer: pathRenderer,
         };
-    }, []);
+    }, [pathRenderer, forExport]);
 
     const applyStyleToLayer = useCallback(
         (layer: L.Path, feature: Feature, variant: "base" | "hover" | "selected") => {
-            const base = getBaseStyle(
-                feature,
-                heatmapColorsRef.current,
-                goalIdsRef.current,
-                goalProvinceIdsRef.current,
-                goalRegionIdsRef.current,
-                modeRef.current,
-            );
+            const base = getBaseStyle(feature, heatmapColorsRef.current, forExport);
             const style =
-                variant === "selected"
-                    ? getSelectedStyle(base)
-                    : variant === "hover"
-                      ? getHoverStyle(base)
-                      : base;
+                forExport || variant === "base"
+                    ? base
+                    : getEmphasisStyle(base);
             layer.setStyle(style);
             return style;
         },
-        [],
+        [forExport],
     );
+
+    const repaintExportLayers = useCallback(() => {
+        for (const [id, layer] of layerMapRef.current) {
+            const feature = currentData.features.find((f) => f.properties.id === id);
+            if (feature) applyStyleToLayer(layer, feature as Feature, "base");
+        }
+    }, [currentData.features, applyStyleToLayer]);
 
     // Update only the previously selected and newly selected layers
     useEffect(() => {
@@ -386,8 +389,10 @@ function TravelMapInner({
     return (
         <div
             className={cn(
-                "relative h-full min-h-[500px] w-full",
-                !showTiles && "bg-gradient-to-b from-[#c5dce8] via-[#b8cfd8] to-[#a8c4d4]",
+                "relative h-full w-full",
+                !exportCapture && "min-h-[500px]",
+                !showTiles && !exportCapture && "bg-gradient-to-b from-[#c5dce8] via-[#b8cfd8] to-[#a8c4d4]",
+                !showTiles && exportCapture && "bg-parchment",
             )}
         >
             <MapContainer
@@ -400,9 +405,9 @@ function TravelMapInner({
                 doubleClickZoom={interactive}
                 touchZoom={interactive}
                 preferCanvas={true}
-                maxBounds={PH_MAX_BOUNDS}
-                maxBoundsViscosity={1}
-                maxZoom={14}
+                maxBounds={exportCapture ? undefined : PH_MAX_BOUNDS}
+                maxBoundsViscosity={exportCapture ? undefined : 1}
+                maxZoom={exportCapture ? 18 : 14}
             >
                 {showTiles && (
                     <TileLayer
@@ -411,12 +416,15 @@ function TravelMapInner({
                     />
                 )}
                 {interactive && <ZoomControl position="bottomright" />}
-                <MapZoomLimits />
+                {!exportCapture && <MapZoomLimits />}
                 {interactive && (
                     <MapBackgroundClickHandler onBackgroundClick={() => onSelectRef.current(null)} />
                 )}
                 {interactive && <FitBoundsOnSelect selectedDivision={selectedDivision} />}
                 {interactive && <MapScreenshotBridge />}
+                {exportCapture && (
+                    <MapExportCapture {...exportCapture} onBeforeCapture={repaintExportLayers} />
+                )}
                 {currentData.features.length > 0 && (
                     <GeoJSON
                         key={geoKey}

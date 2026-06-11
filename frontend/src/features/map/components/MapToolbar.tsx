@@ -10,7 +10,9 @@ import { ProfileMenu } from "./ProfileMenu";
 interface MapToolbarProps {
     onSearchClick: () => void;
     onScreenshotClick: () => void;
+    onExportClick: () => void;
     isCapturing?: boolean;
+    isExporting?: boolean;
     travelStore: TravelStore;
     regions: Region[];
     provinces: ProvinceGeoJSON[];
@@ -21,7 +23,9 @@ interface MapToolbarProps {
 export function MapToolbar({
     onSearchClick,
     onScreenshotClick,
+    onExportClick,
     isCapturing = false,
+    isExporting = false,
     travelStore,
     regions,
     provinces,
@@ -39,8 +43,10 @@ export function MapToolbar({
             />
             <IconButton
                 iconNode={<FaArrowUpFromBracket size={16} />}
-                label="Export map image"
-                onClick={() => console.log({ action: "EXPORT_MAP_IMAGE" })}
+                label="Export map"
+                onClick={onExportClick}
+                disabled={isExporting}
+                loading={isExporting}
             />
             <ProfileMenu
                 travelStore={travelStore}
