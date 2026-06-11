@@ -1,12 +1,5 @@
-/**
- * Upload geo JSON from public/geo to Supabase Storage (public geo bucket).
- *
- * Requires:
- *   VITE_SUPABASE_URL
- *   SUPABASE_SERVICE_ROLE_KEY
- *
- * Run: pnpm upload:geo
- */
+// Upload public/geo JSON to Supabase Storage. Run: pnpm upload:geo
+// Requires VITE_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
 import { createClient } from "@supabase/supabase-js";
 import * as fs from "fs";
 import * as path from "path";

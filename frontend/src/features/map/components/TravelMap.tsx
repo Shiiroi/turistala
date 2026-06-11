@@ -1,24 +1,24 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, GeoJSON, ZoomControl, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import type { Feature, Geometry } from "geojson";
 import type { Division, MapMode } from "../../homepage/types";
 import type { MunicityGeoJSON, ProvinceGeoJSON, Region } from "../types";
-import { MapScreenshotBridge } from "../hooks/useMapScreenshot";
+import { MapScreenshotBridge } from "../hooks/MapScreenshotBridge";
 import { cn } from "../../../lib/cn";
 import type { MapExportCaptureProps } from "./MapExportCapture";
 import { MapExportCapture } from "./MapExportCapture";
 
 const PH_CENTER: [number, number] = [12.8797, 121.774];
 const PH_ZOOM = 6;
-/** SW / NE corners — keeps panning within the Philippine archipelago */
+// Pan bounds — Philippine archipelago
 const PH_MAX_BOUNDS: L.LatLngBoundsExpression = [
     [3.5, 115.5],
     [22.0, 128.0],
 ];
 const PH_BOUNDS = L.latLngBounds(PH_MAX_BOUNDS);
 
-/** One shared canvas renderer for the entire layer — never create per feature */
+// Single canvas renderer for all features — don't create per feature
 const SHARED_RENDERER = L.canvas({ padding: 0.5 });
 
 const BASE_FILL = "#ede3d2";
@@ -114,16 +114,53 @@ function boundsFromGeometry(geometry: Geometry): L.LatLngBounds | null {
     return bounds.isValid() ? bounds : null;
 }
 
+const MAP_FLY_DURATION = 0.55;
+
+function selectionDebugSnapshot() {
+    const sel = window.getSelection();
+    return {
+        text: sel?.toString().slice(0, 80) ?? "",
+        collapsed: sel?.isCollapsed ?? true,
+        anchor: sel?.anchorNode?.parentElement?.className?.slice(0, 60) ?? "",
+        focus: sel?.focusNode?.parentElement?.className?.slice(0, 60) ?? "",
+        activeTag: document.activeElement?.tagName ?? "",
+    };
+}
+
 function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | null }) {
     const map = useMap();
 
     useEffect(() => {
         if (!selectedDivision?.geometry) return;
         const bounds = boundsFromGeometry(selectedDivision.geometry);
-        if (bounds) {
-            map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
-        }
-    }, [selectedDivision, map]);
+        if (!bounds) return;
+
+        map.stop();
+        // #region agent log
+        fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "012611" },
+            body: JSON.stringify({
+                sessionId: "012611",
+                location: "TravelMap.tsx:FitBoundsOnSelect",
+                message: "flyToBounds start",
+                data: {
+                    divisionId: selectedDivision.id,
+                    level: selectedDivision.level,
+                    selection: selectionDebugSnapshot(),
+                },
+                timestamp: Date.now(),
+                hypothesisId: "E",
+            }),
+        }).catch(() => {});
+        // #endregion
+        map.flyToBounds(bounds, {
+            padding: [40, 40],
+            maxZoom: 12,
+            duration: MAP_FLY_DURATION,
+            easeLinearity: 0.25,
+        });
+    }, [selectedDivision?.id, selectedDivision?.level, selectedDivision?.geometry, map]);
 
     return null;
 }
@@ -137,7 +174,7 @@ function MapBackgroundClickHandler({ onBackgroundClick }: { onBackgroundClick: (
     return null;
 }
 
-/** Prevent zooming out past the point where the whole Philippines is visible */
+// Floor zoom so the whole Philippines stays in view
 function MapZoomLimits() {
     const map = useMap();
 
@@ -191,20 +228,22 @@ function TravelMapInner({
     const goalRegionIdsRef = useRef(goalRegionIds);
     const modeRef = useRef(mode);
     const geoKeyRef = useRef("");
-    const exportRendererRef = useRef<L.Canvas | null>(null);
-    if (exportCapture && !exportRendererRef.current) {
-        exportRendererRef.current = L.canvas({ padding: 0.5 });
-    }
-    const pathRenderer = exportCapture ? exportRendererRef.current! : SHARED_RENDERER;
+    const exportRenderer = useMemo(
+        () => (exportCapture ? L.canvas({ padding: 0.5 }) : null),
+        [exportCapture],
+    );
+    const pathRenderer = exportRenderer ?? SHARED_RENDERER;
     const forExport = !!exportCapture;
 
-    onHoverRef.current = onHover;
-    onSelectRef.current = onSelect;
-    heatmapColorsRef.current = heatmapColors;
-    goalIdsRef.current = goalMunicityIds;
-    goalProvinceIdsRef.current = goalProvinceIds;
-    goalRegionIdsRef.current = goalRegionIds;
-    modeRef.current = mode;
+    useLayoutEffect(() => {
+        onHoverRef.current = onHover;
+        onSelectRef.current = onSelect;
+        heatmapColorsRef.current = heatmapColors;
+        goalIdsRef.current = goalMunicityIds;
+        goalProvinceIdsRef.current = goalProvinceIds;
+        goalRegionIdsRef.current = goalRegionIds;
+        modeRef.current = mode;
+    });
 
     const currentData = useMemo(() => {
         let entities: Array<{
@@ -249,12 +288,12 @@ function TravelMapInner({
 
     const geoKey = `${mode}-${currentData.features.length}`;
 
-    // Clear registry BEFORE GeoJSON mounts new layers (useEffect ran too late and wiped the map)
-    if (geoKeyRef.current !== geoKey) {
+    useLayoutEffect(() => {
+        if (geoKeyRef.current === geoKey) return;
         layerMapRef.current.clear();
         hoveredIdRef.current = null;
         geoKeyRef.current = geoKey;
-    }
+    }, [geoKey]);
 
     const selectedId = selectedDivision?.id ?? null;
 
@@ -373,14 +412,61 @@ function TravelMapInner({
             });
 
             pathLayer.on("click", (e) => {
+                L.DomEvent.preventDefault(e);
                 L.DomEvent.stopPropagation(e);
                 const division = divisionFromFeature(feature);
                 if (!division) return;
+                // #region agent log
+                const selBefore = selectionDebugSnapshot();
+                fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "012611" },
+                    body: JSON.stringify({
+                        sessionId: "012611",
+                        location: "TravelMap.tsx:pathLayer.click",
+                        message: "map feature click before select",
+                        data: { divisionId: id, selection: selBefore },
+                        timestamp: Date.now(),
+                        hypothesisId: "A,C",
+                        runId: "post-fix",
+                    }),
+                }).catch(() => {});
+                // #endregion
                 if (selectedIdRef.current === id) {
                     onSelectRef.current(null);
                 } else {
                     onSelectRef.current(division);
                 }
+                const active = document.activeElement;
+                if (active instanceof HTMLElement && active.closest(".leaflet-container")) {
+                    active.blur();
+                }
+                // #region agent log
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-Debug-Session-Id": "012611",
+                            },
+                            body: JSON.stringify({
+                                sessionId: "012611",
+                                location: "TravelMap.tsx:pathLayer.click",
+                                message: "map feature click after select (2 rAF)",
+                                data: {
+                                    divisionId: id,
+                                    selection: selectionDebugSnapshot(),
+                                    activeTag: document.activeElement?.tagName ?? "none",
+                                },
+                                timestamp: Date.now(),
+                                hypothesisId: "F",
+                                runId: "post-fix",
+                            }),
+                        }).catch(() => {});
+                    });
+                });
+                // #endregion
             });
         },
         [applyStyleToLayer, currentData.features, interactive],
@@ -389,7 +475,7 @@ function TravelMapInner({
     return (
         <div
             className={cn(
-                "relative h-full w-full",
+                "relative h-full w-full outline-none",
                 !exportCapture && "min-h-[500px]",
                 !showTiles && !exportCapture && "bg-gradient-to-b from-[#c5dce8] via-[#b8cfd8] to-[#a8c4d4]",
                 !showTiles && exportCapture && "bg-parchment",
@@ -399,7 +485,10 @@ function TravelMapInner({
                 center={PH_CENTER}
                 zoom={PH_ZOOM}
                 zoomControl={false}
-                className={cn("h-full w-full", showTiles ? "bg-parchment" : "bg-transparent")}
+                className={cn(
+                    "h-full w-full outline-none focus:outline-none",
+                    showTiles ? "bg-parchment" : "bg-transparent",
+                )}
                 scrollWheelZoom={interactive}
                 dragging={interactive}
                 doubleClickZoom={interactive}

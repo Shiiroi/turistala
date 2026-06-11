@@ -199,7 +199,7 @@ export async function uploadJournalPhoto(
     };
 }
 
-/** @deprecated Use uploadJournalPhoto */
+// deprecated: use uploadJournalPhoto
 export async function uploadJournalImage(
     file: File,
     userId: string,

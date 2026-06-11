@@ -1,7 +1,5 @@
-/**
- * Export regions/provinces/municities GeoJSON from CSV metadata + public/geo shapes.
- * Same layout as the Supabase geo bucket. For cloud: pnpm upload:geo
- */
+// Export geo layers from CSV + public/geo — same layout as Supabase geo bucket
+// For cloud deploy: pnpm upload:geo
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";

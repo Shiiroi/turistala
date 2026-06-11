@@ -12,8 +12,7 @@ import { PlaceCard, type PlaceFilterTab } from "../../travel/components/PlaceAct
 import type { MockPlace } from "../../travel/types";
 import type { TravelStore } from "../../travel/types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON } from "../../map/types";
-
-export type ExploreViewTab = "provinces" | "municipalities" | "places";
+import type { ExploreViewTab } from "./divisionExploreUtils";
 
 interface SubdivisionRow {
     id: number;
@@ -56,96 +55,6 @@ function isProvinceExplored(
             visitedPlaceIds.has(p.id) &&
             municityMeta.some((m) => m.id === p.municity_id && m.province_id === provinceId),
     );
-}
-
-export function getAvailableViewTabs(level: Division["level"]): ExploreViewTab[] {
-    switch (level) {
-        case "region":
-            return ["provinces", "municipalities", "places"];
-        case "province":
-            return ["municipalities", "places"];
-        case "municipality":
-            return ["places"];
-    }
-}
-
-export function getDefaultViewTab(level: Division["level"]): ExploreViewTab {
-    switch (level) {
-        case "region":
-            return "provinces";
-        case "province":
-            return "municipalities";
-        case "municipality":
-            return "places";
-    }
-}
-
-const VIEW_TAB_LABELS: Record<ExploreViewTab, string> = {
-    provinces: "Provinces",
-    municipalities: "Municipalities",
-    places: "Places",
-};
-
-interface ExploreViewTabsProps {
-    tabs: ExploreViewTab[];
-    active: ExploreViewTab;
-    onChange: (tab: ExploreViewTab) => void;
-}
-
-export function ExploreViewTabs({ tabs, active, onChange }: ExploreViewTabsProps) {
-    if (tabs.length <= 1) return null;
-
-    return (
-        <PillTabs
-            value={active}
-            options={tabs.map((tab) => ({ value: tab, label: VIEW_TAB_LABELS[tab] }))}
-            onChange={onChange}
-            className="mb-2.5 mt-3.5"
-        />
-    );
-}
-
-export function computeExploreProgress(
-    division: Division,
-    viewTab: ExploreViewTab,
-    provinces: ProvinceGeoJSON[],
-    municityMeta: MunicityMeta[],
-    provinceMunicities: MunicityMeta[],
-    places: MockPlace[],
-    store: TravelStore,
-): { visited: number; total: number } {
-    const visitedPlaceIds = new Set(store.visited.map((v) => v.place_id));
-
-    switch (viewTab) {
-        case "provinces": {
-            const rows = provinces
-                .filter((p) => p.region_id === division.id)
-                .map((p) => isProvinceExplored(p.id, store, municityMeta, visitedPlaceIds));
-            return { visited: rows.filter(Boolean).length, total: rows.length };
-        }
-        case "municipalities": {
-            const munis =
-                division.level === "province"
-                    ? provinceMunicities.length > 0
-                        ? provinceMunicities
-                        : municityMeta.filter((m) => m.province_id === division.id)
-                    : municityMeta.filter((m) => {
-                          const prov = provinces.find((p) => p.id === m.province_id);
-                          return prov?.region_id === division.id;
-                      });
-            return {
-                visited: munis.filter((m) => isMuniExplored(m.id, store, visitedPlaceIds)).length,
-                total: munis.length,
-            };
-        }
-        case "places": {
-            const destinations = places.filter((p) => store.getPlaceStatus(p.id) != null);
-            return {
-                visited: destinations.filter((p) => store.getPlaceStatus(p.id) === "visited").length,
-                total: destinations.length,
-            };
-        }
-    }
 }
 
 function filterByStatus<T extends { explored: boolean }>(
@@ -320,7 +229,10 @@ export function DivisionExploreSection({
                             key={item.id}
                             type="button"
                             onClick={() => handleSubdivisionSelect(item.id)}
-                            className="flex w-full cursor-pointer items-center gap-2.5 border-none border-b border-border-light bg-transparent px-3.5 py-2.5 text-left font-body last:border-b-0"
+                            className={cn(
+                                "flex w-full cursor-pointer items-center gap-2.5 border-none border-b border-border-light bg-transparent px-3.5 py-2.5 text-left font-body select-none last:border-b-0",
+                                "transition-colors duration-150 hover:bg-parchment active:bg-border-light",
+                            )}
                         >
                             <MapPin
                                 size={14}

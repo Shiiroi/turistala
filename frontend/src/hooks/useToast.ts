@@ -11,7 +11,7 @@ export function useToast() {
     return ctx;
 }
 
-/** @deprecated Use useToast().success() */
+// deprecated: use useToast().success()
 export function useSaveFeedback() {
     const { success } = useToast();
     return useCallback(

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { LoginForm } from "../features/auth/components/LoginForm";
 import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/AuthShell";
 import { useSignIn } from "../features/auth/hooks/useAuthSession";
-import { clearDemoMode, isImportDone, clearDemoData, hasDemoData } from "../features/travel/demoStorage";
+import { clearDemoMode, isImportDone, clearDemoData } from "../features/travel/demoStorage";
 
 export function LoginPage() {
     const navigate = useNavigate();

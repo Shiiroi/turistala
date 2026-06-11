@@ -67,7 +67,10 @@ export function AddPlaceWizard({
         staleTime: 20 * 60 * 1000,
     });
 
-    const provinceMunicities = provinceMunicitiesQuery.data ?? [];
+    const provinceMunicities = useMemo(
+        () => provinceMunicitiesQuery.data ?? [],
+        [provinceMunicitiesQuery.data],
+    );
 
     const breadcrumb = useMemo(() => {
         const parts: string[] = [];

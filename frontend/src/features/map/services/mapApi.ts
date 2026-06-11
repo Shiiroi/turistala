@@ -16,7 +16,7 @@ export async function fetchProvinces(): Promise<ProvinceGeoJSON[]> {
     return fetchProvincesFromStorage();
 }
 
-/** Quick metadata-only fetch (no geometry) — from Storage or PostgREST fallback */
+// Metadata only (no geometry); Storage first, PostgREST fallback
 export async function fetchMunicitiesMeta(): Promise<MunicityMeta[]> {
     try {
         return await fetchMunicitiesMetaFromStorage();
@@ -59,7 +59,7 @@ export async function fetchMunicitiesMetaByProvince(provinceId: number): Promise
     return (data ?? []) as MunicityMeta[];
 }
 
-/** Fetch full municipality geometry from Storage CDN */
+// Full municity geometry from Storage CDN
 export async function fetchMunicitiesGeometry(
     onProgress?: (loaded: number, total?: number) => void,
 ): Promise<MunicityGeoJSON[]> {

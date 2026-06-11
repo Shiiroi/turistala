@@ -1,7 +1,7 @@
 import { Download, MapPin } from "lucide-react";
 import { Button } from "../../../components/ui/Button";
 import type { Geometry } from "geojson";
-import type { DivisionProgress, PassportProgressLevel } from "../types";
+import type { DivisionProgress } from "../types";
 import type { RegionalProgressBy, ProvincialProgressBy } from "../utils/computePassportStats";
 import { metricUnitLabel, summarizeChildProgress } from "../utils/computePassportStats";
 import { PassportProgressRow } from "./PassportProgressRow";

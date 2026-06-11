@@ -9,7 +9,7 @@ function getLayerCanvas(map: L.Map): HTMLCanvasElement | null {
     return map.getContainer().querySelector<HTMLCanvasElement>(".leaflet-overlay-pane canvas");
 }
 
-/** Fast export: copy Leaflet canvas, optionally cropped to geographic bounds. */
+// Copy Leaflet canvas; optionally crop to bounds
 export async function captureExportMapPng(
     map: L.Map,
     scale = 2,

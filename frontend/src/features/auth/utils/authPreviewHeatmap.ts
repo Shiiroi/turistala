@@ -4,7 +4,7 @@ import {
     getHeatmapColorFromRatio,
 } from "../../travel/hooks/useMockHeatmapData";
 
-/** Curated sample travel progress for auth page preview (region id → ratio 0–1) */
+// Sample region progress for auth preview (id → 0–1 ratio)
 const SAMPLE_REGION_PROGRESS: Record<number, number> = {
     1: 0.92, // NCR
     3: 0.55, // Ilocos

@@ -26,14 +26,10 @@ export function usePassportStats(
         [
             metric,
             store,
-            store.places,
-            store.visited,
-            store.goals,
             regions,
             provinces,
             municityMeta,
-            provinceFilter?.includeMM,
-            provinceFilter?.includeSGA,
+            provinceFilter,
         ],
     );
 }

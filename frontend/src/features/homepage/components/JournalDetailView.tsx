@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Calendar, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "../../../components/ui/Badge";
 import { Button } from "../../../components/ui/Button";
@@ -9,9 +9,9 @@ import type { MockJournal, MockPlace } from "../../travel/types";
 import type { TravelStore } from "../../travel/types";
 import {
     JournalPhotoPicker,
-    localPhotosToJournalInput,
     type LocalPhoto,
 } from "../../travel/components/JournalPhotoPicker";
+import { localPhotosToJournalInput } from "../../travel/utils/journalPhotoUtils";
 import { useAuthSession } from "../../auth/hooks/useAuthSession";
 import { useUserStorageUsage } from "../../journal/hooks/useUserStorageUsage";
 
@@ -50,21 +50,15 @@ export function JournalDetailView({ journal: initialJournal, place, store, onBac
         store.isDemo ? undefined : session?.user?.id,
     );
     const [editOpen, setEditOpen] = useState(false);
-    const [title, setTitle] = useState(initialJournal.title);
-    const [content, setContent] = useState(initialJournal.content);
-    const [visitDate, setVisitDate] = useState(initialJournal.visit_date);
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [visitDate, setVisitDate] = useState("");
     const [editPhotos, setEditPhotos] = useState<LocalPhoto[]>([]);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
     const journal = store.journals.find((j) => j.id === initialJournal.id) ?? initialJournal;
-
-    useEffect(() => {
-        setTitle(journal.title);
-        setContent(journal.content);
-        setVisitDate(journal.visit_date);
-    }, [journal.title, journal.content, journal.visit_date]);
 
     function openEdit() {
         setTitle(journal.title);

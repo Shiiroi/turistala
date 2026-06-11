@@ -6,7 +6,7 @@ import type { MapMode } from "../../homepage/types";
 import {
     getAvailableViewTabs,
     type ExploreViewTab,
-} from "../../homepage/components/DivisionExploreSection";
+} from "../../homepage/components/divisionExploreUtils";
 import { HeatmapLegend } from "./HeatmapLegend";
 import { MapProgressOverlay } from "./MapProgressOverlay";
 import { ViewModeControl } from "./ViewModeControl";

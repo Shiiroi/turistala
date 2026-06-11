@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DemoTravelData, Goal, Journal, Place, TravelStore, VisitedPlace } from "../types";
 import { loadDemoData, saveDemoData } from "../demoStorage";
 
@@ -9,9 +9,13 @@ function uid(): string {
 const EMPTY: DemoTravelData = { places: [], goals: [], visited: [], journals: [] };
 
 export function useDemoTravelStore(): TravelStore {
-    const dataRef = useRef<DemoTravelData>(loadDemoData());
-    const [data, setData] = useState<DemoTravelData>(() => dataRef.current);
+    const [data, setData] = useState<DemoTravelData>(loadDemoData);
+    const dataRef = useRef(data);
     const { places, goals, visited, journals } = data;
+
+    useEffect(() => {
+        dataRef.current = data;
+    }, [data]);
 
     const persist = useCallback((next: DemoTravelData) => {
         dataRef.current = next;

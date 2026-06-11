@@ -45,10 +45,7 @@ export function HiddenMapExportHost({
     );
 
     useEffect(() => {
-        if (job.level !== "municipality") {
-            setExportMunicities([]);
-            return;
-        }
+        if (job.level !== "municipality") return;
 
         let cancelled = false;
         loadMunicitiesForExport(
@@ -125,13 +122,12 @@ export function HiddenMapExportHost({
 
     const geometryReady = job.level !== "municipality" || exportMunicities != null;
 
-    useEffect(() => {
-        if (geometryReady && exportMunicities != null && !bounds) {
-            onError(new Error("No map geometry in export scope"));
-        }
-    }, [geometryReady, exportMunicities, bounds, onError]);
+    if (!geometryReady) {
+        return null;
+    }
 
-    if (!geometryReady || !bounds) {
+    if (!bounds) {
+        onError(new Error("No map geometry in export scope"));
         return null;
     }
 

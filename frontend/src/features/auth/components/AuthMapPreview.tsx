@@ -13,7 +13,7 @@ export function AuthMapPreview() {
         staleTime: 15 * 60 * 1000,
     });
 
-    const regions = regionsQuery.data ?? [];
+    const regions = useMemo(() => regionsQuery.data ?? [], [regionsQuery.data]);
 
     const heatmapColors = useMemo(() => {
         if (regions.length === 0) return new Map<number, string>();

@@ -15,12 +15,6 @@ export interface LocalPhoto {
     preview_url: string;
 }
 
-export interface JournalPhotoInput {
-    id?: string;
-    preview_url: string;
-    file?: File;
-}
-
 interface JournalPhotoPickerProps {
     photos: LocalPhoto[];
     onChange: (photos: LocalPhoto[]) => void;
@@ -181,17 +175,4 @@ function StorageUsageBar({ bytesUsed }: { bytesUsed: number }) {
             </div>
         </div>
     );
-}
-
-export function localPhotosToJournalInput(photos: LocalPhoto[]): JournalPhotoInput[] {
-    return photos.map((p) => ({
-        id: p.id,
-        preview_url: p.preview_url,
-        file: p.file,
-    }));
-}
-
-/** @deprecated Use localPhotosToJournalInput for authenticated uploads */
-export function localPhotosToStorePhotos(photos: LocalPhoto[]): { preview_url: string }[] {
-    return photos.map((p) => ({ preview_url: p.preview_url }));
 }

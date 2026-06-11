@@ -8,7 +8,7 @@ export function getGeoStoragePublicUrl(fileName: string): string {
     return data.publicUrl;
 }
 
-/** Fetch a map layer JSON file from Supabase Storage CDN */
+// Map layer JSON from Supabase Storage CDN
 export async function fetchGeoLayerFromStorage<T>(fileName: string, label: string): Promise<T> {
     const url = getGeoStoragePublicUrl(fileName);
     const res = await fetch(url);
@@ -30,7 +30,7 @@ export async function fetchMunicitiesMetaFromStorage(): Promise<MunicityMeta[]> 
     return fetchGeoLayerFromStorage<MunicityMeta[]>("municities/meta.json", "fetchMunicitiesMeta");
 }
 
-/** Load all municipality geometries from per-province Storage files (parallel CDN fetches) */
+// All municity geometries — one file per province, parallel CDN fetches
 export async function fetchMunicitiesGeometryFromStorage(): Promise<MunicityGeoJSON[]> {
     const manifest = await fetchGeoLayerFromStorage<{ provinceIds: number[] }>(
         "municities/manifest.json",

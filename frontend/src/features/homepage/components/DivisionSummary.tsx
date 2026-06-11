@@ -2,11 +2,10 @@ import { X } from "lucide-react";
 import { CloseButton } from "../../../components/ui/CloseButton";
 import { Label } from "../../../components/ui/Label";
 import { PillTabs } from "../../../components/ui/PillTabs";
-import { cn } from "../../../lib/cn";
 import type { Division } from "../types";
 import { divisionLevelLabel } from "../types";
-import type { ExploreViewTab } from "./DivisionExploreSection";
-import { getAvailableViewTabs } from "./DivisionExploreSection";
+import type { ExploreViewTab } from "./divisionExploreUtils";
+import { getAvailableViewTabs } from "./divisionExploreUtils";
 
 interface DivisionSummaryProps {
     division: Division;

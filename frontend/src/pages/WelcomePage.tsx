@@ -1,7 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import { Button } from "../components/ui/Button";
-import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/AuthShell";
+import { AuthCard, AuthShell } from "../features/auth/components/AuthShell";
 import { useAuthSession } from "../features/auth/hooks/useAuthSession";
 import { setDemoMode } from "../features/travel/demoStorage";
 

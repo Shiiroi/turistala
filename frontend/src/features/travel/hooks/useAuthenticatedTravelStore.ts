@@ -62,10 +62,10 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         },
     });
 
-    const places = data?.places ?? [];
-    const goals = data?.goals ?? [];
-    const visited = data?.visited ?? [];
-    const journals = data?.journals ?? [];
+    const places = useMemo(() => data?.places ?? [], [data?.places]);
+    const goals = useMemo(() => data?.goals ?? [], [data?.goals]);
+    const visited = useMemo(() => data?.visited ?? [], [data?.visited]);
+    const journals = useMemo(() => data?.journals ?? [], [data?.journals]);
 
     const findPlaceByOsmId = useCallback(
         (osm_id: string) => places.find((p) => p.osm_id === osm_id),

@@ -1,7 +1,7 @@
 import { Label } from "../../../components/ui/Label";
 import { SegmentedControl } from "../../../components/ui/SegmentedControl";
 import { cn } from "../../../lib/cn";
-import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
+import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 
 interface MapProgressOverlayProps {
     progressBy: ExploreViewTab;

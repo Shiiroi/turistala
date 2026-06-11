@@ -3,7 +3,7 @@ import { FaLayerGroup } from "react-icons/fa";
 import { MapOverlayCard } from "../../../components/ui/MapOverlayCard";
 import { cn } from "../../../lib/cn";
 import type { Division, MapMode } from "../../homepage/types";
-import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
+import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 import type { MunicityMeta, ProvinceGeoJSON, Region } from "../types";
 import type { TravelStore } from "../../travel/types";
 import { HoverInfoCard } from "./HoverInfoCard";

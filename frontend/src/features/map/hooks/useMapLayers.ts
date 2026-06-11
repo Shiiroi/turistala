@@ -16,6 +16,7 @@ interface UseMapLayersReturn {
 }
 
 export function useMapLayers(mapMode: MapMode): UseMapLayersReturn {
+    void mapMode;
     const [loadProgress, setLoadProgress] = useState<number | null>(null);
 
     const provincesQuery = useQuery<ProvinceGeoJSON[]>({

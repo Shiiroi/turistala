@@ -1,7 +1,7 @@
 import type { Geometry } from "geojson";
 import type { PassportProgressLevel } from "../types";
 import type { PassportProgressLine } from "../components/PassportBooklet";
-import { coverDecorSvg, planeIconSvg, stylizedSunSvg } from "../components/PassportDecor";
+import { coverDecorSvg, planeIconSvg, stylizedSunSvg } from "./passportDecorSvg";
 import { geometriesToSvgPath, geometryToSvgPath } from "./geometryToSvgPath";
 import {
     badgeTier,

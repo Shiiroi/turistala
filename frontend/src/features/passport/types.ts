@@ -1,6 +1,6 @@
-import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
+import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 
-/** Passport progress levels — includes regions (not in map sidebar tabs). */
+// Includes regions — not in map sidebar tabs
 export type PassportProgressLevel = "regions" | ExploreViewTab;
 
 export interface DivisionProgress {
@@ -9,7 +9,7 @@ export interface DivisionProgress {
     visited: number;
     total: number;
     fraction: number;
-    /** Set for place-level drill-down rows */
+    // Place-level drill-down rows only
     placeId?: string;
 }
 
@@ -31,7 +31,7 @@ export interface PassportStats {
     regions: RegionPassportRow[];
 }
 
-/** @deprecated use PassportStats */
+// deprecated: use PassportStats
 export interface ProvinceProgress {
     provinceId: number;
     provinceName: string;
@@ -40,7 +40,7 @@ export interface ProvinceProgress {
     completionFraction: number;
 }
 
-/** @deprecated use RegionPassportRow */
+// deprecated: use RegionPassportRow
 export interface RegionBadge {
     regionId: number;
     regionName: string;

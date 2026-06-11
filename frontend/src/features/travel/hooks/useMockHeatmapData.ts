@@ -43,7 +43,7 @@ function darken(hex: string, amount: number): string {
     return mixColors(hex, "#000000", amount);
 }
 
-/** Build a 6-step heatmap ramp from unvisited cream to the chosen accent */
+// 6-step ramp: unvisited cream → accent
 export function buildHeatmapPalette(accentHex: string): string[] {
     return [
         HEATMAP_BASE,
@@ -55,7 +55,7 @@ export function buildHeatmapPalette(accentHex: string): string[] {
     ];
 }
 
-/** Deterministic mock visit counts based on entity id for visual demo */
+// Mock visit counts from entity id (demo only)
 function mockVisitCount(id: number, level: MapMode): number {
     const seed = id * (level === "region" ? 7 : level === "province" ? 3 : 1);
     return seed % 12;
@@ -67,7 +67,7 @@ export function getHeatmapColor(count: number, palette: string[] = DEFAULT_HEATM
     return palette[index];
 }
 
-/** Map a 0–1 progress ratio to a heatmap color */
+// Map 0–1 progress ratio to heatmap color
 export function getHeatmapColorFromRatio(
     ratio: number,
     palette: string[] = DEFAULT_HEATMAP_COLORS,

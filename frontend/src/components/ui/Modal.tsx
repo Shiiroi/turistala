@@ -19,7 +19,7 @@ interface ModalProps {
     subtitle?: string;
     size?: ModalSize;
     zIndex?: number;
-    /** @deprecated prefer size */
+    // deprecated: prefer size
     maxWidth?: number | string;
     minHeight?: number | string;
     className?: string;

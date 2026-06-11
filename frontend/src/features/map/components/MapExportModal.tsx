@@ -43,7 +43,7 @@ const PROGRESS_OPTIONS: { value: MapExportProgressBy; label: string }[] = [
     { value: "places", label: "Places" },
 ];
 
-function defaultScopeMode(level: MapExportLevel): ScopeMode {
+function defaultScopeMode(): ScopeMode {
     return "all";
 }
 
@@ -141,7 +141,7 @@ export function MapExportModal({
 
     function handleLevelChange(next: MapExportLevel) {
         setLevel(next);
-        setScopeMode(defaultScopeMode(next));
+        setScopeMode(defaultScopeMode());
         setPickIds([]);
         setSearch("");
     }

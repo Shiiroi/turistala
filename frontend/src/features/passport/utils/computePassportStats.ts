@@ -1,4 +1,4 @@
-import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
+import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 import type { MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
 import type { TravelStore } from "../../travel/types";
 import type { DivisionProgress, PassportProgressLevel, PassportStats, RegionPassportRow } from "../types";
@@ -371,7 +371,7 @@ export function metricLabel(metric: PassportProgressLevel): string {
     }
 }
 
-/** Singular unit label — use after "By" (e.g. "By province") */
+// Singular label after "By" (e.g. "By province")
 export function metricUnitLabel(metric: PassportProgressLevel): string {
     switch (metric) {
         case "regions":
@@ -491,5 +491,5 @@ export function summarizeChildProgress(
     };
 }
 
-/** @deprecated use RegionalProgressBy */
+// deprecated: use RegionalProgressBy
 export type ExploreViewTabAlias = ExploreViewTab;

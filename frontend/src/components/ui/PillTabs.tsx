@@ -28,7 +28,7 @@ export function PillTabs<T extends string>({
                         key={option.value}
                         type="button"
                         className={cn(
-                            "cursor-pointer rounded-full border border-border bg-surface px-3 py-1.5 font-mono text-xs text-muted transition-[background,color,border-color] duration-150",
+                            "cursor-pointer rounded-full border border-border bg-surface px-3 py-1.5 font-mono text-xs text-muted transition-[background,color,border-color] duration-150 select-none",
                             isActive && "border-accent bg-accent text-white",
                         )}
                         onClick={() => onChange(option.value)}

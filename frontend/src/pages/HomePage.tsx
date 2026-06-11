@@ -6,7 +6,8 @@ import { MapExportModal } from "../features/map/components/MapExportModal";
 import { MapExportPreviewModal } from "../features/map/components/MapExportPreviewModal";
 import { HiddenMapExportHost } from "../features/map/components/HiddenMapExportHost";
 import { SearchModal } from "../features/map/components/SearchModal";
-import { MapScreenshotProvider, useMapScreenshotCapture } from "../features/map/hooks/useMapScreenshot";
+import { MapScreenshotProvider } from "../features/map/hooks/MapScreenshotProvider";
+import { useMapScreenshotCapture } from "../features/map/hooks/useMapScreenshotCapture";
 import { useMapLayers } from "../features/map/hooks/useMapLayers";
 import { HomePageLayout } from "../features/homepage/components/HomePageLayout";
 import { DetailPanel } from "../features/homepage/components/DetailPanel";
@@ -16,7 +17,7 @@ import { divisionLevelLabel } from "../features/homepage/types";
 import { useTravelStore } from "../features/travel/hooks/useTravelStore";
 import { useProgressHeatmapColors } from "../features/travel/hooks/useProgressHeatmapColors";
 import { useMapAccentColor } from "../features/profile/hooks/useMapAccentColor";
-import { getDefaultViewTab, type ExploreViewTab } from "../features/homepage/components/DivisionExploreSection";
+import { getDefaultViewTab, type ExploreViewTab } from "../features/homepage/components/divisionExploreUtils";
 import { DemoBanner, ImportDemoModal } from "../features/auth/components/ImportDemoModal";
 import { useDemoImportPrompt } from "../features/auth/hooks/useDemoImportPrompt";
 import { useAuthSession } from "../features/auth/hooks/useAuthSession";
@@ -227,6 +228,7 @@ function HomePageMapSection({
             />
             {pngExportJob && (
                 <HiddenMapExportHost
+                    key={`${pngExportJob.level}-${pngExportJob.entityIds.join(",")}`}
                     job={pngExportJob}
                     regions={regions}
                     provinces={provinces}
@@ -267,19 +269,43 @@ export default function HomePage() {
     const travelStore = useTravelStore();
     const [searchOpen, setSearchOpen] = useState(false);
     const importPrompt = useDemoImportPrompt();
-    const [sidebarExploreViewTab, setSidebarExploreViewTab] = useState<ExploreViewTab>("provinces");
-    const [mapProgressBy, setMapProgressBy] = useState<ExploreViewTab>("provinces");
+    const [sidebarTabOverride, setSidebarTabOverride] = useState<{
+        key: string;
+        tab: ExploreViewTab;
+    } | null>(null);
+    const [mapProgressByOverride, setMapProgressByOverride] = useState<ExploreViewTab | null>(null);
     const { mapAccentColor, onMapAccentColorChange } = useMapAccentColor();
 
-    useEffect(() => {
-        if (selectedDivision) {
-            setSidebarExploreViewTab(getDefaultViewTab(selectedDivision.level));
-        }
-    }, [selectedDivision?.id, selectedDivision?.level]);
+    const divisionKey = selectedDivision
+        ? `${selectedDivision.id}-${selectedDivision.level}`
+        : null;
+    const sidebarExploreViewTab = selectedDivision
+        ? sidebarTabOverride?.key === divisionKey
+            ? sidebarTabOverride.tab
+            : getDefaultViewTab(selectedDivision.level)
+        : "provinces";
+    const mapProgressBy = mapProgressByOverride ?? getDefaultViewTab(mapMode);
 
-    useEffect(() => {
-        setMapProgressBy(getDefaultViewTab(mapMode));
-    }, [mapMode]);
+    const handleMapModeChange = useCallback(
+        (mode: MapMode) => {
+            setMapMode(mode);
+            setMapProgressByOverride(null);
+        },
+        [setMapMode],
+    );
+
+    const handleSidebarExploreViewTabChange = useCallback(
+        (tab: ExploreViewTab) => {
+            if (divisionKey) {
+                setSidebarTabOverride({ key: divisionKey, tab });
+            }
+        },
+        [divisionKey],
+    );
+
+    const handleMapProgressByChange = useCallback((tab: ExploreViewTab) => {
+        setMapProgressByOverride(tab);
+    }, []);
 
     const heatmapColors = useProgressHeatmapColors(
         mapMode,
@@ -364,9 +390,9 @@ export default function HomePage() {
                             goalRegionIds={goalRegionIds}
                             mapProgressBy={mapProgressBy}
                             mapAccentColor={mapAccentColor}
-                            onMapProgressByChange={setMapProgressBy}
+                            onMapProgressByChange={handleMapProgressByChange}
                             onMapAccentColorChange={onMapAccentColorChange}
-                            onModeChange={setMapMode}
+                            onModeChange={handleMapModeChange}
                             onSearchClick={() => setSearchOpen(true)}
                             onHover={hoverDivision}
                             onSelect={selectDivision}
@@ -376,13 +402,14 @@ export default function HomePage() {
                 }
                 detailPanel={
                     <DetailPanel
+                        key={divisionKey ?? "none"}
                         selectedDivision={selectedDivision}
                         regions={regions}
                         provinces={provinces}
                         municities={municities}
                         municityMeta={municityMeta}
                         exploreViewTab={sidebarExploreViewTab}
-                        onExploreViewTabChange={setSidebarExploreViewTab}
+                        onExploreViewTabChange={handleSidebarExploreViewTabChange}
                         onSelectDivision={selectDivision}
                         onClose={() => selectDivision(null)}
                         travelStore={travelStore}

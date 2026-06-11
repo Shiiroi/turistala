@@ -87,7 +87,7 @@ function geometryById<T extends { id: number; geometry?: Geometry | null }>(rows
     return new Map(rows.map((r) => [r.id, r.geometry ?? null]));
 }
 
-/** Merge CSV metadata with geometry from public/geo JSON */
+// CSV metadata + geometry from public/geo JSON
 export async function loadRegionsFromCsv(): Promise<RegionGeoRow[]> {
     const meta = await loadRegionsMetaFromCsv();
     const geo = readGeoJson<RegionGeoRow[]>("regions.json");
@@ -95,7 +95,7 @@ export async function loadRegionsFromCsv(): Promise<RegionGeoRow[]> {
     return meta.map((r) => ({ ...r, geometry: geomMap.get(r.id) ?? null }));
 }
 
-/** Merge CSV metadata with geometry from public/geo JSON */
+// CSV metadata + geometry from public/geo JSON
 export async function loadProvincesFromCsv(): Promise<ProvinceGeoRow[]> {
     const meta = await loadProvincesMetaFromCsv();
     const geo = readGeoJson<ProvinceGeoRow[]>("provinces.json");
@@ -103,7 +103,7 @@ export async function loadProvincesFromCsv(): Promise<ProvinceGeoRow[]> {
     return meta.map((p) => ({ ...p, geometry: geomMap.get(p.id) ?? null }));
 }
 
-/** Meta from CSV; geometry from per-province public/geo JSON files */
+// CSV meta; per-province geometry from public/geo
 export async function loadMunicitiesGroupedByProvince() {
     const meta = await loadMunicitiesMetaFromCsv();
     const manifest = readGeoJson<{ provinceIds: number[] }>("municities/manifest.json");

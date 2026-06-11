@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import { Button } from "../../../components/ui/Button";
 import { Modal } from "../../../components/ui/Modal";
@@ -102,12 +102,11 @@ export function PassportModal({
     const [optionsPanel, setOptionsPanel] = useState<OptionsPanel | null>(null);
     const [exporting, setExporting] = useState<ExportKind | "stamp" | null>(null);
 
-    useEffect(() => {
-        if (!isOpen) {
-            setStampSelection(null);
-            setOptionsPanel(null);
-        }
-    }, [isOpen]);
+    function handleClose() {
+        setStampSelection(null);
+        setOptionsPanel(null);
+        onClose();
+    }
 
     const passportIncludesProvinces = passportProgressLevels.includes("provinces");
 
@@ -303,14 +302,14 @@ export function PassportModal({
         const region = regions.find((r) => r.id === regionId);
         if (!region) return;
         onViewOnMap(regionToDivision(region), "province");
-        onClose();
+        handleClose();
     }
 
     function handleViewProvince(provinceId: number) {
         const province = provinces.find((p) => p.id === provinceId);
         if (!province) return;
         onViewOnMap(provinceToDivision(province), "municipality");
-        onClose();
+        handleClose();
     }
 
     const selectedRegionRow =
@@ -356,7 +355,7 @@ export function PassportModal({
         <>
             <Modal
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={handleClose}
                 title="My Passport"
                 subtitle={
                     isDemo

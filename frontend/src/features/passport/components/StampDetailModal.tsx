@@ -1,6 +1,6 @@
 import { Modal } from "../../../components/ui/Modal";
 import type { Geometry } from "geojson";
-import type { DivisionProgress, PassportProgressLevel } from "../types";
+import type { DivisionProgress } from "../types";
 import type { ProvincialProgressBy, RegionalProgressBy } from "../utils/computePassportStats";
 import { StampDetailPanel } from "./StampDetailPanel";
 

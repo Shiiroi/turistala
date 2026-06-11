@@ -1,7 +1,7 @@
 import type { DemoTravelData } from "../types";
 
 export const DEMO_STORAGE_KEY = "turistala_demo_v1";
-/** UX gate for /map without login — not a security boundary; JWT + RLS protect server data */
+// Demo /map without login — UX only; JWT + RLS protect real data
 export const DEMO_MODE_KEY = "turistala_mode";
 export const PENDING_IMPORT_KEY = "turistala_pending_import";
 export const NEW_SIGNUP_KEY = "turistala_new_signup";
@@ -25,7 +25,7 @@ function readLocalJson<T>(key: string): T | null {
     }
 }
 
-/** Migrate legacy sessionStorage flags from before localStorage switch */
+// Migrate sessionStorage flags from pre-localStorage
 function migrateLegacyImportFlags(): void {
     try {
         const pending = window.sessionStorage.getItem(PENDING_IMPORT_KEY);

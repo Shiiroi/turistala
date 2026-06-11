@@ -1,4 +1,4 @@
-/** Gym-badge palette — one distinct hue per region id (not flag colors) */
+// One hue per region id — gym-badge style, not flag colors
 const BADGE_PALETTE = [
     "#c0622f",
     "#2d6a4f",
@@ -24,7 +24,7 @@ export function divisionBadgeColor(id: number): string {
     return BADGE_PALETTE[id % BADGE_PALETTE.length];
 }
 
-/** @deprecated use divisionBadgeColor */
+// deprecated: use divisionBadgeColor
 export const regionBadgeColor = divisionBadgeColor;
 
 export function badgeTier(fraction: number): "locked" | "bronze" | "silver" | "gold" {

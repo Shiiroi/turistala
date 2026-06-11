@@ -3,6 +3,7 @@ import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
 import { Label } from "../../../components/ui/Label";
 import { cn } from "../../../lib/cn";
+import { getInitials } from "../utils/getInitials";
 
 interface AvatarEditorProps {
     username: string;
@@ -11,13 +12,6 @@ interface AvatarEditorProps {
     onUsernameChange: (username: string) => void;
     onSourceUrlChange: (url: string | null) => void;
     onZoomChange: (zoom: number) => void;
-}
-
-export function getInitials(name: string): string {
-    const parts = name.trim().split(/\s+/).filter(Boolean);
-    if (parts.length === 0) return "?";
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 export function AvatarEditor({
@@ -134,31 +128,4 @@ export function AvatarEditor({
             )}
         </div>
     );
-}
-
-export async function cropAvatarToDataUrl(sourceUrl: string, zoom: number): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-            const size = 128;
-            const canvas = document.createElement("canvas");
-            canvas.width = size;
-            canvas.height = size;
-            const ctx = canvas.getContext("2d");
-            if (!ctx) {
-                resolve(sourceUrl);
-                return;
-            }
-            ctx.beginPath();
-            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-            ctx.closePath();
-            ctx.clip();
-            const drawSize = size * zoom;
-            const offset = (size - drawSize) / 2;
-            ctx.drawImage(img, offset, offset, drawSize, drawSize);
-            resolve(canvas.toDataURL("image/jpeg", 0.9));
-        };
-        img.onerror = () => reject(new Error("Failed to load image"));
-        img.src = sourceUrl;
-    });
 }

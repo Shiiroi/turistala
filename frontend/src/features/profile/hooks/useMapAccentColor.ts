@@ -27,7 +27,6 @@ export function useMapAccentColor() {
     const userId = session?.user.id;
     const queryClient = useQueryClient();
     const saveTimerRef = useRef<number | null>(null);
-    const syncedFromProfileRef = useRef(false);
 
     const { data: profile } = useQuery({
         queryKey: ["profile", userId],
@@ -35,24 +34,18 @@ export function useMapAccentColor() {
         enabled: Boolean(userId),
     });
 
-    const [mapAccentColor, setMapAccentColor] = useState(() =>
-        userId ? DEFAULT_MAP_ACCENT : loadDemoMapColor(),
+    const userKey = userId ?? "demo";
+    const [colorOverride, setColorOverride] = useState<{ userKey: string; color: string } | null>(
+        null,
     );
 
-    useEffect(() => {
-        syncedFromProfileRef.current = false;
-        setMapAccentColor(userId ? DEFAULT_MAP_ACCENT : loadDemoMapColor());
-    }, [userId]);
-
-    useEffect(() => {
-        if (!userId || !profile?.map_color || syncedFromProfileRef.current) return;
-        setMapAccentColor(profile.map_color);
-        syncedFromProfileRef.current = true;
-    }, [userId, profile?.map_color]);
+    const profileBaseline = userId ? (profile?.map_color ?? DEFAULT_MAP_ACCENT) : loadDemoMapColor();
+    const mapAccentColor =
+        colorOverride?.userKey === userKey ? colorOverride.color : profileBaseline;
 
     const onMapAccentColorChange = useCallback(
         (color: string) => {
-            setMapAccentColor(color);
+            setColorOverride({ userKey, color });
 
             if (userId) {
                 if (saveTimerRef.current != null) {
@@ -74,7 +67,7 @@ export function useMapAccentColor() {
 
             saveDemoMapColor(color);
         },
-        [userId, queryClient],
+        [userId, userKey, queryClient],
     );
 
     useEffect(() => {

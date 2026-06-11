@@ -9,9 +9,9 @@ import { useAuthSession, useSignOut } from "../../auth/hooks/useAuthSession";
 import { fetchProfile, updateProfile } from "../../profile/services/profileApi";
 import {
     AvatarEditor,
-    cropAvatarToDataUrl,
-    getInitials,
 } from "../../profile/components/AvatarEditor";
+import { cropAvatarToDataUrl } from "../../profile/utils/cropAvatarToDataUrl";
+import { getInitials } from "../../profile/utils/getInitials";
 import { ImportDemoModal } from "../../auth/components/ImportDemoModal";
 import { PassportModal } from "../../passport/components/PassportModal";
 import {
@@ -64,14 +64,11 @@ export function ProfileMenu({
     const username = isDemo ? "Guest" : (profile?.username ?? session?.user.email?.split("@")[0] ?? "traveler");
     const avatarUrl = isDemo ? null : (profile?.avatar_url ?? null);
 
-    const [editUsername, setEditUsername] = useState(username);
+    const [editUsername, setEditUsername] = useState("");
     const [editSourceUrl, setEditSourceUrl] = useState<string | null>(null);
     const [editZoom, setEditZoom] = useState(1);
     const [isSaving, setIsSaving] = useState(false);
-
-    useEffect(() => {
-        setEditUsername(username);
-    }, [username]);
+    const demoPassportId = "DEMO-LOCAL";
 
     useEffect(() => {
         function handleClick(e: MouseEvent) {
@@ -94,6 +91,7 @@ export function ProfileMenu({
             return;
         }
         setOpen(false);
+        setEditUsername(username);
         setEditSourceUrl(avatarUrl);
         setEditZoom(1);
         setEditOpen(true);
@@ -240,7 +238,7 @@ export function ProfileMenu({
                 passportId={
                     userId
                         ? `PH-${userId.slice(0, 8).toUpperCase()}`
-                        : `DEMO-${Date.now().toString(36).slice(-6).toUpperCase()}`
+                        : demoPassportId
                 }
                 isDemo={isDemo}
                 travelStore={travelStore}

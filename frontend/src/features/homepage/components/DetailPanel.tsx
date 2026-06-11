@@ -7,11 +7,11 @@ import { PanelEmptyState } from "./PanelEmptyState";
 import { PanelBrowseView } from "./PanelBrowseView";
 import { AddPlaceWizard } from "./AddPlaceWizard";
 import { JournalDetailView } from "./JournalDetailView";
-import { QuickJournalForm } from "../../travel/components/JournalPreviewList";
+import { QuickJournalForm } from "../../travel/components/QuickJournalForm";
 import type { PlaceFilterTab } from "../../travel/components/PlaceActions";
 import type { TravelStore } from "../../travel/types";
 import type { Journal } from "../../travel/types";
-import type { ExploreViewTab } from "./DivisionExploreSection";
+import type { ExploreViewTab } from "./divisionExploreUtils";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
 
 interface DetailPanelProps {
@@ -48,14 +48,28 @@ export function DetailPanel({
     const [newJournalPlaceId, setNewJournalPlaceId] = useState<string | null>(null);
 
     useEffect(() => {
-        setPanelMode("browse");
-        setBrowseTab("explore");
-        setReturnBrowseTab("explore");
-        setStatusFilter("all");
-        setJournalContext(null);
-        setAddPlaceOpen(false);
-        setNewJournalPlaceId(null);
-    }, [selectedDivision?.id, selectedDivision?.level]);
+        const sel = window.getSelection();
+        // #region agent log
+        fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "012611" },
+            body: JSON.stringify({
+                sessionId: "012611",
+                location: "DetailPanel.tsx:useEffect",
+                message: "panel division changed",
+                data: {
+                    divisionId: selectedDivision?.id,
+                    divisionName: selectedDivision?.name,
+                    selectionText: sel?.toString().slice(0, 80) ?? "",
+                    selectionCollapsed: sel?.isCollapsed ?? true,
+                    activeTag: document.activeElement?.tagName ?? "",
+                },
+                timestamp: Date.now(),
+                hypothesisId: "D",
+            }),
+        }).catch(() => {});
+        // #endregion
+    }, [selectedDivision?.id, selectedDivision?.name]);
 
     const existingOsmIds = useMemo(
         () => new Set(travelStore.places.map((p) => p.osm_id)),
@@ -126,6 +140,7 @@ export function DetailPanel({
                     />
                     {journalEntry && journalPlace ? (
                         <JournalDetailView
+                            key={journalEntry.id}
                             journal={journalEntry}
                             place={journalPlace}
                             store={travelStore}

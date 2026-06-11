@@ -35,7 +35,7 @@ export type PanelBrowseTab = "explore" | "journals";
 export interface JournalDetailContext {
     journalId: string;
     placeId: string;
-    /** Shown immediately after create, before travel query refetches */
+    // Shown after create until travel query refetches
     pendingJournal?: Journal;
 }
 

@@ -93,3 +93,21 @@ textarea,
 select {
     font-family: var(--font-body);
 }
+
+/* map clicks focus the leaflet div — browser draws a blue outline at the sidebar seam */
+.leaflet-container:focus,
+.leaflet-container:focus-visible {
+    outline: none !important;
+}
+
+.leaflet-container .leaflet-interactive:focus {
+    outline: none !important;
+}
+
+[data-sidebar] {
+    -webkit-tap-highlight-color: transparent;
+}
+
+[data-sidebar] ::selection {
+    background: transparent;
+}

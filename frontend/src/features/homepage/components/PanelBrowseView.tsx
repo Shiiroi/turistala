@@ -6,11 +6,8 @@ import { cn } from "../../../lib/cn";
 import type { Division, PanelBrowseTab } from "../types";
 import { placesInDivision, resolveRegionId } from "../utils/divisionPlaces";
 import { DivisionSummary } from "./DivisionSummary";
-import {
-    computeExploreProgress,
-    DivisionExploreSection,
-    type ExploreViewTab,
-} from "./DivisionExploreSection";
+import { DivisionExploreSection } from "./DivisionExploreSection";
+import { computeExploreProgress, type ExploreViewTab } from "./divisionExploreUtils";
 import { PanelJournalsView } from "./PanelJournalsView";
 import type { PlaceFilterTab } from "../../travel/components/PlaceActions";
 import type { TravelStore } from "../../travel/types";
@@ -66,7 +63,10 @@ export function PanelBrowseView({
         staleTime: 20 * 60 * 1000,
     });
 
-    const provinceMunicities = provinceMunicitiesQuery.data ?? [];
+    const provinceMunicities = useMemo(
+        () => provinceMunicitiesQuery.data ?? [],
+        [provinceMunicitiesQuery.data],
+    );
 
     const parentRegionName = useMemo(() => {
         if (selectedDivision.level === "region") return undefined;
@@ -111,9 +111,6 @@ export function PanelBrowseView({
             provinceMunicities,
             areaPlaces,
             travelStore,
-            travelStore.visited,
-            travelStore.places,
-            travelStore.goals,
         ],
     );
 
@@ -174,7 +171,7 @@ export function PanelBrowseView({
                 <button
                     type="button"
                     className={cn(
-                        "-mb-px inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-none border-b-2 border-transparent bg-transparent py-2.5 font-body text-sm text-muted transition-[color,border-color] duration-150",
+                        "-mb-px inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-none border-b-2 border-transparent bg-transparent py-2.5 font-body text-sm text-muted transition-[color,border-color] duration-150 select-none",
                         browseTab === "explore" && "border-b-accent font-semibold text-primary",
                     )}
                     onClick={() => onBrowseTabChange("explore")}
@@ -184,7 +181,7 @@ export function PanelBrowseView({
                 <button
                     type="button"
                     className={cn(
-                        "-mb-px inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-none border-b-2 border-transparent bg-transparent py-2.5 font-body text-sm text-muted transition-[color,border-color] duration-150",
+                        "-mb-px inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 border-none border-b-2 border-transparent bg-transparent py-2.5 font-body text-sm text-muted transition-[color,border-color] duration-150 select-none",
                         browseTab === "journals" && "border-b-accent font-semibold text-primary",
                     )}
                     onClick={() => onBrowseTabChange("journals")}

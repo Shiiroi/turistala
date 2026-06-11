@@ -18,7 +18,7 @@ export interface MunicityGeoJSON {
     geometry: Geometry;
 }
 
-/** Municity metadata only (no geometry) — fast to load */
+// Metadata only (no geometry) — fast load
 export interface MunicityMeta {
     id: number;
     name: string;

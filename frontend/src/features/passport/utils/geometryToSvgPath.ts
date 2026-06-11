@@ -40,7 +40,7 @@ function projectRing(
         .concat(" Z");
 }
 
-/** GeoJSON geometry → SVG path using one global bounding box for all rings */
+// GeoJSON → SVG path with one shared bbox for all rings
 export function geometryToSvgPath(geometry: Geometry, size = 48, pad = 4): string {
     const bounds = getGeometryBounds(geometry);
     if (!bounds) return "";
@@ -49,7 +49,7 @@ export function geometryToSvgPath(geometry: Geometry, size = 48, pad = 4): strin
     return rings.map((ring) => projectRing(ring, bounds, size, size, pad)).filter(Boolean).join(" ");
 }
 
-/** Merge multiple geometries into one SVG path (e.g. full PH outline) */
+// Merge geometries into one path (e.g. PH outline)
 export function geometriesToSvgPath(geometries: Geometry[], size = 48, pad = 4): string {
     const allRings: number[][][] = [];
     let minLng = Infinity,

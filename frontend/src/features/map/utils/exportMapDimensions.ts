@@ -1,10 +1,10 @@
 import type L from "leaflet";
 
-/** Longest side of the export frame (px). */
+// Longest export frame side (px)
 const EXPORT_MAX = 1440;
 const EXPORT_MIN = 520;
 
-/** Keep raster output ~4 MP so canvas copy stays fast. */
+// Cap ~4 MP so canvas copy stays fast
 const TARGET_OUTPUT_MP = 4_000_000;
 
 export function exportMapDimensions(bounds: L.LatLngBounds): { width: number; height: number } {
@@ -33,8 +33,8 @@ export function exportCaptureScale(width: number, height: number): number {
     return Math.max(2, Math.sqrt(TARGET_OUTPUT_MP / area));
 }
 
-/** @deprecated use exportMapDimensions */
+// deprecated: use exportMapDimensions
 export const EXPORT_WIDTH = 1200;
-/** @deprecated use exportMapDimensions */
+// deprecated: use exportMapDimensions
 export const EXPORT_HEIGHT = 800;
 export const EXPORT_CAPTURE_SCALE = 2;

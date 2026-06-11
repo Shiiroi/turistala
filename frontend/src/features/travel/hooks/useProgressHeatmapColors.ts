@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { MapMode } from "../../homepage/types";
-import type { ExploreViewTab } from "../../homepage/components/DivisionExploreSection";
+import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 import type { TravelStore } from "../types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON } from "../../map/types";
 import { buildHeatmapPalette, getHeatmapColorFromRatio } from "./useMockHeatmapData";
@@ -31,7 +31,7 @@ function ratioColor(visited: number, total: number, palette: string[]): string {
     return getHeatmapColorFromRatio(visited / total, palette);
 }
 
-/** Heatmap fill colors driven by map "progress by" dimension and current map view mode */
+// Heatmap colors from progress dimension + map view mode
 export function useProgressHeatmapColors(
     mapMode: MapMode,
     progressBy: ExploreViewTab,
@@ -95,8 +95,8 @@ export function useProgressHeatmapColors(
                     );
                     const destinations = provPlaces.filter((p) => store.getPlaceStatus(p.id) != null);
 
-                    let visitedCount = 0;
-                    let total = 0;
+                    let visitedCount: number;
+                    let total: number;
 
                     switch (progressBy) {
                         case "municipalities":
@@ -142,9 +142,6 @@ export function useProgressHeatmapColors(
         progressBy,
         accentColor,
         store,
-        store.places,
-        store.visited,
-        store.goals,
         regions,
         provinces,
         municityMeta,

@@ -9,18 +9,20 @@ const __dirname = path.dirname(__filename);
 
 const supabase = createClient(process.env.VITE_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-function parseCsv(filePath: string): Promise<any[]> {
+type CsvRow = Record<string, string>;
+
+function parseCsv(filePath: string): Promise<CsvRow[]> {
     return new Promise((resolve, reject) => {
-        const rows: any[] = [];
+        const rows: CsvRow[] = [];
         fs.createReadStream(filePath)
             .pipe(parse({ headers: true }))
-            .on("data", (row) => rows.push(row))
-            .on("end", () => resolve(rows))
-            .on("error", (err) => reject(err));
+            .on("data", (row: CsvRow) => rows.push(row))
+            .on("error", (err) => reject(err))
+            .on("end", () => resolve(rows));
     });
 }
 
-function mapRegion(row: any) {
+function mapRegion(row: CsvRow) {
     return {
         id: Number(row.id),
         code: row.code,
@@ -28,7 +30,7 @@ function mapRegion(row: any) {
     };
 }
 
-function mapProvince(row: any) {
+function mapProvince(row: CsvRow) {
     return {
         id: Number(row.id),
         code: row.code,
@@ -37,7 +39,7 @@ function mapProvince(row: any) {
     };
 }
 
-function mapMunicity(row: any) {
+function mapMunicity(row: CsvRow) {
     return {
         id: Number(row.id),
         name: row.name,
@@ -48,9 +50,11 @@ function mapMunicity(row: any) {
     };
 }
 
+type MunicityRecord = ReturnType<typeof mapMunicity>;
+
 // ── Diagnostic helpers ────────────────────────────────────────────────────
 
-function auditMunicities(records: ReturnType<typeof mapMunicity>[]) {
+function auditMunicities(records: MunicityRecord[]) {
     // 1. Show all distinct `type` values in the CSV
     const typeValues = [...new Set(records.map((r) => r.type))];
     console.log(`\n🔍 Distinct 'type' values found in CSV:`, typeValues);
@@ -114,7 +118,13 @@ function auditMunicities(records: ReturnType<typeof mapMunicity>[]) {
 
 // ── Seeder ────────────────────────────────────────────────────────────────
 
-async function seedTable<T>(tableName: string, fileName: string, mapper: (row: any) => T, batchSize = 100, pauseMs = 0) {
+async function seedTable<T>(
+    tableName: string,
+    fileName: string,
+    mapper: (row: CsvRow) => T,
+    batchSize = 100,
+    pauseMs = 0,
+) {
     const csvPath = path.resolve(__dirname, fileName);
     if (!fs.existsSync(csvPath)) {
         console.warn(`⚠️  Skipped ${tableName}: ${fileName} not found.`);
@@ -127,7 +137,7 @@ async function seedTable<T>(tableName: string, fileName: string, mapper: (row: a
 
     // Run diagnostics before seeding municities
     if (tableName === "municities") {
-        auditMunicities(records as any);
+        auditMunicities(records as MunicityRecord[]);
         console.log(`\n⏸  Audit complete. Proceeding with insert...\n`);
     }
 
@@ -142,11 +152,12 @@ async function seedTable<T>(tableName: string, fileName: string, mapper: (row: a
             console.error(`   Details: ${error.details ?? "none"}`);
             console.error(`   Hint:    ${error.hint ?? "none"}`);
             console.error(`\n📋 Offending batch rows:`);
-            (batch as any[]).forEach((r: any, bi: number) =>
+            batch.forEach((r, bi) => {
+                const row = r as MunicityRecord;
                 console.error(
-                    `   [${i + bi}] id=${r.id}  name="${r.name}"  code="${r.code}"  type="${r.type}"  province_id=${r.province_id}  region_id=${r.region_id}`,
-                ),
-            );
+                    `   [${i + bi}] id=${row.id}  name="${row.name}"  code="${row.code}"  type="${row.type}"  province_id=${row.province_id}  region_id=${row.region_id}`,
+                );
+            });
             throw error;
         }
         console.log(`  ✅ Inserted rows ${i + 1}–${Math.min(i + batchSize, records.length)} of ${records.length}`);
@@ -162,8 +173,9 @@ async function main() {
         await seedTable("provinces", "provinces.csv", mapProvince, 50);
         await seedTable("municities", "municities.csv", mapMunicity, 25, 300);
         console.log("\n🏁 Remote cloud data pipeline successfully initialized!");
-    } catch (err: any) {
-        console.error("❌ Seeding execution halted:", err.message);
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.error("❌ Seeding execution halted:", message);
     }
 }
 
