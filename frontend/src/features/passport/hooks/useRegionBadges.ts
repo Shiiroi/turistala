@@ -1,3 +1,5 @@
+// useRegionBadges.ts — React Query hook for region badge data.
+
 import { useQuery } from "@tanstack/react-query";
 import { fetchPassportStats } from "../services/passportApi";
 import type { RegionBadge } from "../types";

@@ -1,3 +1,5 @@
+// MapGate.tsx — Route guards for map access and auth-only redirects.
+
 import { Navigate } from "react-router-dom";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { isDemoMode } from "../../travel/demoStorage";

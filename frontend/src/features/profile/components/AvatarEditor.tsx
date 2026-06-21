@@ -1,3 +1,5 @@
+// AvatarEditor.tsx — Profile avatar and username editing form.
+
 import { useRef } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";

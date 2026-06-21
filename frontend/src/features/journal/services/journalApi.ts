@@ -1,3 +1,5 @@
+// journalApi.ts — Supabase client for journal entries and photos.
+
 import { supabase } from "../../../config/supabase";
 import {
     isStorageQuotaEnabled,

@@ -1,3 +1,5 @@
+// ShareCard.tsx — Shareable passport completion summary card.
+
 import type { PassportStats } from "../types";
 
 interface ShareCardProps {

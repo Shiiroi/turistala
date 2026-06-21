@@ -1,3 +1,5 @@
+// App.tsx — Root application router.
+
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthRedirect } from "./features/auth/components/MapGate";
 import { MapGate } from "./features/auth/components/MapGate";

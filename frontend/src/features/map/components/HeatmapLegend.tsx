@@ -1,3 +1,5 @@
+// HeatmapLegend.tsx — Swatch strip and color picker for map accent-driven heatmap palette.
+
 import { Label } from "../../../components/ui/Label";
 import { cn } from "../../../lib/cn";
 import { buildHeatmapPalette } from "../../travel/hooks/useMockHeatmapData";

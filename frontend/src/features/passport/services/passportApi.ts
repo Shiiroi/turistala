@@ -1,3 +1,5 @@
+// passportApi.ts — Supabase client for server-side passport statistics.
+
 import { supabase } from "../../../config/supabase";
 import type { PassportStats, ProvinceProgress, RegionBadge } from "../types";
 

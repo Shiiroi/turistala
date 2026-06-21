@@ -1,3 +1,5 @@
+// useProvinceProgress.ts — React Query hook for province-level progress.
+
 import { useQuery } from "@tanstack/react-query";
 import { fetchPassportStats } from "../services/passportApi";
 import type { ProvinceProgress } from "../types";

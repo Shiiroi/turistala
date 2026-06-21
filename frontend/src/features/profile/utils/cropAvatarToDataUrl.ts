@@ -1,3 +1,5 @@
+// cropAvatarToDataUrl.ts — Circular avatar crop to JPEG data URL.
+
 export async function cropAvatarToDataUrl(sourceUrl: string, zoom: number): Promise<string> {
     return new Promise((resolve, reject) => {
         const img = new Image();

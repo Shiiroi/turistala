@@ -1,3 +1,5 @@
+// captureMapScreenshot.ts — Canvas and DOM utilities for map PNG capture and download.
+
 import html2canvas from "html2canvas";
 import type L from "leaflet";
 

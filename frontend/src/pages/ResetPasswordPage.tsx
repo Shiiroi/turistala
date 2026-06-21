@@ -1,3 +1,6 @@
+// ResetPasswordPage.tsx — New password entry route after a reset link.
+// Validates matching password fields and updates the account password via auth.
+
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "../components/ui/Button";

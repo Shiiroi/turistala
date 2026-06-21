@@ -1,3 +1,5 @@
+// SignupForm.tsx — Registration form with username, email, and password fields.
+
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";

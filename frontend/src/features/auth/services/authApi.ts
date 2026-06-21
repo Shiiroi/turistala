@@ -1,3 +1,5 @@
+// authApi.ts — Thin Supabase client wrappers for authentication.
+
 import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { supabase } from "../../../config/supabase";
 

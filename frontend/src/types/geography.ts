@@ -1,3 +1,5 @@
+// geography.ts — Legacy geographic entity type definitions.
+
 import type { Geometry } from "geojson";
 
 export interface ProvinceGeoJSON {

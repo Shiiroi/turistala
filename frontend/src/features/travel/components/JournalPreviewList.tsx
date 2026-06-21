@@ -1,3 +1,5 @@
+// JournalPreviewList.tsx — Grouped journal entry previews by place.
+
 import { useMemo, useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
 import { Label } from "../../../components/ui/Label";

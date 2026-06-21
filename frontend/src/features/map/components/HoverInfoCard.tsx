@@ -1,3 +1,5 @@
+// HoverInfoCard.tsx — Top-left map overlay showing hovered division or default branding.
+
 import { cn } from "../../../lib/cn";
 import type { Division } from "../../homepage/types";
 import { divisionLevelLabel } from "../../homepage/types";

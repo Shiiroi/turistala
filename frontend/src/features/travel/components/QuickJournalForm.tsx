@@ -1,3 +1,5 @@
+// QuickJournalForm.tsx — Compact form for creating a journal entry at a place.
+
 import { useState } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";

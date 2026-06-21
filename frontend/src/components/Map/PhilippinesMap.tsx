@@ -1,3 +1,5 @@
+// PhilippinesMap.tsx — Standalone Leaflet map for Philippine administrative divisions.
+
 import { useMemo, useState, useCallback } from "react";
 import { MapContainer, TileLayer, GeoJSON, ZoomControl } from "react-leaflet";
 import L from "leaflet";

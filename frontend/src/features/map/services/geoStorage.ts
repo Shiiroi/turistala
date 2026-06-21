@@ -1,3 +1,5 @@
+// geoStorage.ts — Low-level fetch helpers for map JSON hosted in Supabase Storage.
+
 import { supabase } from "../../../config/supabase";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../types";
 

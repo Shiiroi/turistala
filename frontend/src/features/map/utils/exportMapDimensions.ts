@@ -1,3 +1,5 @@
+// exportMapDimensions.ts — Sizing and scale helpers for off-screen map PNG exports.
+
 import type L from "leaflet";
 
 // Longest export frame side (px)

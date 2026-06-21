@@ -1,3 +1,5 @@
+// useMapScreenshotCapture.ts — Hook that invokes the registered map screenshot capture.
+
 import { useContext } from "react";
 import { MapScreenshotContext } from "./mapScreenshotContext";
 

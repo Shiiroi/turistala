@@ -1,3 +1,5 @@
+// useAuthMutations.ts — React Query mutations for Supabase auth operations.
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { resetPasswordForEmail, signIn, signOut, signUp, updatePassword } from "../services/authApi";
 

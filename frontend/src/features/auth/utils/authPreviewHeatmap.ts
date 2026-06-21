@@ -1,3 +1,5 @@
+// authPreviewHeatmap.ts — Sample heatmap colors for the auth map preview.
+
 import {
     DEFAULT_MAP_ACCENT,
     buildHeatmapPalette,
@@ -15,6 +17,7 @@ const SAMPLE_REGION_PROGRESS: Record<number, number> = {
     15: 0.28, // Davao
 };
 
+// Maps each region id to a heatmap color using baked sample progress ratios.
 export function buildAuthPreviewHeatmapColors(regionIds: number[]): Map<number, string> {
     const palette = buildHeatmapPalette(DEFAULT_MAP_ACCENT);
     const colors = new Map<number, string>();

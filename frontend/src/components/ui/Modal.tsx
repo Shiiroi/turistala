@@ -1,3 +1,5 @@
+// Modal.tsx — Centered overlay dialog.
+
 import type { ReactNode } from "react";
 import { X } from "lucide-react";
 import { cn } from "../../lib/cn";

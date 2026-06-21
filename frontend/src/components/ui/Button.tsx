@@ -1,3 +1,6 @@
+// Button.tsx — Primary action button component.
+// Supports variant, size, and loading states with disabled handling during async work.
+
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "../../lib/cn";

@@ -1,3 +1,5 @@
+// DivisionSummary.tsx — Header block for the selected division.
+
 import { X } from "lucide-react";
 import { CloseButton } from "../../../components/ui/CloseButton";
 import { Label } from "../../../components/ui/Label";

@@ -1,3 +1,5 @@
+// JournalPhotoPicker.tsx — Photo attachment control for journal forms.
+
 import { useRef, useState } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { Label } from "../../../components/ui/Label";

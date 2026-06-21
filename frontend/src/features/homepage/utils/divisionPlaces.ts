@@ -1,7 +1,10 @@
+// divisionPlaces.ts — Geographic scoping helpers for places and divisions.
+
 import type { Division } from "../types";
 import type { MockPlace } from "../../travel/types";
 import type { MunicityMeta, ProvinceGeoJSON } from "../../map/types";
 
+// Prefers the province's region_id when the municipality belongs to a province.
 export function effectiveRegionId(m: MunicityMeta, provinces: ProvinceGeoJSON[]): number | null {
     if (m.province_id) {
         return provinces.find((p) => p.id === m.province_id)?.region_id ?? m.region_id;
@@ -25,6 +28,7 @@ export function municityIdsInProvince(provinceId: number, municityMeta: Municity
     return new Set(municityMeta.filter((m) => m.province_id === provinceId).map((m) => m.id));
 }
 
+// Filters places to those whose municipality falls within the given division.
 export function placesInDivision(
     division: Division,
     places: MockPlace[],

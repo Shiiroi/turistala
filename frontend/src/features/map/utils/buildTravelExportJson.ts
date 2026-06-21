@@ -1,3 +1,5 @@
+// buildTravelExportJson.ts — Builds and downloads scoped JSON travel data exports.
+
 import type { TravelStore } from "../../travel/types";
 import type {
     MapExportConfig,

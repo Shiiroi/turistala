@@ -1,3 +1,6 @@
+// IconButton.tsx — Icon-only action button for toolbars and overlays.
+// Accepts a Lucide icon or custom icon node with accessible label and optional loading state.
+
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Loader2 } from "lucide-react";

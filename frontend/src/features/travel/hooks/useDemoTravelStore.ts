@@ -1,3 +1,5 @@
+// useDemoTravelStore.ts — In-memory travel store backed by localStorage.
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DemoTravelData, Goal, Journal, Place, TravelStore, VisitedPlace } from "../types";
 import { loadDemoData, saveDemoData } from "../demoStorage";

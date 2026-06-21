@@ -1,3 +1,5 @@
+// useLocalStorage.ts — React state synchronized with localStorage.
+
 import { useState, useCallback } from "react";
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => void] {

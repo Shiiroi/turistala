@@ -1,3 +1,5 @@
+// geoLayersFromCsv.ts — CSV and GeoJSON loader for Philippine administrative layers.
+
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";

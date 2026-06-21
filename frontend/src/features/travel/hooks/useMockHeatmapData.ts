@@ -1,3 +1,5 @@
+// useMockHeatmapData.ts — Heatmap palette utilities and demo color generation.
+
 import { useMemo } from "react";
 import type { MapMode } from "../../homepage/types";
 
@@ -43,7 +45,7 @@ function darken(hex: string, amount: number): string {
     return mixColors(hex, "#000000", amount);
 }
 
-// 6-step ramp: unvisited cream → accent
+// Builds a six-step palette from unvisited base cream to darkened accent.
 export function buildHeatmapPalette(accentHex: string): string[] {
     return [
         HEATMAP_BASE,
@@ -67,7 +69,7 @@ export function getHeatmapColor(count: number, palette: string[] = DEFAULT_HEATM
     return palette[index];
 }
 
-// Map 0–1 progress ratio to heatmap color
+// Maps a normalized 0–1 progress ratio to a palette color.
 export function getHeatmapColorFromRatio(
     ratio: number,
     palette: string[] = DEFAULT_HEATMAP_COLORS,

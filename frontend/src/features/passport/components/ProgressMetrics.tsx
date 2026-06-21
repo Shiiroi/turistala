@@ -1,3 +1,5 @@
+// ProgressMetrics.tsx — Summary card for legacy municipality progress.
+
 import type { PassportStats } from "../types";
 
 interface ProgressMetricsProps {

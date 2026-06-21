@@ -1,3 +1,5 @@
+// useMapSelection.ts — Map hover/selection state and division converters.
+
 import { useCallback, useRef, useState } from "react";
 import type { Division, MapMode } from "../types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
@@ -63,6 +65,7 @@ export function municityToDivision(m: MunicityGeoJSON): Division {
     };
 }
 
+// Resolves region_id from province metadata when municity meta omits it.
 export function municityMetaToDivision(m: MunicityMeta, provinces?: ProvinceGeoJSON[]): Division {
     const region_id =
         provinces && m.province_id
@@ -79,6 +82,7 @@ export function municityMetaToDivision(m: MunicityMeta, provinces?: ProvinceGeoJ
     };
 }
 
+// Returns a Division for the given id and level, or null if not found in loaded data.
 export function findDivisionById(
     id: number,
     level: MapMode,

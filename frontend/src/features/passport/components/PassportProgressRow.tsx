@@ -1,3 +1,5 @@
+// PassportProgressRow.tsx — Single row in a passport progress hierarchy.
+
 import { Check, ChevronDown, MapPin, X } from "lucide-react";
 import { Button } from "../../../components/ui/Button";
 import { cn } from "../../../lib/cn";

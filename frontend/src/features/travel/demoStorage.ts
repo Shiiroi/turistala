@@ -1,4 +1,6 @@
-import type { DemoTravelData } from "../types";
+// demoStorage.ts — Local persistence for demo mode and import lifecycle flags.
+
+import type { DemoTravelData } from "./types";
 
 export const DEMO_STORAGE_KEY = "turistala_demo_v1";
 // Demo /map without login — UX only; JWT + RLS protect real data
@@ -133,6 +135,7 @@ export function isImportDone(userId: string): boolean {
     return window.localStorage.getItem(`${IMPORT_DONE_PREFIX}${userId}`) === "1";
 }
 
+// Returns pending import payload, or live demo data when importable content exists.
 export function getDemoDataForImport(): DemoTravelData | null {
     const pending = getPendingImport();
     if (pending && (pending.places.length > 0 || pending.goals.length > 0 || pending.visited.length > 0 || pending.journals.length > 0)) {
@@ -142,6 +145,7 @@ export function getDemoDataForImport(): DemoTravelData | null {
     return null;
 }
 
+// True when the user has importable demo data and has not dismissed or completed import.
 export function shouldOfferDemoImport(userId?: string): boolean {
     if (!userId) return false;
     if (isImportDone(userId)) return false;

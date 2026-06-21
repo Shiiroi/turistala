@@ -1,3 +1,6 @@
+// index.ts — Barrel export for shared UI components.
+// Re-exports primitives from the ui directory for convenient single-import access.
+
 export { Badge } from "./Badge";
 export { Button } from "./Button";
 export { Card } from "./Card";

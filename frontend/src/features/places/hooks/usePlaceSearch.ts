@@ -1,3 +1,5 @@
+// usePlaceSearch.ts — React Query hook for debounced place search.
+
 import { useQuery } from "@tanstack/react-query";
 import { searchPlaces, type PlaceSearchContext } from "../services/placeSearchApi";
 

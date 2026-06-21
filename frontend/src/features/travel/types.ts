@@ -1,3 +1,5 @@
+// types.ts — Core domain types and TravelStore interface for travel data.
+
 export interface Place {
     id: string;
     osm_id: string;

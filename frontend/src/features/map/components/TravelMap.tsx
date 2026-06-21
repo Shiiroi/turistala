@@ -1,3 +1,5 @@
+// TravelMap.tsx — Interactive Leaflet map of Philippine administrative divisions.
+
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, GeoJSON, ZoomControl, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
@@ -116,17 +118,6 @@ function boundsFromGeometry(geometry: Geometry): L.LatLngBounds | null {
 
 const MAP_FLY_DURATION = 0.55;
 
-function selectionDebugSnapshot() {
-    const sel = window.getSelection();
-    return {
-        text: sel?.toString().slice(0, 80) ?? "",
-        collapsed: sel?.isCollapsed ?? true,
-        anchor: sel?.anchorNode?.parentElement?.className?.slice(0, 60) ?? "",
-        focus: sel?.focusNode?.parentElement?.className?.slice(0, 60) ?? "",
-        activeTag: document.activeElement?.tagName ?? "",
-    };
-}
-
 function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | null }) {
     const map = useMap();
 
@@ -136,24 +127,6 @@ function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | 
         if (!bounds) return;
 
         map.stop();
-        // #region agent log
-        fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "012611" },
-            body: JSON.stringify({
-                sessionId: "012611",
-                location: "TravelMap.tsx:FitBoundsOnSelect",
-                message: "flyToBounds start",
-                data: {
-                    divisionId: selectedDivision.id,
-                    level: selectedDivision.level,
-                    selection: selectionDebugSnapshot(),
-                },
-                timestamp: Date.now(),
-                hypothesisId: "E",
-            }),
-        }).catch(() => {});
-        // #endregion
         map.flyToBounds(bounds, {
             padding: [40, 40],
             maxZoom: 12,
@@ -416,22 +389,6 @@ function TravelMapInner({
                 L.DomEvent.stopPropagation(e);
                 const division = divisionFromFeature(feature);
                 if (!division) return;
-                // #region agent log
-                const selBefore = selectionDebugSnapshot();
-                fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "012611" },
-                    body: JSON.stringify({
-                        sessionId: "012611",
-                        location: "TravelMap.tsx:pathLayer.click",
-                        message: "map feature click before select",
-                        data: { divisionId: id, selection: selBefore },
-                        timestamp: Date.now(),
-                        hypothesisId: "A,C",
-                        runId: "post-fix",
-                    }),
-                }).catch(() => {});
-                // #endregion
                 if (selectedIdRef.current === id) {
                     onSelectRef.current(null);
                 } else {
@@ -441,32 +398,6 @@ function TravelMapInner({
                 if (active instanceof HTMLElement && active.closest(".leaflet-container")) {
                     active.blur();
                 }
-                // #region agent log
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-Debug-Session-Id": "012611",
-                            },
-                            body: JSON.stringify({
-                                sessionId: "012611",
-                                location: "TravelMap.tsx:pathLayer.click",
-                                message: "map feature click after select (2 rAF)",
-                                data: {
-                                    divisionId: id,
-                                    selection: selectionDebugSnapshot(),
-                                    activeTag: document.activeElement?.tagName ?? "none",
-                                },
-                                timestamp: Date.now(),
-                                hypothesisId: "F",
-                                runId: "post-fix",
-                            }),
-                        }).catch(() => {});
-                    });
-                });
-                // #endregion
             });
         },
         [applyStyleToLayer, currentData.features, interactive],

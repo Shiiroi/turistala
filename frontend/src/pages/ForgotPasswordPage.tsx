@@ -1,3 +1,5 @@
+// ForgotPasswordPage.tsx — Password reset request route.
+
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "../components/ui/Button";

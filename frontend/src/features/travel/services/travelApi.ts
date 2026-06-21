@@ -1,3 +1,5 @@
+// travelApi.ts — Supabase queries and mutations for user travel records.
+
 import { supabase } from "../../../config/supabase";
 import type { Goal, Journal, Place, VisitedPlace } from "../types";
 import { fetchPlacesByIds } from "../../places/services/placesApi";

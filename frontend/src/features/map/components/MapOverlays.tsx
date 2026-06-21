@@ -1,3 +1,5 @@
+// MapOverlays.tsx — Composes all floating UI layered above the travel map.
+
 import { useState } from "react";
 import { FaLayerGroup } from "react-icons/fa";
 import { MapOverlayCard } from "../../../components/ui/MapOverlayCard";

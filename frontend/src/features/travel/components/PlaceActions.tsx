@@ -1,3 +1,5 @@
+// PlaceActions.tsx — Place cards and filtered place explore section.
+
 import { BookOpen, MapPin, Plus } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "../../../components/ui/Badge";

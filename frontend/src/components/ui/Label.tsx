@@ -1,3 +1,6 @@
+// Label.tsx — Uppercase mono-spaced field label.
+// Provides consistent typographic styling for form labels and section headings.
+
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
 

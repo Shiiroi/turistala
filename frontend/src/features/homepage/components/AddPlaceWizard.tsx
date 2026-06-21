@@ -1,3 +1,5 @@
+// AddPlaceWizard.tsx — Multi-step form for adding OSM places to a division.
+
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../../../components/ui/Button";

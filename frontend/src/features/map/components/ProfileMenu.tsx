@@ -1,3 +1,5 @@
+// ProfileMenu.tsx — Avatar dropdown with profile, passport, auth, and demo import actions.
+
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";

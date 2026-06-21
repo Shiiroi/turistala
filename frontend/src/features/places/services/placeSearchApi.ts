@@ -1,3 +1,5 @@
+// placeSearchApi.ts — OpenStreetMap place search with municipality scoping.
+
 import { isPointInMunicity } from "../../../lib/pointInPolygon";
 import type { OsmSearchResult, PlaceSearchResponse, PlaceSearchSuggestion } from "../types";
 

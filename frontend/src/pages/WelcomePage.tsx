@@ -1,3 +1,5 @@
+// WelcomePage.tsx — Landing route offering demo, sign-in, and sign-up entry points.
+
 import { Link, Navigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import { Button } from "../components/ui/Button";

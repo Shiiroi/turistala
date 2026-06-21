@@ -1,3 +1,5 @@
+// MapExportCapture.tsx — Leaflet hook component that snapshots the map canvas for export.
+
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import type L from "leaflet";

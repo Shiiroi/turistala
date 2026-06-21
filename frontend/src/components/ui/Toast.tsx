@@ -1,3 +1,5 @@
+// Toast.tsx — Global toast notification provider and viewport.
+
 import { useCallback, useState, type ReactNode } from "react";
 import { cn } from "../../lib/cn";
 import { DISMISS_MS, ToastContext, type ToastState, type ToastVariant } from "../../hooks/toastContext";

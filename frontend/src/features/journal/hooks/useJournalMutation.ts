@@ -1,3 +1,5 @@
+// useJournalMutation.ts — React Query hooks for journal entry CRUD.
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     fetchJournalEntries,

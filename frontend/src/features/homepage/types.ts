@@ -1,3 +1,5 @@
+// types.ts — Shared types for homepage map selection and panel state.
+
 import type { Geometry } from "geojson";
 import type { Journal } from "../../travel/types";
 

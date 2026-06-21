@@ -1,3 +1,5 @@
+// exportPassportImage.ts — SVG builders and PNG export for passport assets.
+
 import type { Geometry } from "geojson";
 import type { PassportProgressLevel } from "../types";
 import type { PassportProgressLine } from "../components/PassportBooklet";

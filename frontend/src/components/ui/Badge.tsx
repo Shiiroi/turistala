@@ -1,3 +1,6 @@
+// Badge.tsx — Compact status label component.
+// Renders a small pill-shaped label for counts, tags, or visit indicators.
+
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
 

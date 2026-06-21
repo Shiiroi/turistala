@@ -1,3 +1,5 @@
+// LoginForm.tsx — Email and password sign-in form.
+
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";

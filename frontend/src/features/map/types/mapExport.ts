@@ -1,3 +1,5 @@
+// mapExport.ts — Types for map export configuration, jobs, and JSON export payloads.
+
 import type { DemoTravelData } from "../../travel/types";
 
 export type MapExportLevel = "region" | "province" | "municipality";

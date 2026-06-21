@@ -1,3 +1,5 @@
+// useTravelStore.ts — Facade that selects demo or authenticated travel storage.
+
 import { useAuthSession } from "../../auth/hooks/useAuthSession";
 import { useAuthenticatedTravelStore } from "./useAuthenticatedTravelStore";
 import { useDemoTravelStore } from "./useDemoTravelStore";

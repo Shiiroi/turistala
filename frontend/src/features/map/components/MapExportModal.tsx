@@ -1,3 +1,5 @@
+// MapExportModal.tsx — Configuration dialog for PNG or JSON map and travel exports.
+
 import { useMemo, useState } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";

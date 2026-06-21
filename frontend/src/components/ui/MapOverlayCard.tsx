@@ -1,3 +1,6 @@
+// MapOverlayCard.tsx — Frosted card container for map HUD elements.
+// Applies translucent parchment styling with backdrop blur for controls and info panels rendered
+
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
 

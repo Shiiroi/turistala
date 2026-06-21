@@ -1,3 +1,6 @@
+// Input.tsx — Styled text input with optional label.
+// Wraps a native input element with consistent border, typography, and spacing.
+
 import type { InputHTMLAttributes } from "react";
 import { cn } from "../../lib/cn";
 

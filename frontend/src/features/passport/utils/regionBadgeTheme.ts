@@ -1,4 +1,5 @@
-// One hue per region id — gym-badge style, not flag colors
+// regionBadgeTheme.ts — Visual theme for division stamp badges.
+
 const BADGE_PALETTE = [
     "#c0622f",
     "#2d6a4f",

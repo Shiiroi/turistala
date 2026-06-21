@@ -1,3 +1,5 @@
+// mapApi.ts — Public API for loading map layers from storage or Supabase.
+
 import { supabase } from "../../../config/supabase";
 import type { ProvinceGeoJSON, MunicityGeoJSON, MunicityMeta, Region } from "../types";
 import {

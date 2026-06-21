@@ -1,4 +1,5 @@
-// Strip geometry/geojson columns from reference CSVs. Run: pnpm exec tsx scripts/strip-csv-spatial.ts
+// strip-csv-spatial.ts — CLI script to remove geometry columns from reference CSVs.
+
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";

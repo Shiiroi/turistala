@@ -1,3 +1,5 @@
+// RegionBadgeGrid.tsx — Grid layout for legacy region achievement badges.
+
 import type { RegionBadge } from "../types";
 import { cn } from "../../../lib/cn";
 

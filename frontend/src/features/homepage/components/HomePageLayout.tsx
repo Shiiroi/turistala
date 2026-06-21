@@ -1,3 +1,5 @@
+// HomePageLayout.tsx — Split-view shell for the map and detail sidebar.
+
 import type { ReactNode } from "react";
 import { cn } from "../../../lib/cn";
 
@@ -26,31 +28,6 @@ export function HomePageLayout({ mapSection, detailPanel, panelOpen }: HomePageL
                     />
                     <aside
                         data-sidebar
-                        onMouseUp={() => {
-                            const sel = window.getSelection();
-                            if (sel && !sel.isCollapsed && sel.toString().trim()) {
-                                // #region agent log
-                                fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                        "X-Debug-Session-Id": "012611",
-                                    },
-                                    body: JSON.stringify({
-                                        sessionId: "012611",
-                                        location: "HomePageLayout.tsx:aside.mouseup",
-                                        message: "sidebar text selection detected",
-                                        data: {
-                                            text: sel.toString().slice(0, 80),
-                                            anchor: sel.anchorNode?.parentElement?.className?.slice(0, 60),
-                                        },
-                                        timestamp: Date.now(),
-                                        hypothesisId: "A,B",
-                                    }),
-                                }).catch(() => {});
-                                // #endregion
-                            }
-                        }}
                         className={cn(
                             "select-none overflow-y-auto bg-surface [-webkit-overflow-scrolling:touch]",
                             "md:flex-[0_0_38%]",

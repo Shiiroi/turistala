@@ -1,4 +1,4 @@
-// decorative passport header icons (live UI)
+// PassportDecor.tsx — Decorative SVG marks for the live passport UI.
 
 export function StylizedSunMark({ size = 64, className }: { size?: number; className?: string }) {
     const rays = Array.from({ length: 8 }, (_, i) => {

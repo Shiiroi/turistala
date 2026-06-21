@@ -1,3 +1,5 @@
+// computePassportStats.ts — Client-side passport progress computation.
+
 import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 import type { MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
 import type { TravelStore } from "../../travel/types";

@@ -1,3 +1,5 @@
+// MapScreenshotProvider.tsx — Context provider for viewport map screenshot capture.
+
 import { useCallback, useMemo, useRef, type ReactNode } from "react";
 import { MapScreenshotContext } from "./mapScreenshotContext";
 

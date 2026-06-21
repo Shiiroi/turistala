@@ -1,3 +1,5 @@
+// useMediaUpload.ts — React Query mutation for journal photo uploads.
+
 import { useMutation } from "@tanstack/react-query";
 import { uploadJournalPhoto } from "../services/journalApi";
 

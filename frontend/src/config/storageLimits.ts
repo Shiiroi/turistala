@@ -1,3 +1,6 @@
+// storageLimits.ts — Journal photo storage quota and compression defaults.
+// Centralizes environment-driven storage limits, warning thresholds, image resize bounds, and WebP
+
 export const JOURNAL_STORAGE_QUOTA_BYTES =
     Number(import.meta.env.VITE_JOURNAL_STORAGE_QUOTA_MB ?? 10) * 1024 * 1024;
 

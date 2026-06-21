@@ -1,3 +1,5 @@
+// StampBadge.tsx — Circular division stamp badge with progress ring.
+
 import type { Geometry } from "geojson";
 import { Star } from "lucide-react";
 import { cn } from "../../../lib/cn";

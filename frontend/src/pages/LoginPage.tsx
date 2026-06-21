@@ -1,3 +1,5 @@
+// LoginPage.tsx — Email and password sign-in route.
+
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LoginForm } from "../features/auth/components/LoginForm";

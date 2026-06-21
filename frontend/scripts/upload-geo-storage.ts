@@ -1,5 +1,5 @@
-// Upload public/geo JSON to Supabase Storage. Run: pnpm upload:geo
-// Requires VITE_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
+// upload-geo-storage.ts — CLI script to upload public/geo JSON to Supabase Storage.
+
 import { createClient } from "@supabase/supabase-js";
 import * as fs from "fs";
 import * as path from "path";

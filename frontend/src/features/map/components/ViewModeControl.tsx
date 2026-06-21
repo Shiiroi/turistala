@@ -1,3 +1,5 @@
+// ViewModeControl.tsx — Segmented control for region, province, or municipality map mode.
+
 import { Label } from "../../../components/ui/Label";
 import { SegmentedControl } from "../../../components/ui/SegmentedControl";
 import type { MapMode } from "../../homepage/types";

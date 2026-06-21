@@ -1,3 +1,5 @@
+// useAuthSession.ts — React Query hook for the current Supabase session.
+
 import { useEffect } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";

@@ -1,3 +1,5 @@
+// loadExportMunicities.ts — Loads municipality geometry needed for a scoped map export.
+
 import { fetchMunicitiesByProvince } from "../services/mapApi";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON } from "../types";
 import type { MapExportLevel, MapExportScope } from "../types/mapExport";

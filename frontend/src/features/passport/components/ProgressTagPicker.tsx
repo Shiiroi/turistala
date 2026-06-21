@@ -1,3 +1,5 @@
+// ProgressTagPicker.tsx — Multi-select for passport cover progress lines.
+
 import { cn } from "../../../lib/cn";
 import { PASSPORT_PROGRESS_OPTIONS, type PassportProgressLevel } from "../types";
 

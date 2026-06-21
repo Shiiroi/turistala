@@ -1,3 +1,6 @@
+// profileApi.ts — Supabase client for user profile records.
+// Reads and updates username, avatar URL, and map accent color on the users table for authenticated travelers.
+
 import { supabase } from "../../../config/supabase";
 
 export interface UserProfile {

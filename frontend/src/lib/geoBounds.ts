@@ -1,3 +1,6 @@
+// geoBounds.ts — Bounding-box computation for GeoJSON geometries.
+// Derives min/max longitude and latitude from Polygon and MultiPolygon coordinate arrays.
+
 export function getGeometryBounds(
     geometry: GeoJSON.Geometry,
 ): [number, number, number, number] | undefined {

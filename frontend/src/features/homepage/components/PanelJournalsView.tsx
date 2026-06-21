@@ -1,3 +1,6 @@
+// PanelJournalsView.tsx — Journal list scoped to the selected division.
+// Thin wrapper around JournalPreviewList that shows all journal entries for places within the current
+
 import type { MockPlace } from "../../travel/types";
 import type { TravelStore } from "../../travel/types";
 import { JournalPreviewList } from "../../travel/components/JournalPreviewList";

@@ -1,3 +1,6 @@
+// CloseButton.tsx — Accessible dismiss control for panels and modals.
+// Renders a transparent icon button with hover feedback and configurable size.
+
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
 

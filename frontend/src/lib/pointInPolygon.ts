@@ -1,3 +1,6 @@
+// pointInPolygon.ts — GeoJSON point-in-polygon containment checks.
+// Implements ray-casting for Polygon and MultiPolygon geometries, including holes in polygon rings.
+
 function isPointInRing(lng: number, lat: number, ring: GeoJSON.Position[]): boolean {
     let inside = false;
     for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {

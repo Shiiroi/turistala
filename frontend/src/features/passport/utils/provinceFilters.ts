@@ -1,3 +1,5 @@
+// provinceFilters.ts — Province inclusion rules for passport progress.
+
 import type { ProvinceGeoJSON } from "../../map/types";
 
 export const METRO_MANILA_PROVINCE_ID = 1;

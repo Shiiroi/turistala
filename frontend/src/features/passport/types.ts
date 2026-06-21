@@ -1,6 +1,7 @@
+// types.ts — Shared type definitions for passport progress tracking.
+
 import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 
-// Includes regions — not in map sidebar tabs
 export type PassportProgressLevel = "regions" | ExploreViewTab;
 
 export interface DivisionProgress {

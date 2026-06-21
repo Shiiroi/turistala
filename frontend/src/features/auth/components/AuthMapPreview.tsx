@@ -1,3 +1,5 @@
+// AuthMapPreview.tsx — Non-interactive map backdrop for auth screens.
+
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { TravelMap } from "../../map/components/TravelMap";

@@ -1,3 +1,5 @@
+// divisionExploreUtils.ts — Explore tab configuration and progress metrics.
+
 import type { Division } from "../types";
 import type { MockPlace, TravelStore } from "../../travel/types";
 import type { MunicityMeta, ProvinceGeoJSON } from "../../map/types";
@@ -47,6 +49,7 @@ export function getDefaultViewTab(level: Division["level"]): ExploreViewTab {
     }
 }
 
+// Counts explored subdivisions or visited places according to the active view tab.
 export function computeExploreProgress(
     division: Division,
     viewTab: ExploreViewTab,

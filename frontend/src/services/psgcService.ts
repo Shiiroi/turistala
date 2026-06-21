@@ -1,3 +1,6 @@
+// psgcService.ts — PSGC administrative division lookup from bundled CSV data.
+// Parses regions, provinces, and municipalities/cities from raw CSV imports with in-memory caching
+
 import { parse } from "csv-parse/sync";
 import regionsCsv from "../../scripts/regions.csv?raw";
 import provincesCsv from "../../scripts/provinces.csv?raw";

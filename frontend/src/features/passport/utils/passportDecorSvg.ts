@@ -1,4 +1,4 @@
-// svg strings for passport PNG export
+// passportDecorSvg.ts — SVG decoration fragments for passport PNG export.
 
 export function planeIconSvg(x: number, y: number, size: number): string {
     const s = size / 24;

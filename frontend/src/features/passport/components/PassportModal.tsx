@@ -1,3 +1,5 @@
+// PassportModal.tsx — Primary passport experience modal.
+
 import { useMemo, useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import { Button } from "../../../components/ui/Button";

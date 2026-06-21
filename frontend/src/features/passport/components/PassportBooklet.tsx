@@ -1,3 +1,5 @@
+// PassportBooklet.tsx — Visual passport cover card in the live UI.
+
 import { cn } from "../../../lib/cn";
 import type { Region } from "../../map/types";
 import { PlaneMark, StylizedSunMark } from "./PassportDecor";

@@ -1,3 +1,5 @@
+// MapScreenshotBridge.tsx — Leaflet child that registers screenshot capture on the map.
+
 import { useContext, useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { captureMapScreenshot } from "../utils/captureMapScreenshot";

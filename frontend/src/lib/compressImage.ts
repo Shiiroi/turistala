@@ -1,3 +1,5 @@
+// compressImage.ts — Browser-side image resizing and WebP compression.
+
 import { MAX_IMAGE_WIDTH, WEBP_QUALITY } from "../config/storageLimits";
 
 export async function compressImage(

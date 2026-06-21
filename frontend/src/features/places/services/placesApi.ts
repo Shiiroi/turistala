@@ -1,3 +1,5 @@
+// placesApi.ts — Supabase client for persisted place records.
+
 import { supabase } from "../../../config/supabase";
 import type { Place } from "../../travel/types";
 

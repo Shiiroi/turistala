@@ -1,3 +1,5 @@
+// MapExportPreviewModal.tsx — Preview and save dialog for scoped PNG map exports.
+
 import { Download } from "lucide-react";
 import { Button } from "../../../components/ui/Button";
 import { Modal } from "../../../components/ui/Modal";

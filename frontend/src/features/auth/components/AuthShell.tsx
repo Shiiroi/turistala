@@ -1,3 +1,5 @@
+// AuthShell.tsx — Layout shell for authentication pages.
+
 import type { ReactNode } from "react";
 import { AuthMapPreview } from "./AuthMapPreview";
 import { cn } from "../../../lib/cn";

@@ -1,3 +1,5 @@
+// ChildDivisionList.tsx — Scrollable list of selectable child divisions.
+
 import { Label } from "../../../components/ui/Label";
 import { cn } from "../../../lib/cn";
 

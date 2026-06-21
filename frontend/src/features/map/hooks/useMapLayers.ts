@@ -1,3 +1,5 @@
+// useMapLayers.ts — React Query hook that loads all map geographic layers.
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProvinces, fetchMunicitiesMeta, fetchMunicitiesGeometry, fetchRegions } from "../services/mapApi";

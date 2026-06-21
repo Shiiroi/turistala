@@ -1,3 +1,6 @@
+// PillTabs.tsx — Pill-shaped tab selector.
+// Renders a horizontal row of toggle buttons for switching between named options.
+
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
 

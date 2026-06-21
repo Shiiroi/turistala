@@ -1,3 +1,5 @@
+// geometryToSvgPath.ts — GeoJSON-to-SVG path projection utilities.
+
 import type { Geometry } from "geojson";
 import { getGeometryBounds } from "../../../lib/geoBounds";
 

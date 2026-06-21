@@ -1,3 +1,5 @@
+// SignupPage.tsx — Account registration route with optional demo data handoff.
+
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { SignupForm, USERNAME_PATTERN } from "../features/auth/components/SignupForm";

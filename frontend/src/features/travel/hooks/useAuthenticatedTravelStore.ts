@@ -1,3 +1,5 @@
+// useAuthenticatedTravelStore.ts — Supabase-backed travel store for signed-in users.
+
 import { useCallback, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Goal, Journal, JournalPhotoInput, Place, TravelStore, VisitedPlace } from "../types";

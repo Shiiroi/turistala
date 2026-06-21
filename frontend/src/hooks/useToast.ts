@@ -1,3 +1,5 @@
+// useToast.ts — Hook for accessing the global toast notification API.
+
 import { useCallback, useContext } from "react";
 import { ToastContext } from "./toastContext";
 

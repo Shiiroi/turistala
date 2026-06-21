@@ -1,3 +1,6 @@
+// PassportSectionHeader.tsx — Section title with options affordance.
+// Renders a passport subsection heading and an icon button that opens the corresponding options modal
+
 import { SlidersHorizontal } from "lucide-react";
 import { IconButton } from "../../../components/ui/IconButton";
 

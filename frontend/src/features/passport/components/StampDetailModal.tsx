@@ -1,3 +1,5 @@
+// StampDetailModal.tsx — Modal wrapper for stamp detail content.
+
 import { Modal } from "../../../components/ui/Modal";
 import type { Geometry } from "geojson";
 import type { DivisionProgress } from "../types";

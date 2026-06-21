@@ -1,3 +1,5 @@
+// useDemoImportPrompt.ts — State machine for the post-signup demo import modal.
+
 import { useCallback, useState } from "react";
 import { useAuthSession } from "./useAuthSession";
 import {

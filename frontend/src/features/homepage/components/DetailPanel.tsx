@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+// DetailPanel.tsx — Sidebar controller for division exploration and journals.
+
+import { useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Modal } from "../../../components/ui/Modal";
 import type { Division, JournalDetailContext, PanelBrowseTab, PanelMode } from "../types";
@@ -46,30 +48,6 @@ export function DetailPanel({
     const [journalContext, setJournalContext] = useState<JournalDetailContext | null>(null);
     const [addPlaceOpen, setAddPlaceOpen] = useState(false);
     const [newJournalPlaceId, setNewJournalPlaceId] = useState<string | null>(null);
-
-    useEffect(() => {
-        const sel = window.getSelection();
-        // #region agent log
-        fetch("http://127.0.0.1:7624/ingest/396c05e2-f228-407a-9c62-2015f0b265e4", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "012611" },
-            body: JSON.stringify({
-                sessionId: "012611",
-                location: "DetailPanel.tsx:useEffect",
-                message: "panel division changed",
-                data: {
-                    divisionId: selectedDivision?.id,
-                    divisionName: selectedDivision?.name,
-                    selectionText: sel?.toString().slice(0, 80) ?? "",
-                    selectionCollapsed: sel?.isCollapsed ?? true,
-                    activeTag: document.activeElement?.tagName ?? "",
-                },
-                timestamp: Date.now(),
-                hypothesisId: "D",
-            }),
-        }).catch(() => {});
-        // #endregion
-    }, [selectedDivision?.id, selectedDivision?.name]);
 
     const existingOsmIds = useMemo(
         () => new Set(travelStore.places.map((p) => p.osm_id)),

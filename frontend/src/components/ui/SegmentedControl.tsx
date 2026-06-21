@@ -1,3 +1,6 @@
+// SegmentedControl.tsx — Connected button-group selector.
+// Renders adjacent segments with shared borders for mutually exclusive choices.
+
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
 

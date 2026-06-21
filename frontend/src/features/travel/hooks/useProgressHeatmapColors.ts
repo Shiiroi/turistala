@@ -1,3 +1,5 @@
+// useProgressHeatmapColors.ts — Progress-driven heatmap colors from travel data.
+
 import { useMemo } from "react";
 import type { MapMode } from "../../homepage/types";
 import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
@@ -31,7 +33,7 @@ function ratioColor(visited: number, total: number, palette: string[]): string {
     return getHeatmapColorFromRatio(visited / total, palette);
 }
 
-// Heatmap colors from progress dimension + map view mode
+// Derives heatmap colors from real visit progress for the current map mode and tab.
 export function useProgressHeatmapColors(
     mapMode: MapMode,
     progressBy: ExploreViewTab,

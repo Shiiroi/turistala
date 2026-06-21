@@ -1,3 +1,6 @@
+// PhilippinesOutline.tsx — SVG silhouette of the Philippine archipelago.
+// Renders merged region geometries as a compact filled outline for passport covers and other
+
 import type { Geometry } from "geojson";
 import { cn } from "../../../lib/cn";
 import { geometriesToSvgPath } from "../utils/geometryToSvgPath";

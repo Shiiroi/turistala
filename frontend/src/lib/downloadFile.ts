@@ -1,3 +1,6 @@
+// downloadFile.ts — Client-side JSON file download utilities.
+// Serializes data to a downloadable JSON blob and provides filename slugification for safe export names.
+
 export function downloadJsonFile(data: unknown, filename: string): void {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);

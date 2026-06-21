@@ -1,3 +1,5 @@
+// ExploreViewTabs.tsx — Pill tabs for switching explore dimensions.
+
 import { PillTabs } from "../../../components/ui/PillTabs";
 import type { ExploreViewTab } from "./divisionExploreUtils";
 

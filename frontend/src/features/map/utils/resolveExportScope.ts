@@ -1,3 +1,5 @@
+// resolveExportScope.ts — Translates export scope selections into entity id sets and labels.
+
 import type { MunicityMeta, ProvinceGeoJSON, Region } from "../types";
 import type { MapExportLevel, MapExportScope, ResolvedExportScope } from "../types/mapExport";
 import { slugifyFilename } from "../../../lib/downloadFile";

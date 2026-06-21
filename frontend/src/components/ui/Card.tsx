@@ -1,3 +1,6 @@
+// Card.tsx — Parchment-styled content container.
+// Provides a bordered, shadowed surface for grouped form and panel content.
+
 import type { ReactNode } from "react";
 import { cn } from "../../lib/cn";
 

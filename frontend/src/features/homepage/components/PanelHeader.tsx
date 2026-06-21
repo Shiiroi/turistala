@@ -1,3 +1,5 @@
+// PanelHeader.tsx — Navigation header for nested panel views.
+
 import { ChevronLeft, X } from "lucide-react";
 import { CloseButton } from "../../../components/ui/CloseButton";
 import { cn } from "../../../lib/cn";

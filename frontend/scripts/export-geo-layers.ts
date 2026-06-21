@@ -1,5 +1,5 @@
-// Export geo layers from CSV + public/geo — same layout as Supabase geo bucket
-// For cloud deploy: pnpm upload:geo
+// export-geo-layers.ts — CLI script to build public/geo JSON from CSV and geometry sources.
+
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
