@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LoginForm } from "../features/auth/components/LoginForm";
 import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/AuthShell";
+import { AuthBrandHeader } from "../features/auth/components/AuthBrandHeader";
 import { useSignIn } from "../features/auth/hooks/useAuthSession";
 import { clearDemoMode, isImportDone, clearDemoData } from "../features/travel/demoStorage";
 
@@ -33,6 +34,7 @@ export function LoginPage() {
     return (
         <AuthShell>
             <AuthCard>
+                <AuthBrandHeader />
                 <h1 className="mb-1 font-display text-2xl font-semibold text-primary">Sign in</h1>
                 <LoginForm
                     email={email}

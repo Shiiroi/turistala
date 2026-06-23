@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/AuthShell";
+import { AuthBrandHeader } from "../features/auth/components/AuthBrandHeader";
 import { useUpdatePassword } from "../features/auth/hooks/useAuthSession";
 
 export function ResetPasswordPage() {
@@ -37,6 +38,7 @@ export function ResetPasswordPage() {
     return (
         <AuthShell>
             <AuthCard>
+                <AuthBrandHeader />
                 <h1 className="mb-1 font-display text-2xl font-semibold text-primary">
                     Set new password
                 </h1>

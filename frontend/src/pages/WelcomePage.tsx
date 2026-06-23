@@ -1,8 +1,8 @@
 // WelcomePage.tsx — Landing route offering demo, sign-in, and sign-up entry points.
 
 import { Link, Navigate } from "react-router-dom";
-import { MapPin } from "lucide-react";
 import { Button } from "../components/ui/Button";
+import { TuristalaLogo } from "../components/TuristalaLogo";
 import { AuthCard, AuthShell } from "../features/auth/components/AuthShell";
 import { useAuthSession } from "../features/auth/hooks/useAuthSession";
 import { setDemoMode } from "../features/travel/demoStorage";
@@ -31,12 +31,7 @@ export function WelcomePage() {
         <AuthShell>
             <AuthCard>
                 <div className="mb-8 flex flex-col gap-3">
-                    <div className="flex size-11 items-center justify-center rounded-full bg-accent/10 text-accent">
-                        <MapPin size={22} strokeWidth={2} />
-                    </div>
-                    <h1 className="font-display text-3xl font-semibold tracking-tight text-primary lg:text-4xl">
-                        Turistala
-                    </h1>
+                    <TuristalaLogo size={48} showWordmark />
                     <p className="text-[15px] leading-relaxed text-muted">
                         Journal your Philippine travels
                     </p>

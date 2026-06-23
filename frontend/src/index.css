@@ -111,3 +111,25 @@ select {
 [data-sidebar] ::selection {
     background: transparent;
 }
+
+@keyframes auth-wave-drift {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.auth-wave {
+    animation: auth-wave-drift 10s ease-in-out infinite;
+}
+
+.auth-wave--mid {
+    animation-duration: 8s;
+    animation-direction: reverse;
+}
+
+.auth-wave--front {
+    animation-duration: 6s;
+}

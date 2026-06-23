@@ -43,6 +43,7 @@ interface TravelMapProps {
     onHover: (division: Division | null) => void;
     onSelect: (division: Division | null) => void;
     interactive?: boolean;
+    hoverable?: boolean;
     showTiles?: boolean;
     exportCapture?: MapExportCaptureProps;
 }
@@ -189,9 +190,11 @@ function TravelMapInner({
     onHover,
     onSelect,
     interactive = true,
+    hoverable: hoverableProp,
     showTiles = true,
     exportCapture,
 }: TravelMapProps) {
+    const hoverable = hoverableProp ?? interactive;
     const layerMapRef = useRef<Map<number, L.Path>>(new Map());
     const selectedIdRef = useRef<number | null>(null);
     const hoveredIdRef = useRef<number | null>(null);
@@ -343,48 +346,50 @@ function TravelMapInner({
             layerMapRef.current.set(id, pathLayer);
 
             const name = feature.properties?.name as string;
-            if (name && interactive) {
+            if (name && (hoverable || interactive)) {
                 pathLayer.bindTooltip(name, { sticky: false, direction: "top" });
             }
 
             const variant = selectedIdRef.current === id ? "selected" : "base";
             applyStyleToLayer(pathLayer, feature, variant);
 
-            if (!interactive) return;
-
-            pathLayer.on("mouseover", () => {
-                const prevHoverId = hoveredIdRef.current;
-                if (prevHoverId != null && prevHoverId !== id && prevHoverId !== selectedIdRef.current) {
-                    const prevLayer = layerMapRef.current.get(prevHoverId);
-                    const prevFeature = currentData.features.find(
-                        (f) => f.properties.id === prevHoverId,
-                    );
-                    if (prevLayer && prevFeature) {
-                        applyStyleToLayer(prevLayer, prevFeature as Feature, "base");
+            if (hoverable) {
+                pathLayer.on("mouseover", () => {
+                    const prevHoverId = hoveredIdRef.current;
+                    if (prevHoverId != null && prevHoverId !== id && prevHoverId !== selectedIdRef.current) {
+                        const prevLayer = layerMapRef.current.get(prevHoverId);
+                        const prevFeature = currentData.features.find(
+                            (f) => f.properties.id === prevHoverId,
+                        );
+                        if (prevLayer && prevFeature) {
+                            applyStyleToLayer(prevLayer, prevFeature as Feature, "base");
+                        }
                     }
-                }
 
-                hoveredIdRef.current = id;
+                    hoveredIdRef.current = id;
 
-                if (selectedIdRef.current !== id) {
-                    applyStyleToLayer(pathLayer, feature, "hover");
-                }
-                onHoverRef.current(divisionFromFeature(feature));
-            });
+                    if (selectedIdRef.current !== id) {
+                        applyStyleToLayer(pathLayer, feature, "hover");
+                    }
+                    onHoverRef.current(divisionFromFeature(feature));
+                });
 
-            pathLayer.on("mouseout", () => {
-                if (hoveredIdRef.current === id) {
-                    hoveredIdRef.current = null;
-                }
+                pathLayer.on("mouseout", () => {
+                    if (hoveredIdRef.current === id) {
+                        hoveredIdRef.current = null;
+                    }
 
-                const selId = selectedIdRef.current;
-                if (selId === id) {
-                    applyStyleToLayer(pathLayer, feature, "selected");
-                } else {
-                    applyStyleToLayer(pathLayer, feature, "base");
-                }
-                onHoverRef.current(null);
-            });
+                    const selId = selectedIdRef.current;
+                    if (selId === id) {
+                        applyStyleToLayer(pathLayer, feature, "selected");
+                    } else {
+                        applyStyleToLayer(pathLayer, feature, "base");
+                    }
+                    onHoverRef.current(null);
+                });
+            }
+
+            if (!interactive) return;
 
             pathLayer.on("click", (e) => {
                 const domEvent = e as unknown as Event;
@@ -403,7 +408,7 @@ function TravelMapInner({
                 }
             });
         },
-        [applyStyleToLayer, currentData.features, interactive],
+        [applyStyleToLayer, currentData.features, interactive, hoverable],
     );
 
     return (

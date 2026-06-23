@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { SignupForm, USERNAME_PATTERN } from "../features/auth/components/SignupForm";
 import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/AuthShell";
+import { AuthBrandHeader } from "../features/auth/components/AuthBrandHeader";
 import { useSignUp } from "../features/auth/hooks/useAuthSession";
 import {
     clearDemoMode,
@@ -74,6 +75,7 @@ export function SignupPage() {
     return (
         <AuthShell>
             <AuthCard>
+                <AuthBrandHeader />
                 <h1 className="mb-1 font-display text-2xl font-semibold text-primary">
                     Create account
                 </h1>

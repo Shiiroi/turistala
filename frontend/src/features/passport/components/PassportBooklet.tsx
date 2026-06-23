@@ -1,8 +1,9 @@
 // PassportBooklet.tsx — Visual passport cover card in the live UI.
 
 import { cn } from "../../../lib/cn";
+import { TuristalaLogo } from "../../../components/TuristalaLogo";
 import type { Region } from "../../map/types";
-import { PlaneMark, StylizedSunMark } from "./PassportDecor";
+import { StylizedSunMark } from "./PassportDecor";
 import { PhilippinesOutline } from "./PhilippinesOutline";
 
 export interface PassportProgressLine {
@@ -58,7 +59,7 @@ export function PassportBooklet({
                 />
                 <div className="relative flex min-h-[52px] items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-2">
-                        <PlaneMark size={26} />
+                        <TuristalaLogo size={26} />
                         <div className="min-w-0">
                             <p className="font-display text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
                                 Turistala

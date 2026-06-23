@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/AuthShell";
+import { AuthBrandHeader } from "../features/auth/components/AuthBrandHeader";
 import { useResetPasswordRequest } from "../features/auth/hooks/useAuthSession";
 
 export function ForgotPasswordPage() {
@@ -27,6 +28,7 @@ export function ForgotPasswordPage() {
     return (
         <AuthShell>
             <AuthCard>
+                <AuthBrandHeader />
                 <h1 className="mb-1 font-display text-2xl font-semibold text-primary">
                     Reset password
                 </h1>
