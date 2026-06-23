@@ -140,7 +140,9 @@ function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | 
 
 function MapBackgroundClickHandler({ onBackgroundClick }: { onBackgroundClick: () => void }) {
     useMapEvents({
-        click: () => {
+        click: (e) => {
+            const target = e.originalEvent.target as Element | null;
+            if (target?.closest(".leaflet-interactive")) return;
             onBackgroundClick();
         },
     });
@@ -385,8 +387,9 @@ function TravelMapInner({
             });
 
             pathLayer.on("click", (e) => {
-                L.DomEvent.preventDefault(e.originalEvent);
-                L.DomEvent.stopPropagation(e.originalEvent);
+                const domEvent = e as unknown as Event;
+                L.DomEvent.preventDefault(domEvent);
+                L.DomEvent.stopPropagation(domEvent);
                 const division = divisionFromFeature(feature);
                 if (!division) return;
                 if (selectedIdRef.current === id) {
