@@ -49,7 +49,7 @@ function defaultScopeMode(): ScopeMode {
     return "all";
 }
 
-function scopeForMode(mode: ScopeMode, level: MapExportLevel, pickIds: number[], regionId: number | null, provinceId: number | null): MapExportScope {
+function scopeForMode(mode: ScopeMode, _level: MapExportLevel, pickIds: number[], regionId: number | null, provinceId: number | null): MapExportScope {
     if (mode === "all") return { kind: "all" };
     if (mode === "pick") return { kind: "pick", ids: pickIds };
     if (mode === "inRegion" && regionId != null) return { kind: "inRegion", regionId };
@@ -178,28 +178,28 @@ export function MapExportModal({
         <Modal isOpen={isOpen} onClose={onClose} title="Export map" subtitle="Choose scope and format" size="md">
             <div className="space-y-4">
                 <div>
-                    <Label as="p" className="mb-2">
+                    <Label className="mb-2">
                         Format
                     </Label>
                     <PillTabs value={format} options={FORMAT_OPTIONS} onChange={setFormat} />
                 </div>
 
                 <div>
-                    <Label as="p" className="mb-2">
+                    <Label className="mb-2">
                         Export level
                     </Label>
                     <PillTabs value={level} options={LEVEL_OPTIONS} onChange={handleLevelChange} />
                 </div>
 
                 <div>
-                    <Label as="p" className="mb-2">
+                    <Label className="mb-2">
                         Progress by
                     </Label>
                     <PillTabs value={progressBy} options={PROGRESS_OPTIONS} onChange={setProgressBy} />
                 </div>
 
                 <div>
-                    <Label as="p" className="mb-2">
+                    <Label className="mb-2">
                         Scope
                     </Label>
                     <PillTabs

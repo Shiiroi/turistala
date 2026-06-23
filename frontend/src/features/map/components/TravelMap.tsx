@@ -157,7 +157,7 @@ function MapZoomLimits() {
         const applyLimits = () => {
             // inside=false: max zoom where PH bounds fit the viewport; use padding so the
             // limit sits at "whole country in view", not a cropped tight crop
-            const minZoom = map.getBoundsZoom(PH_BOUNDS, false, [48, 48]);
+            const minZoom = map.getBoundsZoom(PH_BOUNDS, false, L.point(48, 48));
             map.setMinZoom(minZoom);
             if (map.getZoom() < minZoom) {
                 map.setZoom(minZoom);
@@ -385,8 +385,8 @@ function TravelMapInner({
             });
 
             pathLayer.on("click", (e) => {
-                L.DomEvent.preventDefault(e);
-                L.DomEvent.stopPropagation(e);
+                L.DomEvent.preventDefault(e.originalEvent);
+                L.DomEvent.stopPropagation(e.originalEvent);
                 const division = divisionFromFeature(feature);
                 if (!division) return;
                 if (selectedIdRef.current === id) {

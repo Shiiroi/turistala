@@ -108,6 +108,7 @@ function countRegionProgress(
                 visited: destinations.filter((p) => store.getPlaceStatus(p.id) === "visited").length,
             };
     }
+    throw new Error(`Unhandled metric: ${metric}`);
 }
 
 function countProvinceProgress(
@@ -139,6 +140,7 @@ function countProvinceProgress(
                 visited: destinations.filter((p) => store.getPlaceStatus(p.id) === "visited").length,
             };
     }
+    throw new Error(`Unhandled metric: ${metric}`);
 }
 
 export function computePassportStats(
@@ -371,6 +373,7 @@ export function metricLabel(metric: PassportProgressLevel): string {
         case "places":
             return "places";
     }
+    throw new Error(`Unhandled metric: ${metric}`);
 }
 
 // Singular label after "By" (e.g. "By province")
@@ -385,6 +388,7 @@ export function metricUnitLabel(metric: PassportProgressLevel): string {
         case "places":
             return "place";
     }
+    throw new Error(`Unhandled metric: ${metric}`);
 }
 
 export function progressLineFromStats(stats: PassportStats): {
@@ -426,6 +430,7 @@ export function progressLineFromStats(stats: PassportStats): {
                 pct: stats.totalPlaces > 0 ? Math.round(stats.overallFraction * 100) : null,
             };
     }
+    throw new Error(`Unhandled metric: ${stats.metric}`);
 }
 
 export function stampProgressLabel(row: DivisionProgress): string {
