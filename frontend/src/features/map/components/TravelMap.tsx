@@ -116,7 +116,7 @@ function boundsFromGeometry(geometry: Geometry): L.LatLngBounds | null {
     return bounds.isValid() ? bounds : null;
 }
 
-const MAP_FLY_DURATION = 0.55;
+const MAP_FLY_DURATION = 0.4;
 
 function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | null }) {
     const map = useMap();
@@ -131,7 +131,7 @@ function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | 
             padding: [40, 40],
             maxZoom: 12,
             duration: MAP_FLY_DURATION,
-            easeLinearity: 0.25,
+            easeLinearity: 0.35,
         });
     }, [selectedDivision?.id, selectedDivision?.level, selectedDivision?.geometry, map]);
 
