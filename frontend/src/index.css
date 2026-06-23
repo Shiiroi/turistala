@@ -104,6 +104,19 @@ select {
     outline: none !important;
 }
 
+/* Auth / tileless maps — keep the sea gradient visible behind Leaflet canvases */
+.map-sea-background {
+    background: linear-gradient(to bottom, #c5dce8 0%, #b8cfd8 50%, #a8c4d4 100%);
+}
+
+.auth-map-panel .leaflet-container {
+    background: transparent !important;
+}
+
+.auth-map-panel .leaflet-pane {
+    z-index: 1;
+}
+
 [data-sidebar] {
     -webkit-tap-highlight-color: transparent;
 }

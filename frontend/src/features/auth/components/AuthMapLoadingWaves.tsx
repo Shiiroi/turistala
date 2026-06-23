@@ -1,6 +1,7 @@
 // AuthMapLoadingWaves.tsx — Sea-wave loading overlay for the auth map panel.
 
 import { cn } from "../../../lib/cn";
+import { AUTH_SEA_BG_CLASS } from "../constants/authSeaBackground";
 
 interface AuthMapLoadingWavesProps {
     fading?: boolean;
@@ -10,7 +11,8 @@ export function AuthMapLoadingWaves({ fading = false }: AuthMapLoadingWavesProps
     return (
         <div
             className={cn(
-                "pointer-events-none absolute inset-0 overflow-hidden bg-gradient-to-b from-[#c5dce8] via-[#b8cfd8] to-[#a8c4d4]",
+                "pointer-events-none absolute inset-0 overflow-hidden",
+                AUTH_SEA_BG_CLASS,
                 "transition-opacity duration-[400ms] ease-out",
                 fading ? "opacity-0" : "opacity-100",
             )}

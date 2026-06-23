@@ -6,13 +6,12 @@ import { cn } from "../../../lib/cn";
 import type { Division } from "../../homepage/types";
 import { HoverInfoCard } from "../../map/components/HoverInfoCard";
 import { TravelMap } from "../../map/components/TravelMap";
+import { AUTH_SEA_BG_CLASS } from "../constants/authSeaBackground";
 import { fetchRegions } from "../../map/services/mapApi";
 import { buildAuthPreviewHeatmapColors } from "../utils/authPreviewHeatmap";
 import { AuthMapLoadingWaves } from "./AuthMapLoadingWaves";
 
 const noop = () => {};
-
-const SEA_GRADIENT = "bg-gradient-to-b from-[#c5dce8] via-[#b8cfd8] to-[#a8c4d4]";
 
 export function AuthMapPreview() {
     const [hoveredDivision, setHoveredDivision] = useState<Division | null>(null);
@@ -54,11 +53,18 @@ export function AuthMapPreview() {
     }, [regions.length]);
 
     return (
-        <div className={cn("relative h-full min-h-[280px] w-full lg:min-h-0", SEA_GRADIENT)}>
+        <div
+            className={cn(
+                "auth-map-panel relative h-full min-h-[280px] w-full lg:min-h-0",
+                AUTH_SEA_BG_CLASS,
+            )}
+        >
+            <div className={cn("pointer-events-none absolute inset-0 z-0", AUTH_SEA_BG_CLASS)} aria-hidden />
+
             {(isMapLoading || wavesVisible) && <AuthMapLoadingWaves fading={wavesFading} />}
 
             {regionsQuery.isError && regions.length === 0 && !isMapLoading && (
-                <p className="absolute inset-x-0 bottom-8 text-center text-sm text-primary/60">
+                <p className="absolute inset-x-0 bottom-8 z-10 text-center text-sm text-primary/60">
                     Map preview unavailable
                 </p>
             )}
@@ -66,7 +72,7 @@ export function AuthMapPreview() {
             {regions.length > 0 && (
                 <div
                     className={cn(
-                        "relative h-full w-full transition-opacity duration-[400ms] ease-out",
+                        "relative z-10 h-full w-full transition-opacity duration-[400ms] ease-out",
                         mapRevealed ? "opacity-100" : "opacity-0",
                     )}
                 >
@@ -83,6 +89,8 @@ export function AuthMapPreview() {
                         interactive={false}
                         hoverable={true}
                         showTiles={false}
+                        fillContainer
+                        authPreview
                     />
                     <HoverInfoCard hoveredDivision={hoveredDivision} />
                 </div>

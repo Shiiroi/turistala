@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { AuthMapPreview } from "./AuthMapPreview";
+import { AUTH_SEA_BG_CLASS } from "../constants/authSeaBackground";
 import { cn } from "../../../lib/cn";
 
 interface AuthShellProps {
@@ -20,7 +21,8 @@ export function AuthShell({ children }: AuthShellProps) {
             </div>
             <div
                 className={cn(
-                    "relative h-[40vh] shrink-0 overflow-hidden lg:h-auto lg:min-h-dvh lg:flex-1",
+                    "auth-map-panel relative h-[40vh] shrink-0 overflow-hidden lg:h-auto lg:min-h-dvh lg:flex-1",
+                    AUTH_SEA_BG_CLASS,
                 )}
             >
                 <AuthMapPreview />

@@ -1,6 +1,6 @@
 // TravelMap.tsx — Interactive Leaflet map of Philippine administrative divisions.
 
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, GeoJSON, ZoomControl, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import type { Feature, Geometry } from "geojson";
@@ -10,6 +10,7 @@ import { MapScreenshotBridge } from "../hooks/MapScreenshotBridge";
 import { cn } from "../../../lib/cn";
 import type { MapExportCaptureProps } from "./MapExportCapture";
 import { MapExportCapture } from "./MapExportCapture";
+import { MAP_SEA_BG_CLASS } from "../constants/seaBackground";
 
 const PH_CENTER: [number, number] = [12.8797, 121.774];
 const PH_ZOOM = 6;
@@ -45,6 +46,8 @@ interface TravelMapProps {
     interactive?: boolean;
     hoverable?: boolean;
     showTiles?: boolean;
+    fillContainer?: boolean;
+    authPreview?: boolean;
     exportCapture?: MapExportCaptureProps;
 }
 
@@ -79,6 +82,7 @@ function getBaseStyle(
     feature: Feature,
     heatmapColors: Map<number, string>,
     forExport = false,
+    authPreview = false,
 ): L.PathOptions {
     const id = feature.properties?.id as number;
     const fillColor = heatmapColors.get(id) ?? BASE_FILL;
@@ -94,19 +98,28 @@ function getBaseStyle(
         };
     }
 
+    if (authPreview) {
+        return {
+            color,
+            weight: BORDER_WEIGHT_BASE,
+            fillColor,
+            fillOpacity: visited ? 0.38 : 0.32,
+        };
+    }
+
     return {
         color,
         weight: BORDER_WEIGHT_BASE,
         fillColor,
-        fillOpacity: 0.3,
+        fillOpacity: visited ? 0.52 : 0.48,
     };
 }
 
-function getEmphasisStyle(base: L.PathOptions): L.PathOptions {
+function getEmphasisStyle(base: L.PathOptions, authPreview = false): L.PathOptions {
     return {
         ...base,
         weight: BORDER_WEIGHT_EMPHASIS,
-        fillOpacity: 0.45,
+        fillOpacity: authPreview ? 0.48 : 0.62,
     };
 }
 
@@ -192,6 +205,8 @@ function TravelMapInner({
     interactive = true,
     hoverable: hoverableProp,
     showTiles = true,
+    fillContainer = false,
+    authPreview = false,
     exportCapture,
 }: TravelMapProps) {
     const hoverable = hoverableProp ?? interactive;
@@ -212,16 +227,6 @@ function TravelMapInner({
     );
     const pathRenderer = exportRenderer ?? SHARED_RENDERER;
     const forExport = !!exportCapture;
-
-    useLayoutEffect(() => {
-        onHoverRef.current = onHover;
-        onSelectRef.current = onSelect;
-        heatmapColorsRef.current = heatmapColors;
-        goalIdsRef.current = goalMunicityIds;
-        goalProvinceIdsRef.current = goalProvinceIds;
-        goalRegionIdsRef.current = goalRegionIds;
-        modeRef.current = mode;
-    });
 
     const currentData = useMemo(() => {
         let entities: Array<{
@@ -266,34 +271,41 @@ function TravelMapInner({
 
     const geoKey = `${mode}-${currentData.features.length}`;
 
-    useLayoutEffect(() => {
-        if (geoKeyRef.current === geoKey) return;
-        layerMapRef.current.clear();
-        hoveredIdRef.current = null;
+    if (geoKeyRef.current !== geoKey) {
         geoKeyRef.current = geoKey;
-    }, [geoKey]);
+        layerMapRef.current = new Map();
+        hoveredIdRef.current = null;
+    }
+
+    onHoverRef.current = onHover;
+    onSelectRef.current = onSelect;
+    heatmapColorsRef.current = heatmapColors;
+    goalIdsRef.current = goalMunicityIds;
+    goalProvinceIdsRef.current = goalProvinceIds;
+    goalRegionIdsRef.current = goalRegionIds;
+    modeRef.current = mode;
 
     const selectedId = selectedDivision?.id ?? null;
 
     const styleForFeature = useCallback((feature?: Feature): L.PathOptions => {
         if (!feature) return { renderer: pathRenderer };
         return {
-            ...getBaseStyle(feature, heatmapColorsRef.current, forExport),
+            ...getBaseStyle(feature, heatmapColors, forExport, authPreview),
             renderer: pathRenderer,
         };
-    }, [pathRenderer, forExport]);
+    }, [pathRenderer, forExport, heatmapColors, authPreview]);
 
     const applyStyleToLayer = useCallback(
         (layer: L.Path, feature: Feature, variant: "base" | "hover" | "selected") => {
-            const base = getBaseStyle(feature, heatmapColorsRef.current, forExport);
+            const base = getBaseStyle(feature, heatmapColorsRef.current, forExport, authPreview);
             const style =
                 forExport || variant === "base"
                     ? base
-                    : getEmphasisStyle(base);
+                    : getEmphasisStyle(base, authPreview);
             layer.setStyle(style);
             return style;
         },
-        [forExport],
+        [forExport, authPreview],
     );
 
     const repaintExportLayers = useCallback(() => {
@@ -325,19 +337,26 @@ function TravelMapInner({
         }
     }, [selectedId, currentData.features, applyStyleToLayer]);
 
-    // Re-paint all polygons when heatmap palette changes (e.g. accent color picker)
+    // Re-paint all polygons when heatmap colors change. react-leaflet also restyles via
+    // styleForFeature, but this restores hover/selected emphasis after a palette update.
     useEffect(() => {
+        const layers = layerMapRef.current;
+        if (layers.size === 0) return;
+
+        const featureById = new Map(
+            currentData.features.map((f) => [f.properties.id as number, f as Feature]),
+        );
         const selId = selectedIdRef.current;
         const hoverId = hoveredIdRef.current;
 
-        for (const [id, layer] of layerMapRef.current) {
-            const feature = currentData.features.find((f) => f.properties.id === id);
+        for (const [id, layer] of layers) {
+            const feature = featureById.get(id);
             if (!feature) continue;
             const variant =
                 id === selId ? "selected" : id === hoverId ? "hover" : "base";
-            applyStyleToLayer(layer, feature as Feature, variant);
+            applyStyleToLayer(layer, feature, variant);
         }
-    }, [heatmapColors, goalMunicityIds, goalProvinceIds, goalRegionIds, currentData.features, applyStyleToLayer]);
+    }, [heatmapColors, currentData.features, applyStyleToLayer]);
 
     const onEachFeature = useCallback(
         (feature: Feature, layer: L.Layer) => {
@@ -415,9 +434,10 @@ function TravelMapInner({
         <div
             className={cn(
                 "relative h-full w-full outline-none",
-                !exportCapture && "min-h-[500px]",
-                !showTiles && !exportCapture && "bg-gradient-to-b from-[#c5dce8] via-[#b8cfd8] to-[#a8c4d4]",
+                !exportCapture && !fillContainer && "min-h-[500px]",
+                !showTiles && !exportCapture && !authPreview && MAP_SEA_BG_CLASS,
                 !showTiles && exportCapture && "bg-parchment",
+                authPreview && "bg-transparent",
             )}
         >
             <MapContainer
@@ -426,7 +446,7 @@ function TravelMapInner({
                 zoomControl={false}
                 className={cn(
                     "h-full w-full outline-none focus:outline-none",
-                    showTiles ? "bg-parchment" : "bg-transparent",
+                    showTiles ? "bg-parchment" : authPreview ? "bg-transparent" : MAP_SEA_BG_CLASS,
                 )}
                 scrollWheelZoom={interactive}
                 dragging={interactive}

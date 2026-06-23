@@ -4,8 +4,11 @@ import { Link, Navigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { TuristalaLogo } from "../components/TuristalaLogo";
 import { AuthCard, AuthShell } from "../features/auth/components/AuthShell";
+import { AuthMapLoadingWaves } from "../features/auth/components/AuthMapLoadingWaves";
+import { AUTH_SEA_BG_CLASS } from "../features/auth/constants/authSeaBackground";
 import { useAuthSession } from "../features/auth/hooks/useAuthSession";
 import { setDemoMode } from "../features/travel/demoStorage";
+import { cn } from "../lib/cn";
 
 export function WelcomePage() {
     const { data: session, isLoading } = useAuthSession();
@@ -17,8 +20,15 @@ export function WelcomePage() {
 
     if (isLoading) {
         return (
-            <div className="flex min-h-dvh items-center justify-center bg-parchment text-muted">
-                Loading…
+            <div
+                className={cn(
+                    "auth-map-panel relative flex min-h-dvh items-center justify-center text-primary/70",
+                    AUTH_SEA_BG_CLASS,
+                )}
+            >
+                <div className={cn("pointer-events-none absolute inset-0", AUTH_SEA_BG_CLASS)} aria-hidden />
+                <AuthMapLoadingWaves />
+                <p className="relative z-10 text-sm">Loading…</p>
             </div>
         );
     }

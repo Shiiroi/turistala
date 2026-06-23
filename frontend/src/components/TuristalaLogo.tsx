@@ -1,8 +1,8 @@
-// TuristalaLogo.tsx — App logo from public/turistala.svg.
+// TuristalaLogo.tsx — App logo from public/turistala.png (SVG is 6.5MB; PNG is used in-app).
 
 import { cn } from "../lib/cn";
 
-const LOGO_SRC = "/turistala.svg";
+const LOGO_SRC = "/turistala.png";
 
 interface TuristalaLogoProps {
     size?: number;
