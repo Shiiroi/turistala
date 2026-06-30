@@ -1,4 +1,4 @@
-// Badge.tsx — Compact status label component.
+// Compact status label component.
 // Renders a small pill-shaped label for counts, tags, or visit indicators.
 
 import type { ReactNode } from "react";
@@ -15,6 +15,7 @@ const variantClasses = {
     visited: "bg-accent/12 text-accent-dark",
 };
 
+ // React component rendering Badge.
 export function Badge({ children, variant = "default", className }: BadgeProps) {
     return (
         <span

@@ -1,4 +1,4 @@
-// AuthMapLoadingWaves.tsx — Sea-wave loading overlay for the auth map panel.
+// Sea-wave loading overlay for the auth map panel.
 
 import { cn } from "../../../lib/cn";
 import { AUTH_SEA_BG_CLASS } from "../constants/authSeaBackground";
@@ -7,6 +7,7 @@ interface AuthMapLoadingWavesProps {
     fading?: boolean;
 }
 
+ // React component rendering AuthMapLoadingWaves.
 export function AuthMapLoadingWaves({ fading = false }: AuthMapLoadingWavesProps) {
     return (
         <div

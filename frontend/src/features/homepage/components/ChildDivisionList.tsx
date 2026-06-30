@@ -1,4 +1,4 @@
-// ChildDivisionList.tsx — Scrollable list of selectable child divisions.
+// Scrollable list of selectable child divisions.
 
 import { Label } from "../../../components/ui/Label";
 import { cn } from "../../../lib/cn";
@@ -15,6 +15,7 @@ interface ChildDivisionListProps {
     onSelect: (id: number) => void;
 }
 
+ // React component rendering ChildDivisionList.
 export function ChildDivisionList({ title, items, onSelect }: ChildDivisionListProps) {
     if (items.length === 0) return null;
 

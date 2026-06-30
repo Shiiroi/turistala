@@ -1,4 +1,4 @@
-// supabaseClient.ts — Legacy Supabase client singleton.
+// Legacy Supabase client singleton.
 
 import { createClient } from "@supabase/supabase-js";
 

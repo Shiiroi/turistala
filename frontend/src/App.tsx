@@ -1,4 +1,4 @@
-// App.tsx — Root application router.
+// Root application router.
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthRedirect } from "./features/auth/components/MapGate";
@@ -10,6 +10,7 @@ import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { SignupPage } from "./pages/SignupPage";
 import { WelcomePage } from "./pages/WelcomePage";
 
+ // React component rendering App.
 function App() {
     return (
         <BrowserRouter>

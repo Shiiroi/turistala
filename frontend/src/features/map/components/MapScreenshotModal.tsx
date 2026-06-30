@@ -1,4 +1,4 @@
-// MapScreenshotModal.tsx — Preview and save dialog for viewport map screenshots.
+// Preview and save dialog for viewport map screenshots.
 
 import { Download } from "lucide-react";
 import { Button } from "../../../components/ui/Button";

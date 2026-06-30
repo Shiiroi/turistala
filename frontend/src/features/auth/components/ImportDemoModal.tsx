@@ -1,4 +1,4 @@
-// ImportDemoModal.tsx — Post-signup prompt to import anonymous demo travel data.
+// Post-signup prompt to import anonymous demo travel data.
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,6 +16,7 @@ interface ImportDemoModalProps {
     onDone: () => void;
 }
 
+ // React component rendering ImportDemoModal.
 export function ImportDemoModal({ isOpen, userId, demoData, onDone }: ImportDemoModalProps) {
     const importDemo = useImportDemoMutation(userId);
     const [error, setError] = useState<string | null>(null);
@@ -94,6 +95,7 @@ export function ImportDemoModal({ isOpen, userId, demoData, onDone }: ImportDemo
     );
 }
 
+ // React component rendering DemoBanner.
 export function DemoBanner() {
     return (
         <div className="pointer-events-auto absolute left-1/2 top-3 z-[1001] flex -translate-x-1/2 items-center gap-3 rounded-full border border-[rgba(200,190,175,0.55)] bg-[rgba(250,246,238,0.94)] px-4 py-2 text-xs text-muted shadow-[0_2px_10px_rgba(44,36,22,0.06)] backdrop-blur-[10px]">

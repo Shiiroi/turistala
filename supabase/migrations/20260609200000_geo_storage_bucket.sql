@@ -1,4 +1,4 @@
--- Public bucket for map GeoJSON layers (regions, provinces, …)
+-- Provisions public storage bucket for CDN-style GeoJSON map layers.
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES (
   'geo',

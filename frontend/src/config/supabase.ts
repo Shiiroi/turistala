@@ -1,4 +1,4 @@
-// supabase.ts — Application Supabase client configuration.
+// Application Supabase client configuration.
 
 import { createClient } from "@supabase/supabase-js";
 

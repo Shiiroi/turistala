@@ -1,12 +1,21 @@
-// captureMapScreenshot.ts — Canvas and DOM utilities for map PNG capture and download.
+// Canvas and DOM utilities for map PNG capture and download.
 
 import html2canvas from "html2canvas";
 import type L from "leaflet";
 
+ /**
+  * Performs operations for waitFrame in captureMapScreenshot.ts.
+  * @returns Value or promise returned by waitFrame.
+ */
 function waitFrame(): Promise<void> {
     return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }
 
+ /**
+  * Performs operations for getLayerCanvas in captureMapScreenshot.ts.
+  * @param map - Parameter representing map.
+  * @returns Value or promise returned by getLayerCanvas.
+ */
 function getLayerCanvas(map: L.Map): HTMLCanvasElement | null {
     return map.getContainer().querySelector<HTMLCanvasElement>(".leaflet-overlay-pane canvas");
 }
@@ -120,11 +129,22 @@ export async function captureMapScreenshot(
     }
 }
 
+ /**
+  * Performs operations for mapScreenshotFilename in captureMapScreenshot.ts.
+  * @param date - Parameter representing date.
+  * @returns Value or promise returned by mapScreenshotFilename.
+ */
 export function mapScreenshotFilename(date = new Date()): string {
     const iso = date.toISOString().slice(0, 10);
     return `turistala-map-${iso}.png`;
 }
 
+ /**
+  * Performs operations for downloadDataUrlPng in captureMapScreenshot.ts.
+  * @param dataUrl - Parameter representing dataUrl.
+  * @param filename - Parameter representing filename.
+  * @returns Value or promise returned by downloadDataUrlPng.
+ */
 export function downloadDataUrlPng(dataUrl: string, filename: string): void {
     const anchor = document.createElement("a");
     anchor.href = dataUrl;

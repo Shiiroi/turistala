@@ -1,4 +1,4 @@
-// journalPhotoUtils.ts — Adapters between local photo picks and store input shapes.
+// Adapters between local photo picks and store input shapes.
 // Maps JournalPhotoPicker LocalPhoto entries into JournalPhotoInput records for create and update
 
 import type { LocalPhoto } from "../components/JournalPhotoPicker";
@@ -9,6 +9,11 @@ export interface JournalPhotoInput {
     file?: File;
 }
 
+ /**
+  * Performs operations for localPhotosToJournalInput in journalPhotoUtils.ts.
+  * @param photos - Parameter representing photos.
+  * @returns Value or promise returned by localPhotosToJournalInput.
+ */
 export function localPhotosToJournalInput(photos: LocalPhoto[]): JournalPhotoInput[] {
     return photos.map((p) => ({
         id: p.id,

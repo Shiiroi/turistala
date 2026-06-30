@@ -1,4 +1,4 @@
-// MapProgressOverlay.tsx — Segmented control for choosing heatmap progress granularity.
+// Segmented control for choosing heatmap progress granularity.
 
 import { Label } from "../../../components/ui/Label";
 import { SegmentedControl } from "../../../components/ui/SegmentedControl";

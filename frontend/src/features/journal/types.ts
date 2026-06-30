@@ -1,4 +1,4 @@
-// types.ts — Shared type definitions for journal entries.
+// Shared type definitions for journal entries.
 
 export interface JournalEntry {
     id: string;

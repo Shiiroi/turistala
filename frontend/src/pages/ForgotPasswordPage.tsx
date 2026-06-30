@@ -1,4 +1,4 @@
-// ForgotPasswordPage.tsx — Password reset request route.
+// Password reset request route.
 
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/A
 import { AuthBrandHeader } from "../features/auth/components/AuthBrandHeader";
 import { useResetPasswordRequest } from "../features/auth/hooks/useAuthSession";
 
+ // React component rendering ForgotPasswordPage.
 export function ForgotPasswordPage() {
     const resetRequest = useResetPasswordRequest();
     const [email, setEmail] = useState("");

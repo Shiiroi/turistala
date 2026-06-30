@@ -1,4 +1,4 @@
-// AuthMapPreview.tsx — Map backdrop for auth screens with wave loading and region hover preview.
+// Map backdrop for auth screens with wave loading and region hover preview.
 
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import { fetchRegions } from "../../map/services/mapApi";
 import { buildAuthPreviewHeatmapColors } from "../utils/authPreviewHeatmap";
 import { AuthMapLoadingWaves } from "./AuthMapLoadingWaves";
 
+ // Performs operations for noop in AuthMapPreview.tsx.
 const noop = () => {};
 
 export function AuthMapPreview() {

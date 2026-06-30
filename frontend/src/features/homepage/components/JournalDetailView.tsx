@@ -1,4 +1,4 @@
-// JournalDetailView.tsx — Full journal entry editor and reader.
+// Full journal entry editor and reader.
 
 import { useState } from "react";
 import { Calendar, Pencil, Trash2 } from "lucide-react";
@@ -27,6 +27,10 @@ interface JournalDetailViewProps {
 const inputClassName =
     "w-full rounded-md border border-border bg-surface px-2.5 py-2 font-body text-sm text-primary outline-none";
 
+ /**
+  * Performs operations for formatJournalDate in JournalDetailView.tsx.
+  * @param isoDate - Parameter representing isoDate.
+ */
 function formatJournalDate(isoDate: string): string {
     try {
         const d = new Date(isoDate.includes("T") ? isoDate : `${isoDate}T12:00:00`);
@@ -40,10 +44,15 @@ function formatJournalDate(isoDate: string): string {
     }
 }
 
+ /**
+  * Performs operations for journalPhotosToLocal in JournalDetailView.tsx.
+  * @param photos - Parameter representing photos.
+ */
 function journalPhotosToLocal(photos: MockJournal["photos"]): LocalPhoto[] {
     return photos.map((p) => ({ id: p.id, preview_url: p.preview_url }));
 }
 
+ // React component rendering JournalDetailView.
 export function JournalDetailView({ journal: initialJournal, place, store, onBack }: JournalDetailViewProps) {
     const showSaved = useSaveFeedback();
     const { error: toastError } = useToast();

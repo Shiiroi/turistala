@@ -1,4 +1,4 @@
-// TuristalaLogo.tsx — App logo from public/turistala.png (SVG is 6.5MB; PNG is used in-app).
+// App logo from public/turistala.png (SVG is 6.5MB; PNG is used in-app).
 
 import { cn } from "../lib/cn";
 
@@ -11,6 +11,10 @@ interface TuristalaLogoProps {
     wordmarkClassName?: string;
 }
 
+ /**
+  * Renders the Turistala application logo with optional wordmark typography.
+  * @param props - Custom properties defining the image dimensions and wordmark visibility.
+ */
 export function TuristalaLogo({
     size = 44,
     className,

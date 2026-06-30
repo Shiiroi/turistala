@@ -1,4 +1,4 @@
-// HeatmapLegend.tsx — Swatch strip and color picker for map accent-driven heatmap palette.
+// Swatch strip and color picker for map accent-driven heatmap palette.
 
 import { Label } from "../../../components/ui/Label";
 import { cn } from "../../../lib/cn";
@@ -9,6 +9,7 @@ interface HeatmapLegendProps {
     onAccentColorChange: (color: string) => void;
 }
 
+ // React component rendering HeatmapLegend.
 export function HeatmapLegend({ accentColor, onAccentColorChange }: HeatmapLegendProps) {
     const palette = buildHeatmapPalette(accentColor);
 

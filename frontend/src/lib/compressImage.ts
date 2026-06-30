@@ -1,7 +1,15 @@
-// compressImage.ts — Browser-side image resizing and WebP compression.
+// Browser-side image resizing and WebP compression.
 
 import { MAX_IMAGE_WIDTH, WEBP_QUALITY } from "../config/storageLimits";
 
+ /**
+  * Compresses an image file by scaling its dimensions and converting it to WebP format.
+  * @param file - The source image file to be compressed.
+  * @param maxWidth - The maximum width or height allowed for the scaled image. Defaults to MAX_IMAGE_WIDTH.
+  * @param quality - The compression quality parameter for WebP format (between 0.0 and 1.0). Defaults to WEBP_QUALITY.
+  * @returns A promise resolving to an object containing the compressed image as a WebP Blob and its size in bytes.
+  * @throws Error if the canvas context cannot be initialized or the compression fails.
+ */
 export async function compressImage(
     file: File,
     maxWidth = MAX_IMAGE_WIDTH,

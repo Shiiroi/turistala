@@ -1,4 +1,4 @@
--- View uses m.* so it must be dropped before spatial columns go away
+-- Drops legacy PostGIS spatial columns from reference tables to optimize DB size.
 DROP VIEW IF EXISTS public.municities_enriched;
 
 -- Drop spatial indexes first

@@ -1,4 +1,4 @@
-// upload-geo-storage.ts — CLI script to upload public/geo JSON to Supabase Storage.
+// Uploads compiled public/geo JSON files to a remote Supabase Storage bucket for frontend CDN delivery.
 
 import { createClient } from "@supabase/supabase-js";
 import * as fs from "fs";
@@ -19,6 +19,10 @@ if (!supabaseUrl || !serviceKey) {
 
 const supabase = createClient(supabaseUrl, serviceKey);
 
+// Reads a local file from public/geo and uploads it to the specified Supabase bucket with upsert enabled.
+// Parameters:
+// - relativePath: Relative path of the file under the local public/geo directory.
+// Upstream dependencies: Reads local JSON structures under public/geo and requires active connection to Supabase storage.
 async function uploadFile(relativePath: string) {
     const filePath = path.join(GEO_DIR, relativePath);
     const body = fs.readFileSync(filePath);
@@ -38,6 +42,8 @@ async function uploadFile(relativePath: string) {
     console.log(`  ${relativePath} — ${kb} KB → ${urlData.publicUrl}`);
 }
 
+// Scans the local public/geo/municities directory to filter, collect, and sort provincial chunk files.
+// Returns: Ordered list of province boundary JSON filenames.
 function listProvinceFiles(): string[] {
     const dir = path.join(GEO_DIR, "municities");
     return fs
@@ -50,6 +56,7 @@ function listProvinceFiles(): string[] {
         });
 }
 
+// Uploads regional, provincial, municipal metadata, and all sorted provincial boundary assets to Supabase Storage.
 async function main() {
     console.log(`Uploading geo layers to bucket "${BUCKET}"…`);
 

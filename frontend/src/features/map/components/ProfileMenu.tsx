@@ -1,4 +1,4 @@
-// ProfileMenu.tsx — Avatar dropdown with profile, passport, auth, and demo import actions.
+// Avatar dropdown with profile, passport, auth, and demo import actions.
 
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";

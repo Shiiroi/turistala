@@ -1,4 +1,4 @@
-// TravelMap.tsx — Interactive Leaflet map of Philippine administrative divisions.
+// Interactive Leaflet map of Philippine administrative divisions.
 
 import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, GeoJSON, ZoomControl, useMap, useMapEvents } from "react-leaflet";
@@ -51,6 +51,10 @@ interface TravelMapProps {
     exportCapture?: MapExportCaptureProps;
 }
 
+ /**
+  * Performs operations for divisionFromFeature in TravelMap.tsx.
+  * @param feature - Parameter representing feature.
+ */
 function divisionFromFeature(feature: Feature): Division | null {
     const p = feature.properties;
     if (!p || feature.geometry == null) return null;
@@ -115,6 +119,11 @@ function getBaseStyle(
     };
 }
 
+ /**
+  * Performs operations for getEmphasisStyle in TravelMap.tsx.
+  * @param base - Parameter representing base.
+  * @param authPreview - Parameter representing authPreview.
+ */
 function getEmphasisStyle(base: L.PathOptions, authPreview = false): L.PathOptions {
     return {
         ...base,
@@ -123,6 +132,10 @@ function getEmphasisStyle(base: L.PathOptions, authPreview = false): L.PathOptio
     };
 }
 
+ /**
+  * Performs operations for boundsFromGeometry in TravelMap.tsx.
+  * @param geometry - Parameter representing geometry.
+ */
 function boundsFromGeometry(geometry: Geometry): L.LatLngBounds | null {
     const temp = L.geoJSON(geometry as GeoJSON.GeoJsonObject);
     const bounds = temp.getBounds();
@@ -132,6 +145,7 @@ function boundsFromGeometry(geometry: Geometry): L.LatLngBounds | null {
 
 const MAP_FLY_DURATION = 0.4;
 
+ // React component rendering FitBoundsOnSelect.
 function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | null }) {
     const map = useMap();
 
@@ -152,6 +166,7 @@ function FitBoundsOnSelect({ selectedDivision }: { selectedDivision: Division | 
     return null;
 }
 
+ // React component rendering MapBackgroundClickHandler.
 function MapBackgroundClickHandler({ onBackgroundClick }: { onBackgroundClick: () => void }) {
     useMapEvents({
         click: (e) => {
@@ -459,7 +474,7 @@ function TravelMapInner({
             >
                 {showTiles && (
                     <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | Boundary data via GADM / PhilGIS / <a href="https://github.com/faeldon/philippines-json-maps" target="_blank" rel="noopener noreferrer">Faeldon</a>'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                 )}

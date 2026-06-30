@@ -1,9 +1,20 @@
-// loadExportMunicities.ts — Loads municipality geometry needed for a scoped map export.
+// Loads municipality geometry needed for a scoped map export.
 
 import { fetchMunicitiesByProvince } from "../services/mapApi";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON } from "../types";
 import type { MapExportLevel, MapExportScope } from "../types/mapExport";
 
+ /**
+  * Loads the detailed GeoJSON boundary coordinates for all municipalities within the target export scope.
+  * Resolves necessary parent province associations and fetches datasets in parallel where needed.
+  * @param level - The target export level (only retrieves coordinates when level is 'municipality').
+  * @param scope - The configuration details specifying whether it's 'all', 'pick', 'inRegion', or 'inProvince'.
+  * @param entityIds - Flat array of target municipal IDs.
+  * @param provinces - List of provincial metadata.
+  * @param municityMeta - List of municipal metadata.
+  * @param cachedMunicities - Currently cached list of already loaded municipalities to avoid redundant network requests.
+  * @returns A promise resolving to an array of municipal GeoJSON rows with active boundaries.
+ */
 export async function loadMunicitiesForExport(
     level: MapExportLevel,
     scope: MapExportScope,

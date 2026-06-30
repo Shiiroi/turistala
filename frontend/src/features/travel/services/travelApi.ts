@@ -1,4 +1,4 @@
-// travelApi.ts — Supabase queries and mutations for user travel records.
+// Supabase queries and mutations for user travel records.
 
 import { supabase } from "../../../config/supabase";
 import type { Goal, Journal, Place, VisitedPlace } from "../types";
@@ -20,6 +20,11 @@ interface DbVisited {
     visited_at: string;
 }
 
+ /**
+  * Performs operations for toGoal in travelApi.ts.
+  * @param row - Parameter representing row.
+  * @returns Value or promise returned by toGoal.
+ */
 function toGoal(row: DbGoal): Goal {
     return {
         id: row.id,
@@ -30,6 +35,11 @@ function toGoal(row: DbGoal): Goal {
     };
 }
 
+ /**
+  * Performs operations for toVisited in travelApi.ts.
+  * @param row - Parameter representing row.
+  * @returns Value or promise returned by toVisited.
+ */
 function toVisited(row: DbVisited): VisitedPlace {
     return {
         id: row.id,
@@ -38,6 +48,12 @@ function toVisited(row: DbVisited): VisitedPlace {
     };
 }
 
+ /**
+  * Retrieves the list of travel goals established by the user.
+  * Ordered by creation date (newest first).
+  * @param userId - The ID of the user.
+  * @returns A promise resolving to an array of user goals.
+ */
 export async function fetchUserGoals(userId: string): Promise<Goal[]> {
     const { data, error } = await supabase
         .from("user_place_goals")
@@ -48,6 +64,12 @@ export async function fetchUserGoals(userId: string): Promise<Goal[]> {
     return ((data ?? []) as DbGoal[]).map(toGoal);
 }
 
+ /**
+  * Retrieves the list of places the user has marked as visited.
+  * Ordered by visit date in descending order.
+  * @param userId - The ID of the user.
+  * @returns A promise resolving to visited records.
+ */
 export async function fetchUserVisited(userId: string): Promise<VisitedPlace[]> {
     const { data, error } = await supabase
         .from("visited_places")
@@ -58,6 +80,12 @@ export async function fetchUserVisited(userId: string): Promise<VisitedPlace[]> 
     return ((data ?? []) as DbVisited[]).map(toVisited);
 }
 
+ /**
+  * Fetches all place records corresponding to the user's goals and visited collections.
+  * Uses a single batch query for places matching the union of these place IDs.
+  * @param userId - The ID of the user.
+  * @returns A unique list of Place objects linked to user records.
+ */
 export async function fetchUserTravelPlaces(userId: string): Promise<Place[]> {
     const [goals, visited] = await Promise.all([
         fetchUserGoals(userId),
@@ -67,6 +95,12 @@ export async function fetchUserTravelPlaces(userId: string): Promise<Place[]> {
     return fetchPlacesByIds(placeIds);
 }
 
+ /**
+  * Establishes a new travel goal target.
+  * @param userId - The ID of the user.
+  * @param placeId - The ID of the place target.
+  * @returns The newly created Goal metadata.
+ */
 export async function createGoal(userId: string, placeId: string): Promise<Goal> {
     const { data, error } = await supabase
         .from("user_place_goals")
@@ -77,6 +111,11 @@ export async function createGoal(userId: string, placeId: string): Promise<Goal>
     return toGoal(data as DbGoal);
 }
 
+ /**
+  * Marks an existing goal as completed (visited).
+  * @param userId - The ID of the user.
+  * @param goalId - The ID of the goal to mark as completed.
+ */
 export async function markGoalVisited(userId: string, goalId: string): Promise<void> {
     const { error } = await supabase
         .from("user_place_goals")
@@ -86,6 +125,11 @@ export async function markGoalVisited(userId: string, goalId: string): Promise<v
     if (error) throw error;
 }
 
+ /**
+  * Removes a travel goal.
+  * @param userId - The ID of the user.
+  * @param goalId - The ID of the goal to remove.
+ */
 export async function deleteGoal(userId: string, goalId: string): Promise<void> {
     const { error } = await supabase
         .from("user_place_goals")
@@ -95,6 +139,12 @@ export async function deleteGoal(userId: string, goalId: string): Promise<void> 
     if (error) throw error;
 }
 
+ /**
+  * Records a new visited place check-in.
+  * @param userId - The ID of the user.
+  * @param placeId - The ID of the place visited.
+  * @returns The visited record metadata.
+ */
 export async function createVisited(userId: string, placeId: string): Promise<VisitedPlace> {
     const { data, error } = await supabase
         .from("visited_places")
@@ -105,6 +155,11 @@ export async function createVisited(userId: string, placeId: string): Promise<Vi
     return toVisited(data as DbVisited);
 }
 
+ /**
+  * Deletes a visited place record.
+  * @param userId - The ID of the user.
+  * @param visitedId - The ID of the visited place record.
+ */
 export async function deleteVisited(userId: string, visitedId: string): Promise<void> {
     const { error } = await supabase
         .from("visited_places")
@@ -114,6 +169,13 @@ export async function deleteVisited(userId: string, visitedId: string): Promise<
     if (error) throw error;
 }
 
+ /**
+  * Migrates a user's anonymous guest data (stored locally) into the remote database tables.
+  * Loops through places, matches OSM IDs to prevent duplicates, creates relational mapping keys,
+  * and bulk-inserts goals, visited records, and journals linked to the user's UUID.
+  * @param userId - The ID of the authenticated user to link records to.
+  * @param demo - The guest dataset containing places, goals, visited logs, and journals.
+ */
 export async function importDemoTravelData(
     userId: string,
     demo: {

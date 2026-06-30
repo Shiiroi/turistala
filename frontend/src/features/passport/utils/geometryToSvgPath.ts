@@ -1,8 +1,13 @@
-// geometryToSvgPath.ts — GeoJSON-to-SVG path projection utilities.
+// GeoJSON-to-SVG path projection utilities.
 
 import type { Geometry } from "geojson";
 import { getGeometryBounds } from "../../../lib/geoBounds";
 
+ /**
+  * Performs operations for collectRings in geometryToSvgPath.ts.
+  * @param geometry - Parameter representing geometry.
+  * @returns Value or promise returned by collectRings.
+ */
 function collectRings(geometry: Geometry): number[][][] {
     if (geometry.type === "Polygon") {
         return geometry.coordinates;

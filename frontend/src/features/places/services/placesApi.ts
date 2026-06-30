@@ -1,4 +1,4 @@
-// placesApi.ts — Supabase client for persisted place records.
+// Supabase client for persisted place records.
 
 import { supabase } from "../../../config/supabase";
 import type { Place } from "../../travel/types";
@@ -13,6 +13,11 @@ export interface DbPlace {
     lng: number | null;
 }
 
+ /**
+  * Performs operations for toPlace in placesApi.ts.
+  * @param row - Parameter representing row.
+  * @returns Value or promise returned by toPlace.
+ */
 function toPlace(row: DbPlace): Place {
     return {
         id: row.id,
@@ -25,6 +30,11 @@ function toPlace(row: DbPlace): Place {
     };
 }
 
+ /**
+  * Service API wrapper function to fetch places by ids.
+  * @param ids - Parameter representing ids.
+  * @returns Value or promise returned by fetchPlacesByIds.
+ */
 export async function fetchPlacesByIds(ids: string[]): Promise<Place[]> {
     if (ids.length === 0) return [];
     const { data, error } = await supabase.from("places").select("*").in("id", ids);

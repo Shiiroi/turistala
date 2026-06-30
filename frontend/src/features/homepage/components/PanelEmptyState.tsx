@@ -1,4 +1,4 @@
-// PanelEmptyState.tsx — Placeholder when no division is selected.
+// Placeholder when no division is selected.
 // Prompts the user to click a region, province, or municipality on the map to begin exploring and journaling.
 
 export function PanelEmptyState() {

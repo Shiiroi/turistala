@@ -1,4 +1,4 @@
-// AuthProvider.tsx — Root wrapper that subscribes to Supabase auth state.
+// Root wrapper that subscribes to Supabase auth state.
 
 import { useAuthSession } from "../hooks/useAuthSession";
 

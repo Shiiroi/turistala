@@ -1,4 +1,4 @@
-// types.ts — Shared type definitions for passport progress tracking.
+// Shared type definitions for passport progress tracking.
 
 import type { ExploreViewTab } from "../homepage/components/divisionExploreUtils";
 

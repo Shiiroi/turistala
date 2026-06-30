@@ -1,4 +1,4 @@
-// ResetPasswordPage.tsx — New password entry route after a reset link.
+// New password entry route after a reset link.
 // Validates matching password fields and updates the account password via auth.
 
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { AuthBackLink, AuthCard, AuthShell } from "../features/auth/components/A
 import { AuthBrandHeader } from "../features/auth/components/AuthBrandHeader";
 import { useUpdatePassword } from "../features/auth/hooks/useAuthSession";
 
+ // React component rendering ResetPasswordPage.
 export function ResetPasswordPage() {
     const navigate = useNavigate();
     const updatePassword = useUpdatePassword();

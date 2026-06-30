@@ -1,3 +1,8 @@
+-- Legacy SQL snippet providing spatial geometry intersection utility for DB province layers.
+-- Accomplishes matching and updating a province's geometry by intersecting its centroid with a target GeoJSON feature.
+-- Expected parameters:
+-- - target_geometry (jsonb): The GeoJSON coordinate structure to match and insert.
+-- Upstream dependencies: Legacy script requiring PostGIS extension and geo_json spatial columns.
 CREATE OR REPLACE FUNCTION public.patch_province_by_spatial_match(
   target_geometry jsonb
 )

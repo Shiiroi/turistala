@@ -1,4 +1,4 @@
-// JournalFeed.tsx — Placeholder for the journal entry feed view.
+// Placeholder for the journal entry feed view.
 
 export function JournalFeed() {
     return (

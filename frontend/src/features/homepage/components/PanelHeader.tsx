@@ -1,4 +1,4 @@
-// PanelHeader.tsx — Navigation header for nested panel views.
+// Navigation header for nested panel views.
 
 import { ChevronLeft, X } from "lucide-react";
 import { CloseButton } from "../../../components/ui/CloseButton";
@@ -11,6 +11,7 @@ interface PanelHeaderProps {
     title?: string;
 }
 
+ // React component rendering PanelHeader.
 export function PanelHeader({ onBack, backLabel, onClose, title }: PanelHeaderProps) {
     return (
         <div className="mb-4 flex items-center justify-between gap-2">

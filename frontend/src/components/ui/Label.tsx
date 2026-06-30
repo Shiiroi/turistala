@@ -1,4 +1,4 @@
-// Label.tsx — Uppercase mono-spaced field label.
+// Uppercase mono-spaced field label.
 // Provides consistent typographic styling for form labels and section headings.
 
 import type { ReactNode } from "react";
@@ -10,6 +10,7 @@ interface LabelProps {
     as?: "div" | "span" | "label";
 }
 
+ // React component rendering Label.
 export function Label({ children, className, as: Tag = "div" }: LabelProps) {
     return (
         <Tag

@@ -1,4 +1,4 @@
-// WelcomePage.tsx — Landing route offering demo, sign-in, and sign-up entry points.
+// Landing route offering demo, sign-in, and sign-up entry points.
 
 import { Link, Navigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
@@ -10,6 +10,7 @@ import { useAuthSession } from "../features/auth/hooks/useAuthSession";
 import { setDemoMode } from "../features/travel/demoStorage";
 import { cn } from "../lib/cn";
 
+ // React component rendering WelcomePage.
 export function WelcomePage() {
     const { data: session, isLoading } = useAuthSession();
 

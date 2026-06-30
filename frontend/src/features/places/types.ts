@@ -1,4 +1,4 @@
-// types.ts — Shared type definitions for place search.
+// Shared type definitions for place search.
 
 export interface OsmSearchResult {
     osm_id: string;

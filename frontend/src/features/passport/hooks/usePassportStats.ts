@@ -1,4 +1,4 @@
-// usePassportStats.ts — Memoized hook for client-side passport statistics.
+// Memoized hook for client-side passport statistics.
 
 import { useMemo } from "react";
 import type { MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";

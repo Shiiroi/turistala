@@ -1,4 +1,4 @@
-// PassportDecor.tsx — Decorative SVG marks for the live passport UI.
+// Decorative SVG marks for the live passport UI.
 
 export function StylizedSunMark({ size = 64, className }: { size?: number; className?: string }) {
     const rays = Array.from({ length: 8 }, (_, i) => {
@@ -37,6 +37,7 @@ export function StylizedSunMark({ size = 64, className }: { size?: number; class
     );
 }
 
+ // React component rendering PlaneMark.
 export function PlaneMark({ size = 24 }: { size?: number }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden fill="none">

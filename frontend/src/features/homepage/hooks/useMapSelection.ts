@@ -1,9 +1,13 @@
-// useMapSelection.ts — Map hover/selection state and division converters.
+// Map hover/selection state and division converters.
 
 import { useCallback, useRef, useState } from "react";
 import type { Division, MapMode } from "../types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
 
+ /**
+  * React hook providing states and handlers for mapselection.
+  * @returns Value or promise returned by useMapSelection.
+ */
 export function useMapSelection() {
     const [hoveredDivision, setHoveredDivision] = useState<Division | null>(null);
     const [selectedDivision, setSelectedDivision] = useState<Division | null>(null);
@@ -31,6 +35,11 @@ export function useMapSelection() {
     };
 }
 
+ /**
+  * Performs operations for regionToDivision in useMapSelection.ts.
+  * @param r - Parameter representing r.
+  * @returns Value or promise returned by regionToDivision.
+ */
 export function regionToDivision(r: Region): Division {
     return {
         id: r.id,
@@ -41,6 +50,11 @@ export function regionToDivision(r: Region): Division {
     };
 }
 
+ /**
+  * Performs operations for provinceToDivision in useMapSelection.ts.
+  * @param p - Parameter representing p.
+  * @returns Value or promise returned by provinceToDivision.
+ */
 export function provinceToDivision(p: ProvinceGeoJSON): Division {
     return {
         id: p.id,
@@ -52,6 +66,11 @@ export function provinceToDivision(p: ProvinceGeoJSON): Division {
     };
 }
 
+ /**
+  * Performs operations for municityToDivision in useMapSelection.ts.
+  * @param m - Parameter representing m.
+  * @returns Value or promise returned by municityToDivision.
+ */
 export function municityToDivision(m: MunicityGeoJSON): Division {
     return {
         id: m.id,

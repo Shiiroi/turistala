@@ -1,4 +1,4 @@
-// HomePageLayout.tsx — Split-view shell for the map and detail sidebar.
+// Split-view shell for the map and detail sidebar.
 
 import type { ReactNode } from "react";
 import { cn } from "../../../lib/cn";
@@ -9,6 +9,7 @@ interface HomePageLayoutProps {
     panelOpen: boolean;
 }
 
+ // React component rendering HomePageLayout.
 export function HomePageLayout({ mapSection, detailPanel, panelOpen }: HomePageLayoutProps) {
     return (
         <div className="relative flex h-dvh w-screen overflow-hidden bg-parchment">

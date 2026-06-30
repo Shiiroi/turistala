@@ -1,4 +1,4 @@
-// MapToolsPanel.tsx — Collapsible panel for map view mode, progress metric, and heatmap.
+// Collapsible panel for map view mode, progress metric, and heatmap.
 
 import { ChevronDown } from "lucide-react";
 import { CloseButton } from "../../../components/ui/CloseButton";

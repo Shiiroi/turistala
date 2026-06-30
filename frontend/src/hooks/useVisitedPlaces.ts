@@ -1,2 +1,2 @@
-// useVisitedPlaces.ts — Reserved hook module for visited-place state.
+// Reserved hook module for visited-place state.
 

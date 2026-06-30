@@ -1,4 +1,4 @@
-// SearchModal.tsx — Name search dialog for regions, provinces, or municipalities.
+// Name search dialog for regions, provinces, or municipalities.
 
 import { useMemo, useState } from "react";
 import { Input } from "../../../components/ui/Input";

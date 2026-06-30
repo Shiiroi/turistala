@@ -1,4 +1,4 @@
-// seeder.ts — CLI script to seed Supabase tables from PSGC CSV files.
+// Seeds Supabase PostgreSQL tables with administrative metadata (regions, provinces, municities) parsed from local CSV files.
 
 import { createClient } from "@supabase/supabase-js";
 import * as fs from "fs";
@@ -13,6 +13,7 @@ const supabase = createClient(process.env.VITE_SUPABASE_URL!, process.env.SUPABA
 
 type CsvRow = Record<string, string>;
 
+// Streams and parses a local CSV file into a Promise of key-value rows.
 function parseCsv(filePath: string): Promise<CsvRow[]> {
     return new Promise((resolve, reject) => {
         const rows: CsvRow[] = [];
@@ -56,6 +57,9 @@ type MunicityRecord = ReturnType<typeof mapMunicity>;
 
 // ── Diagnostic helpers ────────────────────────────────────────────────────
 
+// Audits municipal data records before seeding, checking for constraint violations like duplicate IDs/codes or invalid type designations.
+// Parameters:
+// - records: The mapped municipality array to check.
 function auditMunicities(records: MunicityRecord[]) {
     // 1. Show all distinct `type` values in the CSV
     const typeValues = [...new Set(records.map((r) => r.type))];
@@ -120,6 +124,14 @@ function auditMunicities(records: MunicityRecord[]) {
 
 // ── Seeder ────────────────────────────────────────────────────────────────
 
+// Seeds a target table by reading a local CSV, auditing if necessary, and bulk-inserting records in batch chunks.
+// Parameters:
+// - tableName: Supabase table name.
+// - fileName: CSV file name in scripts directory.
+// - mapper: Transforms CSV row records into table schemas.
+// - batchSize: Chunk size for SQL insert transactions.
+// - pauseMs: Optional throttle delay to prevent database congestion.
+// Upstream dependencies: Active Supabase Client authentication (service role access).
 async function seedTable<T>(
     tableName: string,
     fileName: string,

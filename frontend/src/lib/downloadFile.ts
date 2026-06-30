@@ -1,4 +1,4 @@
-// downloadFile.ts — Client-side JSON file download utilities.
+// Client-side JSON file download utilities.
 // Serializes data to a downloadable JSON blob and provides filename slugification for safe export names.
 
 export function downloadJsonFile(data: unknown, filename: string): void {
@@ -11,6 +11,11 @@ export function downloadJsonFile(data: unknown, filename: string): void {
     URL.revokeObjectURL(url);
 }
 
+ /**
+  * Performs operations for slugifyFilename in downloadFile.ts.
+  * @param value - Parameter representing value.
+  * @returns Value or promise returned by slugifyFilename.
+ */
 export function slugifyFilename(value: string): string {
     return value.replace(/[^a-z0-9_-]+/gi, "-").toLowerCase() || "export";
 }

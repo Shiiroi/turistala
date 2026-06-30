@@ -1,4 +1,4 @@
-// resolveExportScope.ts — Translates export scope selections into entity id sets and labels.
+// Translates export scope selections into entity id sets and labels.
 
 import type { MunicityMeta, ProvinceGeoJSON, Region } from "../types";
 import type { MapExportLevel, MapExportScope, ResolvedExportScope } from "../types/mapExport";
@@ -8,6 +8,16 @@ function nameById<T extends { id: number; name: string }>(items: T[], id: number
     return items.find((i) => i.id === id)?.name ?? `#${id}`;
 }
 
+ /**
+  * Resolves a specified map export scope/level into target entity IDs and a friendly label/slug.
+  * Filters and aggregates the corresponding municipality IDs depending on parent region or province constraints.
+  * @param level - The granularity level for the export (region, province, or municipality).
+  * @param scope - The configuration details specifying whether it's 'all', 'pick', 'inRegion', or 'inProvince'.
+  * @param regions - List of regional metadata.
+  * @param provinces - List of provincial metadata.
+  * @param municityMeta - List of municipal metadata.
+  * @returns An object containing matched entity IDs, unique municipality IDs, and a generated file label and slug.
+ */
 export function resolveExportScope(
     level: MapExportLevel,
     scope: MapExportScope,

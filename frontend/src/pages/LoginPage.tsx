@@ -1,4 +1,4 @@
-// LoginPage.tsx — Email and password sign-in route.
+// Email and password sign-in route.
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { AuthBrandHeader } from "../features/auth/components/AuthBrandHeader";
 import { useSignIn } from "../features/auth/hooks/useAuthSession";
 import { clearDemoMode, isImportDone, clearDemoData } from "../features/travel/demoStorage";
 
+ // React component rendering LoginPage.
 export function LoginPage() {
     const navigate = useNavigate();
     const signIn = useSignIn();

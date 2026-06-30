@@ -1,4 +1,4 @@
-// IconButton.tsx — Icon-only action button for toolbars and overlays.
+// Icon-only action button for toolbars and overlays.
 // Accepts a Lucide icon or custom icon node with accessible label and optional loading state.
 
 import type { ReactNode } from "react";
@@ -17,6 +17,7 @@ interface IconButtonProps {
     loading?: boolean;
 }
 
+ // React component rendering IconButton.
 export function IconButton({ icon: Icon, iconNode, label, onClick, size = 18, className, disabled = false, loading = false }: IconButtonProps) {
     const isDisabled = disabled || loading;
 

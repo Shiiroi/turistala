@@ -1,4 +1,4 @@
-// PhilippinesMap.tsx — Standalone Leaflet map for Philippine administrative divisions.
+// Leaflet map for Philippine administrative divisions.
 
 import { useMemo, useState, useCallback } from "react";
 import { MapContainer, TileLayer, GeoJSON, ZoomControl } from "react-leaflet";
@@ -43,6 +43,7 @@ interface PhilippinesMapProps {
     defaultMode?: MapMode;
 }
 
+// React component rendering PhilippinesMap.
 export function PhilippinesMap({ provinces = [], regions = [], municities = [], defaultMode = "province" }: PhilippinesMapProps) {
     const [mode, setMode] = useState<MapMode>(defaultMode);
 

@@ -1,8 +1,12 @@
-// useAuthMutations.ts — React Query mutations for Supabase auth operations.
+// React Query mutations for Supabase auth operations.
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { resetPasswordForEmail, signIn, signOut, signUp, updatePassword } from "../services/authApi";
 
+ /**
+  * React hook providing states and handlers for signin.
+  * @returns Value or promise returned by useSignIn.
+ */
 export function useSignIn() {
     const queryClient = useQueryClient();
     return useMutation({
@@ -14,6 +18,10 @@ export function useSignIn() {
     });
 }
 
+ /**
+  * React hook providing states and handlers for signup.
+  * @returns Value or promise returned by useSignUp.
+ */
 export function useSignUp() {
     const queryClient = useQueryClient();
     return useMutation({
@@ -32,6 +40,10 @@ export function useSignUp() {
     });
 }
 
+ /**
+  * React hook providing states and handlers for signout.
+  * @returns Value or promise returned by useSignOut.
+ */
 export function useSignOut() {
     const queryClient = useQueryClient();
     return useMutation({
@@ -43,12 +55,20 @@ export function useSignOut() {
     });
 }
 
+ /**
+  * React hook providing states and handlers for resetpasswordrequest.
+  * @returns Value or promise returned by useResetPasswordRequest.
+ */
 export function useResetPasswordRequest() {
     return useMutation({
         mutationFn: (email: string) => resetPasswordForEmail(email),
     });
 }
 
+ /**
+  * React hook providing states and handlers for updatepassword.
+  * @returns Value or promise returned by useUpdatePassword.
+ */
 export function useUpdatePassword() {
     return useMutation({
         mutationFn: (newPassword: string) => updatePassword(newPassword),

@@ -1,4 +1,4 @@
-// StampDetailPanel.tsx — Inline panel for region or province stamp details.
+// Inline panel for region or province stamp details.
 
 import { Download, MapPin } from "lucide-react";
 import { Button } from "../../../components/ui/Button";

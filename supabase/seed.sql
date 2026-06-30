@@ -1,3 +1,4 @@
+-- Truncates dynamic and reference tables prior to running the import pipeline or developer seed scripts.
 BEGIN;
 
 TRUNCATE

@@ -1,4 +1,4 @@
-// JournalPhotoPicker.tsx — Photo attachment control for journal forms.
+// Photo attachment control for journal forms.
 
 import { useRef, useState } from "react";
 import { ImagePlus, X } from "lucide-react";
@@ -154,6 +154,7 @@ export function JournalPhotoPicker({
     );
 }
 
+ // React component rendering StorageUsageBar.
 function StorageUsageBar({ bytesUsed }: { bytesUsed: number }) {
     const quota = JOURNAL_STORAGE_QUOTA_BYTES;
     const ratio = Math.min(1, bytesUsed / quota);

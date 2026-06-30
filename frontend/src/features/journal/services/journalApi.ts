@@ -1,4 +1,4 @@
-// journalApi.ts — Supabase client for journal entries and photos.
+// Supabase client for journal entries and photos.
 
 import { supabase } from "../../../config/supabase";
 import {
@@ -26,6 +26,12 @@ interface DbJournalPhoto {
     byte_size: number | null;
 }
 
+ /**
+  * Performs operations for toJournal in journalApi.ts.
+  * @param row - Parameter representing row.
+  * @param photos - Parameter representing photos.
+  * @returns Value or promise returned by toJournal.
+ */
 function toJournal(row: DbJournal, photos: JournalPhoto[]): Journal {
     return {
         id: row.id,
@@ -38,6 +44,11 @@ function toJournal(row: DbJournal, photos: JournalPhoto[]): Journal {
     };
 }
 
+ /**
+  * Performs operations for storagePathFromUrl in journalApi.ts.
+  * @param url - Parameter representing url.
+  * @returns Value or promise returned by storagePathFromUrl.
+ */
 function storagePathFromUrl(url: string): string {
     const marker = "/journal-images/";
     const idx = url.indexOf(marker);
@@ -45,6 +56,13 @@ function storagePathFromUrl(url: string): string {
     return decodeURIComponent(url.slice(idx + marker.length));
 }
 
+ /**
+  * Verifies that a specific journal entry belongs to the given user.
+  * Throws an error if the journal does not exist or belongs to another user.
+  * @param userId - The ID of the authenticated user.
+  * @param journalId - The ID of the journal entry.
+  * @throws Error if the entry is not found or unauthorized.
+ */
 async function assertJournalOwnership(userId: string, journalId: string): Promise<void> {
     const { data, error } = await supabase
         .from("journal_entries")
@@ -56,6 +74,11 @@ async function assertJournalOwnership(userId: string, journalId: string): Promis
     if (!data) throw new Error("Journal not found");
 }
 
+ /**
+  * Adjusts the user's recorded storage bytes used counter.
+  * @param userId - The ID of the user.
+  * @param delta - The amount of bytes to add (positive) or subtract (negative).
+ */
 async function incrementStorageBytes(userId: string, delta: number): Promise<void> {
     const used = await fetchUserStorageUsage(userId);
     const { error } = await supabase
@@ -65,6 +88,11 @@ async function incrementStorageBytes(userId: string, delta: number): Promise<voi
     if (error) throw error;
 }
 
+ /**
+  * Fetches the total storage bytes used by the user for uploaded journal photos.
+  * @param userId - The ID of the user.
+  * @returns A promise resolving to the number of bytes used.
+ */
 export async function fetchUserStorageUsage(userId: string): Promise<number> {
     const { data, error } = await supabase
         .from("users")
@@ -75,6 +103,12 @@ export async function fetchUserStorageUsage(userId: string): Promise<number> {
     return data?.storage_bytes_used ?? 0;
 }
 
+ /**
+  * Retrieves all journal entries and their associated photo sub-tables for a given user.
+  * Ordered by visit date in descending order.
+  * @param userId - The ID of the user.
+  * @returns A list of parsed Journal objects.
+ */
 export async function fetchJournalEntries(userId: string): Promise<Journal[]> {
     const { data: entries, error } = await supabase
         .from("journal_entries")
@@ -108,6 +142,12 @@ export async function fetchJournalEntries(userId: string): Promise<Journal[]> {
     return rows.map((r) => toJournal(r, photosByJournal.get(r.id) ?? []));
 }
 
+ /**
+  * Creates a new journal entry in the database.
+  * @param userId - The ID of the user.
+  * @param data - The entry details (place_id, title, content, visit_date).
+  * @returns The newly created Journal entry (without photos).
+ */
 export async function createJournalEntry(
     userId: string,
     data: {
@@ -132,6 +172,12 @@ export async function createJournalEntry(
     return toJournal(row as DbJournal, []);
 }
 
+ /**
+  * Updates an existing journal entry's text fields (title, content, visit_date).
+  * @param userId - The ID of the user (for ownership verification).
+  * @param journalId - The ID of the entry to modify.
+  * @param updates - Partial parameters to update.
+ */
 export async function updateJournalEntry(
     userId: string,
     journalId: string,
@@ -145,6 +191,17 @@ export async function updateJournalEntry(
     if (error) throw error;
 }
 
+ /**
+  * Uploads a journal photo to the storage bucket, compresses it to WebP, updates the user's
+  * storage quota, and creates a database row in the journal_photos table.
+  * Enforces the storage byte quota prior to processing.
+  * @param userId - The ID of the user.
+  * @param journalId - The ID of the parent journal entry.
+  * @param file - The image file upload candidate.
+  * @param displayOrder - The sorting index for multi-image displays. Defaults to 0.
+  * @returns The newly created JournalPhoto metadata.
+  * @throws Error if quota is exceeded or upload/database inserts fail.
+ */
 export async function uploadJournalPhoto(
     userId: string,
     journalId: string,
@@ -211,6 +268,12 @@ export async function uploadJournalImage(
     return uploadJournalPhoto(userId, journalId, file, displayOrder);
 }
 
+ /**
+  * Deletes a journal photo from both the Supabase Storage bucket and the database table.
+  * Reclaims the deleted photo's file size from the user's storage quota.
+  * @param userId - The ID of the user.
+  * @param photoId - The ID of the photo to delete.
+ */
 export async function deleteJournalPhoto(userId: string, photoId: string): Promise<void> {
     const { data: photo, error: fetchError } = await supabase
         .from("journal_photos")
@@ -239,6 +302,11 @@ export async function deleteJournalPhoto(userId: string, photoId: string): Promi
     }
 }
 
+ /**
+  * Deletes all photos associated with a journal entry.
+  * @param userId - The ID of the user.
+  * @param journalId - The ID of the parent journal entry.
+ */
 async function deleteJournalPhotosForEntry(userId: string, journalId: string): Promise<void> {
     const { data: photos, error } = await supabase
         .from("journal_photos")
@@ -251,6 +319,12 @@ async function deleteJournalPhotosForEntry(userId: string, journalId: string): P
     }
 }
 
+ /**
+  * Deletes a journal entry and recursively cleans up all its associated photos from
+  * storage buckets and tables, returning quota allocations back to the user.
+  * @param userId - The ID of the user.
+  * @param journalId - The ID of the entry to delete.
+ */
 export async function deleteJournalEntry(userId: string, journalId: string): Promise<void> {
     await deleteJournalPhotosForEntry(userId, journalId);
 

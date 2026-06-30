@@ -1,4 +1,4 @@
-// mapApi.ts — Public API for loading map layers from storage or Supabase.
+// Public API for loading map layers from storage or Supabase.
 
 import { supabase } from "../../../config/supabase";
 import type { ProvinceGeoJSON, MunicityGeoJSON, MunicityMeta, Region } from "../types";
@@ -10,10 +10,18 @@ import {
     fetchRegionsFromStorage,
 } from "./geoStorage";
 
+ /**
+  * Service API wrapper function to fetch regions.
+  * @returns Value or promise returned by fetchRegions.
+ */
 export async function fetchRegions(): Promise<Region[]> {
     return fetchRegionsFromStorage();
 }
 
+ /**
+  * Service API wrapper function to fetch provinces.
+  * @returns Value or promise returned by fetchProvinces.
+ */
 export async function fetchProvinces(): Promise<ProvinceGeoJSON[]> {
     return fetchProvincesFromStorage();
 }
@@ -28,6 +36,10 @@ export async function fetchMunicitiesMeta(): Promise<MunicityMeta[]> {
     }
 }
 
+ /**
+  * Service API wrapper function to fetch municities meta from db.
+  * @returns Value or promise returned by fetchMunicitiesMetaFromDb.
+ */
 async function fetchMunicitiesMetaFromDb(): Promise<MunicityMeta[]> {
     const BATCH_SIZE = 1000;
     const all: MunicityMeta[] = [];
@@ -50,6 +62,11 @@ async function fetchMunicitiesMetaFromDb(): Promise<MunicityMeta[]> {
     return all;
 }
 
+ /**
+  * Service API wrapper function to fetch municities meta by province.
+  * @param provinceId - Parameter representing provinceId.
+  * @returns Value or promise returned by fetchMunicitiesMetaByProvince.
+ */
 export async function fetchMunicitiesMetaByProvince(provinceId: number): Promise<MunicityMeta[]> {
     const { data, error } = await supabase
         .from("municities")
@@ -70,6 +87,11 @@ export async function fetchMunicitiesGeometry(
     return all;
 }
 
+ /**
+  * Service API wrapper function to fetch municity by id.
+  * @param id - Parameter representing id.
+  * @returns Value or promise returned by fetchMunicityById.
+ */
 export async function fetchMunicityById(id: number): Promise<MunicityGeoJSON | null> {
     const metaList = await fetchMunicitiesMetaFromStorage();
     const meta = metaList.find((m) => m.id === id);
@@ -82,11 +104,21 @@ export async function fetchMunicityById(id: number): Promise<MunicityGeoJSON | n
     return provinceRows.find((m) => m.id === id) ?? null;
 }
 
+ /**
+  * Service API wrapper function to fetch provinces by region.
+  * @param regionId - Parameter representing regionId.
+  * @returns Value or promise returned by fetchProvincesByRegion.
+ */
 export async function fetchProvincesByRegion(regionId: number): Promise<ProvinceGeoJSON[]> {
     const provinces = await fetchProvincesFromStorage();
     return provinces.filter((p) => p.region_id === regionId);
 }
 
+ /**
+  * Service API wrapper function to fetch municities by province.
+  * @param provinceId - Parameter representing provinceId.
+  * @returns Value or promise returned by fetchMunicitiesByProvince.
+ */
 export async function fetchMunicitiesByProvince(provinceId: number): Promise<MunicityGeoJSON[]> {
     return fetchGeoLayerFromStorage<MunicityGeoJSON[]>(
         `municities/province-${provinceId}.json`,

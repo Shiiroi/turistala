@@ -1,4 +1,4 @@
-// useJournalMutation.ts — React Query hooks for journal entry CRUD.
+// React Query hooks for journal entry CRUD.
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -8,6 +8,11 @@ import {
     deleteJournalEntry,
 } from "../services/journalApi";
 
+ /**
+  * React hook providing states and handlers for journalentries.
+  * @param userId - Parameter representing userId.
+  * @returns Value or promise returned by useJournalEntries.
+ */
 export function useJournalEntries(userId: string | undefined) {
     return useQuery({
         queryKey: ["journal-entries", userId],
@@ -16,6 +21,11 @@ export function useJournalEntries(userId: string | undefined) {
     });
 }
 
+ /**
+  * React hook providing states and handlers for createjournalentry.
+  * @param userId - Parameter representing userId.
+  * @returns Value or promise returned by useCreateJournalEntry.
+ */
 export function useCreateJournalEntry(userId: string) {
     const queryClient = useQueryClient();
     return useMutation({
@@ -32,6 +42,11 @@ export function useCreateJournalEntry(userId: string) {
     });
 }
 
+ /**
+  * React hook providing states and handlers for updatejournalentry.
+  * @param userId - Parameter representing userId.
+  * @returns Value or promise returned by useUpdateJournalEntry.
+ */
 export function useUpdateJournalEntry(userId: string) {
     const queryClient = useQueryClient();
     return useMutation({
@@ -49,6 +64,11 @@ export function useUpdateJournalEntry(userId: string) {
     });
 }
 
+ /**
+  * React hook providing states and handlers for deletejournalentry.
+  * @param userId - Parameter representing userId.
+  * @returns Value or promise returned by useDeleteJournalEntry.
+ */
 export function useDeleteJournalEntry(userId: string) {
     const queryClient = useQueryClient();
     return useMutation({

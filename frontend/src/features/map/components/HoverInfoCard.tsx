@@ -1,4 +1,4 @@
-// HoverInfoCard.tsx — Top-left map overlay showing hovered division or default branding.
+// Top-left map overlay showing hovered division or default branding.
 
 import { TuristalaLogo } from "../../../components/TuristalaLogo";
 import { cn } from "../../../lib/cn";
@@ -12,6 +12,7 @@ interface HoverInfoCardProps {
 const textShadowClass =
     "[text-shadow:0_1px_3px_rgba(251,247,240,1),0_0_12px_rgba(251,247,240,0.95),0_2px_4px_rgba(44,36,22,0.15)]";
 
+ // React component rendering HoverInfoCard.
 export function HoverInfoCard({ hoveredDivision }: HoverInfoCardProps) {
     return (
         <div className="pointer-events-none absolute left-4 top-4 z-[1000] max-w-[360px]">

@@ -1,4 +1,4 @@
-// types.ts — Shared TypeScript shapes for Philippine map geographic entities.
+// Shared TypeScript shapes for Philippine map geographic entities.
 
 import type { Geometry } from "geojson";
 

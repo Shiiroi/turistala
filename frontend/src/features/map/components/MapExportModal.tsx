@@ -1,4 +1,4 @@
-// MapExportModal.tsx — Configuration dialog for PNG or JSON map and travel exports.
+// Configuration dialog for PNG or JSON map and travel exports.
 
 import { useMemo, useState } from "react";
 import { Button } from "../../../components/ui/Button";
@@ -45,10 +45,19 @@ const PROGRESS_OPTIONS: { value: MapExportProgressBy; label: string }[] = [
     { value: "places", label: "Places" },
 ];
 
+ // Performs operations for defaultScopeMode in MapExportModal.tsx.
 function defaultScopeMode(): ScopeMode {
     return "all";
 }
 
+ /**
+  * Performs operations for scopeForMode in MapExportModal.tsx.
+  * @param mode - Parameter representing mode.
+  * @param _level - Parameter representing _level.
+  * @param pickIds - Parameter representing pickIds.
+  * @param regionId - Parameter representing regionId.
+  * @param provinceId - Parameter representing provinceId.
+ */
 function scopeForMode(mode: ScopeMode, _level: MapExportLevel, pickIds: number[], regionId: number | null, provinceId: number | null): MapExportScope {
     if (mode === "all") return { kind: "all" };
     if (mode === "pick") return { kind: "pick", ids: pickIds };
@@ -57,6 +66,10 @@ function scopeForMode(mode: ScopeMode, _level: MapExportLevel, pickIds: number[]
     return { kind: "all" };
 }
 
+ /**
+  * Performs operations for scopeModesForLevel in MapExportModal.tsx.
+  * @param level - Parameter representing level.
+ */
 function scopeModesForLevel(level: MapExportLevel): { value: ScopeMode; label: string }[] {
     switch (level) {
         case "region":

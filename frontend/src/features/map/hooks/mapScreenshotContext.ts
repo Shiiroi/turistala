@@ -1,4 +1,4 @@
-// mapScreenshotContext.ts — React context wiring map instances to screenshot capture.
+// React context wiring map instances to screenshot capture.
 
 import { createContext, type RefObject } from "react";
 

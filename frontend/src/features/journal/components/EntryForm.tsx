@@ -1,4 +1,4 @@
-// EntryForm.tsx — Placeholder for journal entry create/edit form.
+// Placeholder for journal entry create/edit form.
 
 export function EntryForm() {
     return (

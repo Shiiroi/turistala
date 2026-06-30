@@ -1,4 +1,4 @@
-// divisionExploreUtils.ts — Explore tab configuration and progress metrics.
+// Explore tab configuration and progress metrics.
 
 import type { Division } from "../types";
 import type { MockPlace, TravelStore } from "../../travel/types";
@@ -27,6 +27,11 @@ function isProvinceExplored(
     );
 }
 
+ /**
+  * Performs operations for getAvailableViewTabs in divisionExploreUtils.ts.
+  * @param level - Parameter representing level.
+  * @returns Value or promise returned by getAvailableViewTabs.
+ */
 export function getAvailableViewTabs(level: Division["level"]): ExploreViewTab[] {
     switch (level) {
         case "region":
@@ -38,6 +43,11 @@ export function getAvailableViewTabs(level: Division["level"]): ExploreViewTab[]
     }
 }
 
+ /**
+  * Performs operations for getDefaultViewTab in divisionExploreUtils.ts.
+  * @param level - Parameter representing level.
+  * @returns Value or promise returned by getDefaultViewTab.
+ */
 export function getDefaultViewTab(level: Division["level"]): ExploreViewTab {
     switch (level) {
         case "region":

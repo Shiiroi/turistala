@@ -1,4 +1,4 @@
-// PassportOptionsModal.tsx — Settings modal for passport sections.
+// Settings modal for passport sections.
 
 import { Modal } from "../../../components/ui/Modal";
 import { PillTabs } from "../../../components/ui/PillTabs";

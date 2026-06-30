@@ -1,4 +1,7 @@
--- Auto-create public.users row when auth user signs up
+-- Connects auth user creation triggers and configures journal media buckets and policies.
+-- Accomplishes auto-creation of a corresponding row in public.users when a new auth.users record is created.
+-- Expected parameters: Called as an AFTER INSERT trigger function on auth.users; receives NEW record.
+-- Upstream dependencies: Triggered by supabase auth signup flows.
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql

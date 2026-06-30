@@ -1,4 +1,4 @@
-// useMockTravelStore.ts — Deprecated re-export of the demo travel store.
+// Deprecated re-export of the demo travel store.
 // Preserves the legacy useMockTravelStore name for callers migrating to useDemoTravelStore or useTravelStore.
 
 // deprecated: use useDemoTravelStore or useTravelStore

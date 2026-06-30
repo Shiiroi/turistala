@@ -1,4 +1,4 @@
-// divisionPlaces.ts — Geographic scoping helpers for places and divisions.
+// Geographic scoping helpers for places and divisions.
 
 import type { Division } from "../types";
 import type { MockPlace } from "../../travel/types";
@@ -24,6 +24,12 @@ export function municityIdsInRegion(
     return ids;
 }
 
+ /**
+  * Performs operations for municityIdsInProvince in divisionPlaces.ts.
+  * @param provinceId - Parameter representing provinceId.
+  * @param municityMeta - Parameter representing municityMeta.
+  * @returns Value or promise returned by municityIdsInProvince.
+ */
 export function municityIdsInProvince(provinceId: number, municityMeta: MunicityMeta[]): Set<number> {
     return new Set(municityMeta.filter((m) => m.province_id === provinceId).map((m) => m.id));
 }
@@ -49,6 +55,12 @@ export function placesInDivision(
     }
 }
 
+ /**
+  * Performs operations for resolveRegionId in divisionPlaces.ts.
+  * @param division - Parameter representing division.
+  * @param provinces - Parameter representing provinces.
+  * @returns Value or promise returned by resolveRegionId.
+ */
 export function resolveRegionId(division: Division, provinces: ProvinceGeoJSON[]): number | null {
     if (division.level === "region") return division.id;
     if (division.level === "province") return division.region_id ?? null;
@@ -58,6 +70,11 @@ export function resolveRegionId(division: Division, provinces: ProvinceGeoJSON[]
     return division.region_id ?? null;
 }
 
+ /**
+  * Performs operations for resolveProvinceId in divisionPlaces.ts.
+  * @param division - Parameter representing division.
+  * @returns Value or promise returned by resolveProvinceId.
+ */
 export function resolveProvinceId(division: Division): number | null {
     if (division.level === "province") return division.id;
     if (division.level === "municipality") return division.province_id;

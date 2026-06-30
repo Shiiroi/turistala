@@ -1,4 +1,4 @@
-// HiddenMapExportHost.tsx — Off-screen renderer that produces scoped PNG map exports.
+// Off-screen renderer that produces scoped PNG map exports.
 
 import { useEffect, useMemo, useState } from "react";
 import type { MapMode } from "../../homepage/types";

@@ -1,4 +1,4 @@
-// PlaceSearchCombobox.tsx — Municipality-scoped place search combobox.
+// Municipality-scoped place search combobox.
 
 import { useState } from "react";
 import { usePlaceSearch, getGeometryBounds } from "../hooks/usePlaceSearch";

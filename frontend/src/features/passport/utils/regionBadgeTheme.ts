@@ -1,4 +1,4 @@
-// regionBadgeTheme.ts — Visual theme for division stamp badges.
+// Visual theme for division stamp badges.
 
 const BADGE_PALETTE = [
     "#c0622f",
@@ -21,6 +21,11 @@ const BADGE_PALETTE = [
     "#606c38",
 ];
 
+ /**
+  * Performs operations for divisionBadgeColor in regionBadgeTheme.ts.
+  * @param id - Parameter representing id.
+  * @returns Value or promise returned by divisionBadgeColor.
+ */
 export function divisionBadgeColor(id: number): string {
     return BADGE_PALETTE[id % BADGE_PALETTE.length];
 }
@@ -63,6 +68,11 @@ const NAME_ABBREVS: Record<string, string> = {
     "Bangsamoro Autonomous Region In Muslim Mindanao (BARMM)": "BARMM",
 };
 
+ /**
+  * Performs operations for shortDivisionName in regionBadgeTheme.ts.
+  * @param name - Parameter representing name.
+  * @returns Value or promise returned by shortDivisionName.
+ */
 export function shortDivisionName(name: string): string {
     if (NAME_ABBREVS[name]) return NAME_ABBREVS[name];
     const leadingRegion = name.match(/^(Region [IVX\d]+(?:-[A-Z])?)/i);

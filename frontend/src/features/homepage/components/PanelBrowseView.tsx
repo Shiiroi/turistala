@@ -1,4 +1,4 @@
-// PanelBrowseView.tsx — Primary browse mode for the detail sidebar.
+// Primary browse mode for the detail sidebar.
 
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";

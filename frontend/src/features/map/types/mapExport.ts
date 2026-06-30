@@ -1,4 +1,4 @@
-// mapExport.ts — Types for map export configuration, jobs, and JSON export payloads.
+// Types for map export configuration, jobs, and JSON export payloads.
 
 import type { DemoTravelData } from "../../travel/types";
 

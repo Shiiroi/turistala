@@ -1,3 +1,4 @@
+-- Core database initialization schema (users, places, visited/goals, journal logs).
 SELECT pg_catalog.set_config('search_path', 'public, extensions, adm, auth', false);
 
 DROP VIEW  IF EXISTS public.municities_enriched  CASCADE;

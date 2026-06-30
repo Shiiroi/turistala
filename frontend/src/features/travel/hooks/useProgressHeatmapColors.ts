@@ -1,4 +1,4 @@
-// useProgressHeatmapColors.ts — Progress-driven heatmap colors from travel data.
+// Progress-driven heatmap colors from travel data.
 
 import { useMemo } from "react";
 import type { MapMode } from "../../homepage/types";
@@ -7,11 +7,23 @@ import type { TravelStore } from "../types";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON } from "../../map/types";
 import { buildHeatmapPalette, getHeatmapColorFromRatio } from "./useMockHeatmapData";
 
+ /**
+  * Performs operations for ratioColor in useProgressHeatmapColors.ts.
+  * @param visited - Parameter representing visited.
+  * @param total - Parameter representing total.
+  * @param palette - Parameter representing palette.
+  * @returns Value or promise returned by ratioColor.
+ */
 function ratioColor(visited: number, total: number, palette: string[]): string {
     if (total === 0) return palette[0];
     return getHeatmapColorFromRatio(visited / total, palette);
 }
 
+ /**
+  * Performs operations for indexPlacesByMunicity in useProgressHeatmapColors.ts.
+  * @param places - Parameter representing places.
+  * @returns Value or promise returned by indexPlacesByMunicity.
+ */
 function indexPlacesByMunicity(places: TravelStore["places"]): Map<number, TravelStore["places"]> {
     const byMunicity = new Map<number, TravelStore["places"]>();
     for (const place of places) {
@@ -25,6 +37,11 @@ function indexPlacesByMunicity(places: TravelStore["places"]): Map<number, Trave
     return byMunicity;
 }
 
+ /**
+  * Performs operations for indexMunisByProvince in useProgressHeatmapColors.ts.
+  * @param municityMeta - Parameter representing municityMeta.
+  * @returns Value or promise returned by indexMunisByProvince.
+ */
 function indexMunisByProvince(municityMeta: MunicityMeta[]): Map<number, MunicityMeta[]> {
     const byProvince = new Map<number, MunicityMeta[]>();
     for (const muni of municityMeta) {
@@ -39,6 +56,11 @@ function indexMunisByProvince(municityMeta: MunicityMeta[]): Map<number, Municit
     return byProvince;
 }
 
+ /**
+  * Performs operations for indexProvincesByRegion in useProgressHeatmapColors.ts.
+  * @param provinces - Parameter representing provinces.
+  * @returns Value or promise returned by indexProvincesByRegion.
+ */
 function indexProvincesByRegion(provinces: ProvinceGeoJSON[]): Map<number, ProvinceGeoJSON[]> {
     const byRegion = new Map<number, ProvinceGeoJSON[]>();
     for (const province of provinces) {

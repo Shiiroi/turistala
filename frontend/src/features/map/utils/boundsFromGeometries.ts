@@ -1,9 +1,14 @@
-// boundsFromGeometries.ts — Computes a Leaflet bounds envelope from GeoJSON geometries.
+// Computes a Leaflet bounds envelope from GeoJSON geometries.
 
 import type { Geometry } from "geojson";
 import L from "leaflet";
 import { getGeometryBounds } from "../../../lib/geoBounds";
 
+ /**
+  * Performs operations for boundsFromGeometries in boundsFromGeometries.ts.
+  * @param geometries - Parameter representing geometries.
+  * @returns Value or promise returned by boundsFromGeometries.
+ */
 export function boundsFromGeometries(geometries: Geometry[]): L.LatLngBounds | null {
     let minLng = Infinity;
     let minLat = Infinity;

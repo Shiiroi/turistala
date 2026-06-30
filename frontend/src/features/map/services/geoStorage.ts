@@ -1,10 +1,15 @@
-// geoStorage.ts — Low-level fetch helpers for map JSON hosted in Supabase Storage.
+// Low-level fetch helpers for map JSON hosted in Supabase Storage.
 
 import { supabase } from "../../../config/supabase";
 import type { MunicityGeoJSON, MunicityMeta, ProvinceGeoJSON, Region } from "../types";
 
 const GEO_BUCKET = "geo";
 
+ /**
+  * Performs operations for getGeoStoragePublicUrl in geoStorage.ts.
+  * @param fileName - Parameter representing fileName.
+  * @returns Value or promise returned by getGeoStoragePublicUrl.
+ */
 export function getGeoStoragePublicUrl(fileName: string): string {
     const { data } = supabase.storage.from(GEO_BUCKET).getPublicUrl(fileName);
     return data.publicUrl;
@@ -20,14 +25,26 @@ export async function fetchGeoLayerFromStorage<T>(fileName: string, label: strin
     return (await res.json()) as T;
 }
 
+ /**
+  * Service API wrapper function to fetch regions from storage.
+  * @returns Value or promise returned by fetchRegionsFromStorage.
+ */
 export async function fetchRegionsFromStorage(): Promise<Region[]> {
     return fetchGeoLayerFromStorage<Region[]>("regions.json", "fetchRegions");
 }
 
+ /**
+  * Service API wrapper function to fetch provinces from storage.
+  * @returns Value or promise returned by fetchProvincesFromStorage.
+ */
 export async function fetchProvincesFromStorage(): Promise<ProvinceGeoJSON[]> {
     return fetchGeoLayerFromStorage<ProvinceGeoJSON[]>("provinces.json", "fetchProvinces");
 }
 
+ /**
+  * Service API wrapper function to fetch municities meta from storage.
+  * @returns Value or promise returned by fetchMunicitiesMetaFromStorage.
+ */
 export async function fetchMunicitiesMetaFromStorage(): Promise<MunicityMeta[]> {
     return fetchGeoLayerFromStorage<MunicityMeta[]>("municities/meta.json", "fetchMunicitiesMeta");
 }

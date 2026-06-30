@@ -1,4 +1,4 @@
-// Card.tsx — Parchment-styled content container.
+// Parchment-styled content container.
 // Provides a bordered, shadowed surface for grouped form and panel content.
 
 import type { ReactNode } from "react";
@@ -9,6 +9,7 @@ interface CardProps {
     className?: string;
 }
 
+ // React component rendering Card.
 export function Card({ children, className }: CardProps) {
     return (
         <div

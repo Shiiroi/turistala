@@ -1,9 +1,10 @@
-// MapGate.tsx — Route guards for map access and auth-only redirects.
+// Route guards for map access and auth-only redirects.
 
 import { Navigate } from "react-router-dom";
 import { useAuthSession } from "../hooks/useAuthSession";
 import { isDemoMode } from "../../travel/demoStorage";
 
+ // React component rendering MapGate.
 export function MapGate({ children }: { children: React.ReactNode }) {
     const { data: session, isLoading } = useAuthSession();
 
@@ -22,6 +23,7 @@ export function MapGate({ children }: { children: React.ReactNode }) {
     return <Navigate to="/" replace />;
 }
 
+ // React component rendering AuthRedirect.
 export function AuthRedirect({ children }: { children: React.ReactNode }) {
     const { data: session, isLoading } = useAuthSession();
 

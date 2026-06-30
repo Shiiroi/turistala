@@ -1,4 +1,4 @@
-// useMapLayers.ts — React Query hook that loads all map geographic layers.
+// React Query hook that loads all map geographic layers.
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +17,13 @@ interface UseMapLayersReturn {
     error: Error | null;
 }
 
+ /**
+  * A custom React hook that orchestrates loading all map geographic boundary layers.
+  * Uses TanStack Query to fetch regions, provinces, municipal metadata, and municipal geometry
+  * in parallel batches. Keeps track of loading and progress state for heavy geometry files.
+  * @param mapMode - The active visualization detail level (region, province, or municipality).
+  * @returns An object containing the geometry datasets, load flags, and error states.
+ */
 export function useMapLayers(mapMode: MapMode): UseMapLayersReturn {
     void mapMode;
     const [loadProgress, setLoadProgress] = useState<number | null>(null);

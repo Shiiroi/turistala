@@ -1,4 +1,4 @@
-// HomePage.tsx — Main application screen combining the travel map and detail sidebar.
+// Main application screen combining the travel map and detail sidebar.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TravelMap } from "../features/map/components/TravelMap";

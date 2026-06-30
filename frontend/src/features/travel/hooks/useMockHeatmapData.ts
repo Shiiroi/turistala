@@ -1,4 +1,4 @@
-// useMockHeatmapData.ts — Heatmap palette utilities and demo color generation.
+// Heatmap palette utilities and demo color generation.
 
 import { useMemo } from "react";
 import type { MapMode } from "../../homepage/types";
@@ -8,6 +8,11 @@ const HEATMAP_BASE = "#ede3d2";
 
 const DEFAULT_HEATMAP_COLORS = buildHeatmapPalette(DEFAULT_MAP_ACCENT);
 
+ /**
+  * Performs operations for hexToRgb in useMockHeatmapData.ts.
+  * @param hex - Parameter representing hex.
+  * @returns Value or promise returned by hexToRgb.
+ */
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
     const normalized = hex.replace("#", "");
     const value =
@@ -24,12 +29,26 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
     };
 }
 
+ /**
+  * Performs operations for rgbToHex in useMockHeatmapData.ts.
+  * @param r - Parameter representing r.
+  * @param g - Parameter representing g.
+  * @param b - Parameter representing b.
+  * @returns Value or promise returned by rgbToHex.
+ */
 function rgbToHex(r: number, g: number, b: number): string {
     return `#${[r, g, b]
         .map((channel) => Math.round(channel).toString(16).padStart(2, "0"))
         .join("")}`;
 }
 
+ /**
+  * Performs operations for mixColors in useMockHeatmapData.ts.
+  * @param from - Parameter representing from.
+  * @param to - Parameter representing to.
+  * @param amount - Parameter representing amount.
+  * @returns Value or promise returned by mixColors.
+ */
 function mixColors(from: string, to: string, amount: number): string {
     const a = hexToRgb(from);
     const b = hexToRgb(to);
@@ -41,6 +60,12 @@ function mixColors(from: string, to: string, amount: number): string {
     );
 }
 
+ /**
+  * Performs operations for darken in useMockHeatmapData.ts.
+  * @param hex - Parameter representing hex.
+  * @param amount - Parameter representing amount.
+  * @returns Value or promise returned by darken.
+ */
 function darken(hex: string, amount: number): string {
     return mixColors(hex, "#000000", amount);
 }
@@ -63,6 +88,12 @@ function mockVisitCount(id: number, level: MapMode): number {
     return seed % 12;
 }
 
+ /**
+  * Performs operations for getHeatmapColor in useMockHeatmapData.ts.
+  * @param count - Parameter representing count.
+  * @param palette - Parameter representing palette.
+  * @returns Value or promise returned by getHeatmapColor.
+ */
 export function getHeatmapColor(count: number, palette: string[] = DEFAULT_HEATMAP_COLORS): string {
     if (count === 0) return palette[0];
     const index = Math.min(Math.ceil(count / 2), palette.length - 1);

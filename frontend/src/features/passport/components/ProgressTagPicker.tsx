@@ -1,4 +1,4 @@
-// ProgressTagPicker.tsx — Multi-select for passport cover progress lines.
+// Multi-select for passport cover progress lines.
 
 import { cn } from "../../../lib/cn";
 import { PASSPORT_PROGRESS_OPTIONS, type PassportProgressLevel } from "../types";
@@ -9,6 +9,7 @@ interface ProgressTagPickerProps {
     className?: string;
 }
 
+ // React component rendering ProgressTagPicker.
 export function ProgressTagPicker({ selected, onChange, className }: ProgressTagPickerProps) {
     function toggle(level: PassportProgressLevel) {
         const isOn = selected.includes(level);

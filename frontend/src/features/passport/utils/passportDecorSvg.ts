@@ -1,10 +1,18 @@
-// passportDecorSvg.ts — SVG decoration fragments for passport PNG export.
+// SVG decoration fragments for passport PNG export.
 
 export function planeIconSvg(x: number, y: number, size: number): string {
     const s = size / 24;
     return `<g transform="translate(${x},${y}) scale(${s})"><g transform="rotate(-45 11 11)"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#c0622f" fill-opacity="0.85"/></g></g>`;
 }
 
+ /**
+  * Performs operations for stylizedSunSvg in passportDecorSvg.ts.
+  * @param cx - Parameter representing cx.
+  * @param cy - Parameter representing cy.
+  * @param size - Parameter representing size.
+  * @param groupOpacity - Parameter representing groupOpacity.
+  * @returns Value or promise returned by stylizedSunSvg.
+ */
 export function stylizedSunSvg(cx: number, cy: number, size: number, groupOpacity = 0.25): string {
     const rays = Array.from({ length: 8 }, (_, i) => {
         const angle = (i * 45 * Math.PI) / 180;
@@ -19,6 +27,12 @@ export function stylizedSunSvg(cx: number, cy: number, size: number, groupOpacit
     return `<g opacity="${groupOpacity}">${rays}<circle cx="${cx}" cy="${cy}" r="${r}" fill="#e9a319" opacity="0.28"/><circle cx="${cx}" cy="${cy}" r="${r2}" fill="#c0622f" opacity="0.35"/></g>`;
 }
 
+ /**
+  * Performs operations for coverDecorSvg in passportDecorSvg.ts.
+  * @param width - Parameter representing width.
+  * @param headerH - Parameter representing headerH.
+  * @returns Value or promise returned by coverDecorSvg.
+ */
 export function coverDecorSvg(width: number, headerH: number): string {
     return `
   <defs>

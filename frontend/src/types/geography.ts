@@ -1,4 +1,4 @@
-// geography.ts — Legacy geographic entity type definitions.
+// Legacy geographic entity type definitions.
 
 import type { Geometry } from "geojson";
 

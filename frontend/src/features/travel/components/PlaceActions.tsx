@@ -1,4 +1,4 @@
-// PlaceActions.tsx — Place cards and filtered place explore section.
+// Place cards and filtered place explore section.
 
 import { BookOpen, MapPin, Plus } from "lucide-react";
 import { useState } from "react";
@@ -16,6 +16,7 @@ interface PlaceCardProps {
     onNewJournal?: (placeId: string) => void;
 }
 
+ // React component rendering PlaceCard.
 export function PlaceCard({ place, status, store, onNewJournal }: PlaceCardProps) {
     const { error: toastError } = useToast();
     const [pendingAction, setPendingAction] = useState<"mark" | "remove" | "unmark" | null>(null);

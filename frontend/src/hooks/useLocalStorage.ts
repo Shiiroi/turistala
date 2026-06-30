@@ -1,4 +1,4 @@
-// useLocalStorage.ts — React state synchronized with localStorage.
+// React state synchronized with localStorage.
 
 import { useState, useCallback } from "react";
 

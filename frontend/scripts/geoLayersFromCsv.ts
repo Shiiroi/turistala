@@ -1,4 +1,4 @@
-// geoLayersFromCsv.ts — CSV and GeoJSON loader for Philippine administrative layers.
+// Utilities to parse PSGC administrative CSV reference tables and merge them with corresponding GeoJSON geometries.
 
 import * as fs from "fs";
 import * as path from "path";
@@ -10,6 +10,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPTS_DIR = __dirname;
 const GEO_DIR = path.join(__dirname, "../public/geo");
 
+// Parses a CSV file asynchronously stream-by-stream.
+// Parameters:
+// - filePath: Absolute path to the CSV file to parse.
+// Returns: A promise resolving to an array of raw row records.
 function parseCsv(filePath: string): Promise<Record<string, string>[]> {
     return new Promise((resolve, reject) => {
         const rows: Record<string, string>[] = [];
@@ -21,6 +25,10 @@ function parseCsv(filePath: string): Promise<Record<string, string>[]> {
     });
 }
 
+// Reads and decodes a public static JSON geo file from storage.
+// Parameters:
+// - relativePath: Target path under public/geo.
+// Returns: Parsed typed JSON data structure.
 function readGeoJson<T>(relativePath: string): T {
     const filePath = path.join(GEO_DIR, relativePath);
     return JSON.parse(fs.readFileSync(filePath, "utf8")) as T;
@@ -54,6 +62,8 @@ export interface ProvinceGeoRow {
     geometry: Geometry | null;
 }
 
+// Parses and maps municipality/city metadata records from CSV.
+// Upstream dependency: scripts/municities.csv
 export async function loadMunicitiesMetaFromCsv(): Promise<MunicityMeta[]> {
     const rows = await parseCsv(path.join(SCRIPTS_DIR, "municities.csv"));
     return rows.map((row) => ({
@@ -66,6 +76,8 @@ export async function loadMunicitiesMetaFromCsv(): Promise<MunicityMeta[]> {
     }));
 }
 
+// Parses and maps regional metadata records from CSV.
+// Upstream dependency: scripts/regions.csv
 export async function loadRegionsMetaFromCsv() {
     const rows = await parseCsv(path.join(SCRIPTS_DIR, "regions.csv"));
     return rows.map((r) => ({
@@ -75,6 +87,8 @@ export async function loadRegionsMetaFromCsv() {
     }));
 }
 
+// Parses and maps provincial metadata records from CSV.
+// Upstream dependency: scripts/provinces.csv
 export async function loadProvincesMetaFromCsv() {
     const rows = await parseCsv(path.join(SCRIPTS_DIR, "provinces.csv"));
     return rows.map((p) => ({
@@ -85,11 +99,13 @@ export async function loadProvincesMetaFromCsv() {
     }));
 }
 
+// Creates a fast lookup map mapping numeric IDs to their geometry properties.
 function geometryById<T extends { id: number; geometry?: Geometry | null }>(rows: T[]): Map<number, Geometry | null> {
     return new Map(rows.map((r) => [r.id, r.geometry ?? null]));
 }
 
-// CSV metadata + geometry from public/geo JSON
+// Merges regional metadata with static spatial boundary files.
+// Upstream dependencies: scripts/regions.csv and public/geo/regions.json
 export async function loadRegionsFromCsv(): Promise<RegionGeoRow[]> {
     const meta = await loadRegionsMetaFromCsv();
     const geo = readGeoJson<RegionGeoRow[]>("regions.json");
@@ -97,7 +113,8 @@ export async function loadRegionsFromCsv(): Promise<RegionGeoRow[]> {
     return meta.map((r) => ({ ...r, geometry: geomMap.get(r.id) ?? null }));
 }
 
-// CSV metadata + geometry from public/geo JSON
+// Merges provincial metadata with static spatial boundary files.
+// Upstream dependencies: scripts/provinces.csv and public/geo/provinces.json
 export async function loadProvincesFromCsv(): Promise<ProvinceGeoRow[]> {
     const meta = await loadProvincesMetaFromCsv();
     const geo = readGeoJson<ProvinceGeoRow[]>("provinces.json");
@@ -105,7 +122,8 @@ export async function loadProvincesFromCsv(): Promise<ProvinceGeoRow[]> {
     return meta.map((p) => ({ ...p, geometry: geomMap.get(p.id) ?? null }));
 }
 
-// CSV meta; per-province geometry from public/geo
+// Loads and groups all municipal coordinates and metadata, mapping by province ID.
+// Upstream dependencies: scripts/municities.csv, public/geo/municities/manifest.json, and public/geo/municities/province-*.json
 export async function loadMunicitiesGroupedByProvince() {
     const meta = await loadMunicitiesMetaFromCsv();
     const manifest = readGeoJson<{ provinceIds: number[] }>("municities/manifest.json");

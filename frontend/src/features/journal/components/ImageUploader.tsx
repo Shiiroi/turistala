@@ -1,4 +1,4 @@
-// ImageUploader.tsx — Placeholder for journal photo upload UI.
+// Placeholder for journal photo upload UI.
 
 export function ImageUploader() {
     return (

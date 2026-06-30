@@ -1,4 +1,4 @@
-// computePassportStats.ts — Client-side passport progress computation.
+// Client-side passport progress computation.
 
 import type { ExploreViewTab } from "../../homepage/components/divisionExploreUtils";
 import type { MunicityMeta, ProvinceGeoJSON, Region } from "../../map/types";
@@ -12,10 +12,22 @@ import {
 export type RegionalProgressBy = Exclude<PassportProgressLevel, "regions">;
 export type ProvincialProgressBy = Exclude<PassportProgressLevel, "regions" | "provinces">;
 
+ /**
+  * Performs operations for visitedPlaceIds in computePassportStats.ts.
+  * @param store - Parameter representing store.
+  * @returns Value or promise returned by visitedPlaceIds.
+ */
 function visitedPlaceIds(store: TravelStore): Set<string> {
     return new Set(store.visited.map((v) => v.place_id));
 }
 
+ /**
+  * Performs operations for isMuniExplored in computePassportStats.ts.
+  * @param muniId - Parameter representing muniId.
+  * @param store - Parameter representing store.
+  * @param visited - Parameter representing visited.
+  * @returns Value or promise returned by isMuniExplored.
+ */
 function isMuniExplored(muniId: number, store: TravelStore, visited: Set<string>): boolean {
     return store.places.some((p) => p.municity_id === muniId && visited.has(p.id));
 }
@@ -45,6 +57,14 @@ function isRegionExplored(
         .some((p) => isProvinceExplored(p.id, store, municityMeta, visited));
 }
 
+ /**
+  * Performs operations for progressRow in computePassportStats.ts.
+  * @param id - Parameter representing id.
+  * @param name - Parameter representing name.
+  * @param visited - Parameter representing visited.
+  * @param total - Parameter representing total.
+  * @returns Value or promise returned by progressRow.
+ */
 function progressRow(id: number, name: string, visited: number, total: number): DivisionProgress {
     return {
         id,
@@ -283,6 +303,11 @@ export function computeProvinceChildren(
     });
 }
 
+ /**
+  * Performs operations for stampFixedMetric in computePassportStats.ts.
+  * @param level - Parameter representing level.
+  * @returns Value or promise returned by stampFixedMetric.
+ */
 export function stampFixedMetric(level: "region" | "province"): PassportProgressLevel {
     return level === "region" ? "provinces" : "municipalities";
 }
@@ -362,6 +387,11 @@ export function formatProgressDisplay(
     };
 }
 
+ /**
+  * Performs operations for metricLabel in computePassportStats.ts.
+  * @param metric - Parameter representing metric.
+  * @returns Value or promise returned by metricLabel.
+ */
 export function metricLabel(metric: PassportProgressLevel): string {
     switch (metric) {
         case "regions":
@@ -391,6 +421,11 @@ export function metricUnitLabel(metric: PassportProgressLevel): string {
     throw new Error(`Unhandled metric: ${metric}`);
 }
 
+ /**
+  * Performs operations for progressLineFromStats in computePassportStats.ts.
+  * @param stats - Parameter representing stats.
+  * @returns Value or promise returned by progressLineFromStats.
+ */
 export function progressLineFromStats(stats: PassportStats): {
     visited: number;
     total: number;
@@ -433,6 +468,11 @@ export function progressLineFromStats(stats: PassportStats): {
     throw new Error(`Unhandled metric: ${stats.metric}`);
 }
 
+ /**
+  * Performs operations for stampProgressLabel in computePassportStats.ts.
+  * @param row - Parameter representing row.
+  * @returns Value or promise returned by stampProgressLabel.
+ */
 export function stampProgressLabel(row: DivisionProgress): string {
     if (row.total === 0) return "0/0";
     const pct = Math.round(row.fraction * 100);

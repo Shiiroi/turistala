@@ -1,4 +1,4 @@
-// Input.tsx — Styled text input with optional label.
+// Styled text input with optional label.
 // Wraps a native input element with consistent border, typography, and spacing.
 
 import type { InputHTMLAttributes } from "react";
@@ -8,6 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
 }
 
+ // React component rendering Input.
 export function Input({ label, className, ...props }: InputProps) {
     return (
         <div className="flex flex-col gap-1">

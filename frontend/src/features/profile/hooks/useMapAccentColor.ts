@@ -1,4 +1,4 @@
-// useMapAccentColor.ts — Map heatmap accent color state and persistence.
+// Map heatmap accent color state and persistence.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -8,6 +8,10 @@ import { fetchProfile, updateProfile, type UserProfile } from "../services/profi
 
 const DEMO_MAP_COLOR_KEY = "turistala_map_color";
 
+ /**
+  * Performs operations for loadDemoMapColor in useMapAccentColor.ts.
+  * @returns Value or promise returned by loadDemoMapColor.
+ */
 function loadDemoMapColor(): string {
     try {
         return window.localStorage.getItem(DEMO_MAP_COLOR_KEY) ?? DEFAULT_MAP_ACCENT;
@@ -16,6 +20,11 @@ function loadDemoMapColor(): string {
     }
 }
 
+ /**
+  * Performs operations for saveDemoMapColor in useMapAccentColor.ts.
+  * @param color - Parameter representing color.
+  * @returns Value or promise returned by saveDemoMapColor.
+ */
 function saveDemoMapColor(color: string): void {
     try {
         window.localStorage.setItem(DEMO_MAP_COLOR_KEY, color);

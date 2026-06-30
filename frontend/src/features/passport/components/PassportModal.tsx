@@ -1,4 +1,4 @@
-// PassportModal.tsx — Primary passport experience modal.
+// Primary passport experience modal.
 
 import { useMemo, useState } from "react";
 import { Download, Loader2 } from "lucide-react";
@@ -73,6 +73,10 @@ interface PassportModalProps {
     onViewOnMap: (division: Division, mapMode: MapMode) => void;
 }
 
+ /**
+  * Performs operations for slugify in PassportModal.tsx.
+  * @param s - Parameter representing s.
+ */
 function slugify(s: string): string {
     return s.replace(/[^a-z0-9_-]+/gi, "-").toLowerCase() || "traveler";
 }

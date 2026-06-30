@@ -1,4 +1,4 @@
-// provinceFilters.ts — Province inclusion rules for passport progress.
+// Province inclusion rules for passport progress.
 
 import type { ProvinceGeoJSON } from "../../map/types";
 
@@ -21,10 +21,20 @@ export function filterProvincesForProgress(
     });
 }
 
+ /**
+  * Performs operations for isMetroManilaProvince in provinceFilters.ts.
+  * @param province - Parameter representing province.
+  * @returns Value or promise returned by isMetroManilaProvince.
+ */
 export function isMetroManilaProvince(province: { id: number }): boolean {
     return province.id === METRO_MANILA_PROVINCE_ID;
 }
 
+ /**
+  * Performs operations for isSgaProvince in provinceFilters.ts.
+  * @param province - Parameter representing province.
+  * @returns Value or promise returned by isSgaProvince.
+ */
 export function isSgaProvince(province: { name: string }): boolean {
     return province.name === SGA_PROVINCE_NAME;
 }

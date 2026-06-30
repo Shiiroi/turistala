@@ -1,4 +1,4 @@
-// DivisionExploreSection.tsx — Subdivision and place listing for explore mode.
+// Subdivision and place listing for explore mode.
 
 import { MapPin } from "lucide-react";
 import { Badge } from "../../../components/ui/Badge";

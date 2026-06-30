@@ -1,4 +1,4 @@
-// RegionBadgeGrid.tsx — Grid layout for legacy region achievement badges.
+// Grid layout for legacy region achievement badges.
 
 import type { RegionBadge } from "../types";
 import { cn } from "../../../lib/cn";
@@ -8,6 +8,7 @@ interface RegionBadgeGridProps {
     loading?: boolean;
 }
 
+ // React component rendering RegionBadgeGrid.
 export function RegionBadgeGrid({ badges, loading }: RegionBadgeGridProps) {
     if (loading) {
         return <div className="text-sm text-muted">Loading badges…</div>;

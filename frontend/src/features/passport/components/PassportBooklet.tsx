@@ -1,4 +1,4 @@
-// PassportBooklet.tsx — Visual passport cover card in the live UI.
+// Visual passport cover card in the live UI.
 
 import { cn } from "../../../lib/cn";
 import { TuristalaLogo } from "../../../components/TuristalaLogo";

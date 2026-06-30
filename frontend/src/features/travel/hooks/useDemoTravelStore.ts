@@ -1,15 +1,25 @@
-// useDemoTravelStore.ts — In-memory travel store backed by localStorage.
+// In-memory travel store backed by localStorage.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DemoTravelData, Goal, Journal, Place, TravelStore, VisitedPlace } from "../types";
 import { loadDemoData, saveDemoData } from "../demoStorage";
 
+ /**
+  * Performs operations for uid in useDemoTravelStore.ts.
+  * @returns Value or promise returned by uid.
+ */
 function uid(): string {
     return crypto.randomUUID();
 }
 
 const EMPTY: DemoTravelData = { places: [], goals: [], visited: [], journals: [] };
 
+ /**
+  * A React hook that initializes and manages the guest mode travel data.
+  * All data (places, goals, visited logs, and journals) is loaded from and persisted
+  * to `window.localStorage`. Performs in-memory operations and returns a matching `TravelStore` facade.
+  * @returns The guest travel store instance.
+ */
 export function useDemoTravelStore(): TravelStore {
     const [data, setData] = useState<DemoTravelData>(loadDemoData);
     const dataRef = useRef(data);
@@ -25,11 +35,17 @@ export function useDemoTravelStore(): TravelStore {
         setData(next);
     }, []);
 
+     // Attempts to find a cached place by its OpenStreetMap ID.
     const findPlaceByOsmId = useCallback(
         (osm_id: string) => dataRef.current.places.find((p) => p.osm_id === osm_id),
         [],
     );
 
+     /**
+      * Maps and adds a new place to the local list, assigning a random UUID if not already present.
+      * @param place - The place parameters without an ID.
+      * @returns The registered Place object.
+     */
     const addPlace = useCallback(
         (place: Omit<Place, "id">): Place => {
             const current = dataRef.current;
@@ -42,6 +58,11 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     /**
+      * Adds a place to the user's travel goals checklist.
+      * Prevents duplicate goals or targets that have already been marked visited.
+      * @param placeId - The local place UUID.
+     */
     const addAsGoal = useCallback(
         (placeId: string) => {
             const current = dataRef.current;
@@ -58,6 +79,11 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     /**
+      * Records a new visited location check-in.
+      * If the location was previously registered as an uncompleted goal, the goal is removed.
+      * @param placeId - The place UUID.
+     */
     const addAsVisited = useCallback(
         (placeId: string) => {
             const current = dataRef.current;
@@ -76,6 +102,10 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     /**
+      * Transition a goal from pending/uncompleted to completed (visited).
+      * @param goalId - The goal UUID.
+     */
     const markGoalVisited = useCallback(
         (goalId: string) => {
             const current = dataRef.current;
@@ -97,6 +127,7 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     // Removes a goal from the target checklist.
     const removeGoal = useCallback(
         (goalId: string) => {
             const current = dataRef.current;
@@ -105,6 +136,7 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     // Removes a visited check-in log.
     const removeVisited = useCallback(
         (visitedId: string) => {
             const current = dataRef.current;
@@ -113,6 +145,11 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     /**
+      * Creates a new journal entry, revoking any local blob preview URLs to clean memory.
+      * @param input - The journal parameters.
+      * @returns The created Journal entry.
+     */
     const createJournal = useCallback(
         (input: {
             place_id: string;
@@ -142,6 +179,7 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     // Modifies the title, content, visit date, or photo timeline of a journal entry.
     const updateJournal = useCallback(
         (
             journalId: string,
@@ -169,6 +207,7 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     // Deletes a journal entry.
     const deleteJournal = useCallback(
         (journalId: string) => {
             const current = dataRef.current;
@@ -177,6 +216,7 @@ export function useDemoTravelStore(): TravelStore {
         [persist],
     );
 
+     // Resolves the current status of a place ("visited", "goal", or null).
     const getPlaceStatus = useCallback((placeId: string) => {
         const current = dataRef.current;
         if (current.visited.some((v) => v.place_id === placeId)) return "visited" as const;
@@ -184,6 +224,7 @@ export function useDemoTravelStore(): TravelStore {
         return null;
     }, []);
 
+     // Computes a set of all unique municipality IDs containing active, unvisited goals.
     const goalMunicityIds = useMemo(() => {
         const ids = new Set<number>();
         for (const goal of goals.filter((g) => !g.is_visited)) {
@@ -215,6 +256,11 @@ export function useDemoTravelStore(): TravelStore {
     };
 }
 
+ /**
+  * Performs operations for reloadDemoTravelStore in useDemoTravelStore.ts.
+  * @param setData - Parameter representing setData.
+  * @returns Value or promise returned by reloadDemoTravelStore.
+ */
 export function reloadDemoTravelStore(setData: (d: DemoTravelData) => void) {
     setData(loadDemoData());
 }

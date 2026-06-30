@@ -1,8 +1,11 @@
--- Username must be unique across all users
+-- Enforces username uniqueness and modifies the auto-creation trigger logic to resolve name collisions.
 ALTER TABLE public.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
 
 -- Auto-create public.users row with a unique username on signup
+-- Accomplishes auto-creation of a public.users row with a unique username candidate derived from email or metadata.
+-- Expected parameters: Triggered AFTER INSERT on auth.users; receives NEW record.
+-- Upstream dependencies: Executed automatically on supabase auth signup events.
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql

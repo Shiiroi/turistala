@@ -1,4 +1,4 @@
-// PanelJournalsView.tsx — Journal list scoped to the selected division.
+// Journal list scoped to the selected division.
 // Thin wrapper around JournalPreviewList that shows all journal entries for places within the current
 
 import type { MockPlace } from "../../travel/types";
@@ -11,6 +11,7 @@ interface PanelJournalsViewProps {
     onOpenJournal: (journalId: string, placeId: string) => void;
 }
 
+ // React component rendering PanelJournalsView.
 export function PanelJournalsView({ places, store, onOpenJournal }: PanelJournalsViewProps) {
     return (
         <JournalPreviewList

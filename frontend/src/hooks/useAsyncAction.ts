@@ -1,4 +1,4 @@
-// useAsyncAction.ts — Hook for guarding async handlers against concurrent execution.
+// Hook for guarding async handlers against concurrent execution.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 

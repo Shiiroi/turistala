@@ -1,4 +1,4 @@
-// exportPassportImage.ts — SVG builders and PNG export for passport assets.
+// SVG builders and PNG export for passport assets.
 
 import type { Geometry } from "geojson";
 import type { PassportProgressLevel } from "../types";
@@ -32,6 +32,11 @@ export interface ExportCoverOptions {
     width?: number;
 }
 
+ /**
+  * Performs operations for escapeXml in exportPassportImage.ts.
+  * @param s - Parameter representing s.
+  * @returns Value or promise returned by escapeXml.
+ */
 function escapeXml(s: string): string {
     return s
         .replace(/&/g, "&amp;")
@@ -40,6 +45,14 @@ function escapeXml(s: string): string {
         .replace(/"/g, "&quot;");
 }
 
+ /**
+  * Performs operations for progressLineSvg in exportPassportImage.ts.
+  * @param line - Parameter representing line.
+  * @param y - Parameter representing y.
+  * @param leftX - Parameter representing leftX.
+  * @param rightX - Parameter representing rightX.
+  * @returns Value or promise returned by progressLineSvg.
+ */
 function progressLineSvg(line: PassportProgressLine, y: number, leftX: number, rightX: number): string {
     const fraction = `${line.visited} / ${line.total} ${line.label}`;
     const pct =
@@ -49,12 +62,25 @@ function progressLineSvg(line: PassportProgressLine, y: number, leftX: number, r
     return `<text x="${leftX}" y="${y}" text-anchor="start" font-family="sans-serif" font-size="11" fill="#6b5c4a">${escapeXml(fraction)}</text>${pct}`;
 }
 
+ /**
+  * Performs operations for renderPhOutline in exportPassportImage.ts.
+  * @param x - Parameter representing x.
+  * @param y - Parameter representing y.
+  * @param size - Parameter representing size.
+  * @param geometries - Parameter representing geometries.
+  * @returns Value or promise returned by renderPhOutline.
+ */
 function renderPhOutline(x: number, y: number, size: number, geometries: Geometry[]): string {
     const pathD = geometriesToSvgPath(geometries, size, 2);
     if (!pathD) return "";
     return `<g transform="translate(${x},${y})"><path d="${pathD}" fill="#c0622f" fill-opacity="0.35" stroke="#c0622f" stroke-width="0.75" stroke-opacity="0.55"/></g>`;
 }
 
+ /**
+  * Performs operations for buildPassportCoverSvg in exportPassportImage.ts.
+  * @param options - Parameter representing options.
+  * @returns Value or promise returned by buildPassportCoverSvg.
+ */
 export function buildPassportCoverSvg(options: ExportCoverOptions): string {
     const { progressLines, username, initials, avatarUrl, passportId, phGeometries, width = 400 } =
         options;
@@ -113,6 +139,11 @@ export function buildPassportCoverSvg(options: ExportCoverOptions): string {
 </svg>`;
 }
 
+ /**
+  * Performs operations for stampStatText in exportPassportImage.ts.
+  * @param stamp - Parameter representing stamp.
+  * @returns Value or promise returned by stampStatText.
+ */
 function stampStatText(stamp: ExportStamp): string {
     return stampProgressLabel({
         id: stamp.id,
@@ -182,6 +213,11 @@ interface ExportStampSheetOptions {
     width?: number;
 }
 
+ /**
+  * Performs operations for buildStampSheetSvg in exportPassportImage.ts.
+  * @param options - Parameter representing options.
+  * @returns Value or promise returned by buildStampSheetSvg.
+ */
 function buildStampSheetSvg(options: ExportStampSheetOptions): string {
     const { title, subtitle, stamps, cols = 5, badgeSize = 72, width = 520 } = options;
     const badgeGap = 16;
@@ -249,6 +285,12 @@ export function buildProvincialStampsSvg(
     });
 }
 
+ /**
+  * Performs operations for downloadPassportPng in exportPassportImage.ts.
+  * @param svg - Parameter representing svg.
+  * @param filename - Parameter representing filename.
+  * @returns Value or promise returned by downloadPassportPng.
+ */
 export async function downloadPassportPng(svg: string, filename: string): Promise<void> {
     const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
     const url = URL.createObjectURL(blob);

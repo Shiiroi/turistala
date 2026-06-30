@@ -1,4 +1,4 @@
-// AuthShell.tsx — Layout shell for authentication pages.
+// Layout shell for authentication pages.
 
 import type { ReactNode } from "react";
 import { AuthMapPreview } from "./AuthMapPreview";
@@ -9,6 +9,7 @@ interface AuthShellProps {
     children: ReactNode;
 }
 
+ // React component rendering AuthShell.
 export function AuthShell({ children }: AuthShellProps) {
     return (
         <div className="flex min-h-dvh flex-col-reverse bg-parchment lg:flex-row">
@@ -36,6 +37,7 @@ interface AuthCardProps {
     className?: string;
 }
 
+ // React component rendering AuthCard.
 export function AuthCard({ children, className }: AuthCardProps) {
     return (
         <div className={cn("w-full max-w-sm lg:max-w-none", className)}>{children}</div>
@@ -46,6 +48,7 @@ interface AuthBackLinkProps {
     children: ReactNode;
 }
 
+ // React component rendering AuthBackLink.
 export function AuthBackLink({ children }: AuthBackLinkProps) {
     return (
         <p className="mt-6 border-t border-border-light pt-6 text-center text-sm text-muted">

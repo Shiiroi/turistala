@@ -1,4 +1,4 @@
-// ExploreViewTabs.tsx — Pill tabs for switching explore dimensions.
+// Pill tabs for switching explore dimensions.
 
 import { PillTabs } from "../../../components/ui/PillTabs";
 import type { ExploreViewTab } from "./divisionExploreUtils";
@@ -15,6 +15,7 @@ interface ExploreViewTabsProps {
     onChange: (tab: ExploreViewTab) => void;
 }
 
+ // React component rendering ExploreViewTabs.
 export function ExploreViewTabs({ tabs, active, onChange }: ExploreViewTabsProps) {
     if (tabs.length <= 1) return null;
 

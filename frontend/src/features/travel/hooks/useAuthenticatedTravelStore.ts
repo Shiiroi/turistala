@@ -1,4 +1,4 @@
-// useAuthenticatedTravelStore.ts — Supabase-backed travel store for signed-in users.
+// Supabase-backed travel store for signed-in users.
 
 import { useCallback, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -31,10 +31,18 @@ interface TravelQueryData {
     journals: Journal[];
 }
 
+ /**
+  * A React hook that initializes and manages travel data for an authenticated user.
+  * Connects directly to the database via Supabase, using TanStack Query for caching,
+  * queries, and mutations. Automatically syncs local modifications back to the cloud.
+  * @param userId - The unique UUID of the logged-in user.
+  * @returns The authenticated travel store instance.
+ */
 export function useAuthenticatedTravelStore(userId: string): TravelStore {
     const queryClient = useQueryClient();
     const travelQueryKey = useMemo(() => ["travel", userId] as const, [userId]);
 
+     // Local helper that performs optimistic updates on the TanStack Query travel cache.
     const patchTravelData = useCallback(
         (updater: (current: TravelQueryData) => TravelQueryData) => {
             queryClient.setQueryData<TravelQueryData>(travelQueryKey, (old) => {
@@ -45,6 +53,7 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [queryClient, travelQueryKey],
     );
 
+     // Invalidates TanStack queries relating to travel lists and storage usage, triggering fresh background downloads.
     const invalidate = useCallback(() => {
         queryClient.invalidateQueries({ queryKey: travelQueryKey });
         queryClient.invalidateQueries({ queryKey: ["storage-usage", userId] });
@@ -74,6 +83,7 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [places],
     );
 
+     // Inserts or retrieves a place in the places database, matched by OSM ID.
     const addPlace = useCallback(
         async (place: Omit<Place, "id">): Promise<Place> => {
             const saved = await upsertPlaceByOsmId(place);
@@ -83,6 +93,7 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [invalidate],
     );
 
+     // Creates a new goal record for the user.
     const addAsGoal = useCallback(
         async (placeId: string) => {
             await createGoal(userId, placeId);
@@ -91,6 +102,7 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [userId, invalidate],
     );
 
+     // Creates a new visited check-in record.
     const addAsVisited = useCallback(
         async (placeId: string) => {
             await createVisited(userId, placeId);
@@ -123,6 +135,12 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [userId, invalidate],
     );
 
+     /**
+      * Client helper that iterates over selected journal photos, compresses them, and uploads them to Supabase Storage.
+      * @param journalId - The parent journal UUID.
+      * @param photos - Selected image inputs.
+      * @returns A promise resolving to the uploaded photos list.
+     */
     const uploadPhotos = useCallback(
         async (journalId: string, photos: JournalPhotoInput[]) => {
             const uploaded = [];
@@ -140,6 +158,8 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [userId],
     );
 
+     // Syncs photos during a journal entry update. Compares existing photos with the new set,
+     // deletes deleted photos from the database/storage, and uploads newly added photos.
     const syncJournalPhotos = useCallback(
         async (journalId: string, photos: JournalPhotoInput[]) => {
             const existing = journals.find((j) => j.id === journalId);
@@ -163,6 +183,11 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [journals, userId],
     );
 
+     /**
+      * Creates a new journal entry, uploads its photos, and updates the cache.
+      * @param input - The journal parameters.
+      * @returns The created Journal record.
+     */
     const createJournal = useCallback(
         async (input: {
             place_id: string;
@@ -189,6 +214,7 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [userId, invalidate, uploadPhotos, patchTravelData],
     );
 
+     // Modifies the journal title, contents, date, or adds/removes photos.
     const updateJournal = useCallback(
         async (
             journalId: string,
@@ -214,6 +240,7 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [userId, invalidate, syncJournalPhotos, patchTravelData],
     );
 
+     // Deletes a journal entry and cleans up its storage files.
     const deleteJournal = useCallback(
         async (journalId: string) => {
             await deleteJournalEntry(userId, journalId);
@@ -226,6 +253,7 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
         [userId, invalidate, patchTravelData],
     );
 
+     // Helper resolving status of place records.
     const getPlaceStatus = useCallback(
         (placeId: string) => {
             if (visited.some((v) => v.place_id === placeId)) return "visited" as const;
@@ -266,6 +294,10 @@ export function useAuthenticatedTravelStore(userId: string): TravelStore {
     };
 }
 
+ /**
+  * Mutation hook for executing the anonymous-to-authenticated travel data migration.
+  * @param userId - The user's target authentication UUID.
+ */
 export function useImportDemoMutation(userId: string) {
     const queryClient = useQueryClient();
     return useMutation({

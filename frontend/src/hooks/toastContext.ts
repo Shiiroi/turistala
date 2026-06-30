@@ -1,4 +1,4 @@
-// toastContext.ts — React context types and provider state for toast notifications.
+// React context types and provider state for toast notifications.
 
 import { createContext } from "react";
 

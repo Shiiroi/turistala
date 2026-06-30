@@ -1,4 +1,4 @@
-// DetailPanel.tsx — Sidebar controller for division exploration and journals.
+// Sidebar controller for division exploration and journals.
 
 import { useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";

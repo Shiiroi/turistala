@@ -1,4 +1,4 @@
-// JournalPreviewList.tsx — Grouped journal entry previews by place.
+// Grouped journal entry previews by place.
 
 import { useMemo, useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
@@ -51,6 +51,11 @@ interface FlatJournalGroup {
     entries: MockJournal[];
 }
 
+ /**
+  * Performs operations for flattenJournalGroups in JournalPreviewList.tsx.
+  * @param groups - Parameter representing groups.
+  * @param maxCards - Parameter representing maxCards.
+ */
 function flattenJournalGroups(groups: JournalGroup[], maxCards?: number): FlatJournalGroup[] {
     if (maxCards == null) {
         return groups.map((group) => ({ group, entries: group.entries }));

@@ -1,4 +1,4 @@
-// useDemoImportPrompt.ts — State machine for the post-signup demo import modal.
+// State machine for the post-signup demo import modal.
 
 import { useCallback, useState } from "react";
 import { useAuthSession } from "./useAuthSession";
@@ -11,6 +11,10 @@ import {
 } from "../../travel/demoStorage";
 import type { DemoTravelData } from "../../travel/types";
 
+ /**
+  * React hook providing states and handlers for demoimportprompt.
+  * @returns Value or promise returned by useDemoImportPrompt.
+ */
 export function useDemoImportPrompt() {
     const { data: session } = useAuthSession();
     const userId = session?.user.id;

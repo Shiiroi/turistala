@@ -1,4 +1,4 @@
-// seaBackground.ts — Sea gradient used behind tileless map views (auth preview, exports).
+// Sea gradient used behind tileless map views (auth preview, exports).
 
 export const MAP_SEA_BG_CLASS = "map-sea-background";
 

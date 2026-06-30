@@ -1,4 +1,4 @@
-// placeSearchApi.ts — OpenStreetMap place search with municipality scoping.
+// OpenStreetMap place search with municipality scoping.
 
 import { isPointInMunicity } from "../../../lib/pointInPolygon";
 import type { OsmSearchResult, PlaceSearchResponse, PlaceSearchSuggestion } from "../types";
@@ -41,16 +41,33 @@ export interface PlaceSearchContext {
     geometry?: GeoJSON.Polygon | GeoJSON.MultiPolygon;
 }
 
+ /**
+  * Performs operations for toOsmId in placeSearchApi.ts.
+  * @param osmType - Parameter representing osmType.
+  * @param osmId - Parameter representing osmId.
+  * @returns Value or promise returned by toOsmId.
+ */
 function toOsmId(osmType: string, osmId: number): string {
     return `${osmType}/${osmId}`;
 }
 
+ /**
+  * Performs operations for toCategory in placeSearchApi.ts.
+  * @param type - Parameter representing type.
+  * @param klass - Parameter representing klass.
+  * @returns Value or promise returned by toCategory.
+ */
 function toCategory(type?: string, klass?: string): string {
     if (type) return type;
     if (klass) return klass;
     return "place";
 }
 
+ /**
+  * Performs operations for nominatimToResult in placeSearchApi.ts.
+  * @param r - Parameter representing r.
+  * @returns Value or promise returned by nominatimToResult.
+ */
 function nominatimToResult(r: NominatimResult): OsmSearchResult {
     return {
         osm_id: toOsmId(r.osm_type, r.osm_id),
@@ -62,6 +79,11 @@ function nominatimToResult(r: NominatimResult): OsmSearchResult {
     };
 }
 
+ /**
+  * Performs operations for photonToResult in placeSearchApi.ts.
+  * @param f - Parameter representing f.
+  * @returns Value or promise returned by photonToResult.
+ */
 function photonToResult(f: PhotonFeature): OsmSearchResult | null {
     const p = f.properties;
     if (!p.osm_type || p.osm_id == null || !p.name) return null;
@@ -78,10 +100,22 @@ function photonToResult(f: PhotonFeature): OsmSearchResult | null {
     };
 }
 
+ /**
+  * Performs operations for normalizeKey in placeSearchApi.ts.
+  * @param name - Parameter representing name.
+  * @param lat - Parameter representing lat.
+  * @param lng - Parameter representing lng.
+  * @returns Value or promise returned by normalizeKey.
+ */
 function normalizeKey(name: string, lat: number, lng: number): string {
     return `${name.toLowerCase().trim()}@${lat.toFixed(4)},${lng.toFixed(4)}`;
 }
 
+ /**
+  * Performs operations for tokenize in placeSearchApi.ts.
+  * @param query - Parameter representing query.
+  * @returns Value or promise returned by tokenize.
+ */
 function tokenize(query: string): string[] {
     return query
         .toLowerCase()
@@ -90,6 +124,14 @@ function tokenize(query: string): string[] {
         .filter((t) => t.length >= 2);
 }
 
+ /**
+  * Scores a search result against the query text and municipality context.
+  * Points are awarded for matches at the start of names, token inclusion, and matching the municipality name.
+  * @param query - The user search query string.
+  * @param r - The OSM search result.
+  * @param municityName - The name of the currently selected municipality.
+  * @returns A numerical relevance score.
+ */
 function scoreResult(query: string, r: OsmSearchResult, municityName?: string): number {
     const q = query.toLowerCase();
     const name = r.name.toLowerCase();
@@ -111,6 +153,13 @@ function scoreResult(query: string, r: OsmSearchResult, municityName?: string): 
     return s;
 }
 
+ /**
+  * Ranks search results by their score in descending order.
+  * @param query - The user search query.
+  * @param results - Array of search results.
+  * @param municityName - Optional selected municipality name.
+  * @returns Sorted array of search results.
+ */
 function rankResults(
     query: string,
     results: OsmSearchResult[],
@@ -121,6 +170,11 @@ function rankResults(
     );
 }
 
+ /**
+  * Dedupes search results by OSM ID or coordinate-name footprint.
+  * @param results - List of duplicate-prone search results.
+  * @returns A list of unique search results.
+ */
 function dedupeResults(results: OsmSearchResult[]): OsmSearchResult[] {
     const seen = new Set<string>();
     const out: OsmSearchResult[] = [];
@@ -133,6 +187,12 @@ function dedupeResults(results: OsmSearchResult[]): OsmSearchResult[] {
     return out;
 }
 
+ /**
+  * Computes the Levenshtein distance (edit distance) between two strings.
+  * @param a - First string.
+  * @param b - Second string.
+  * @returns The integer edit distance.
+ */
 function levenshtein(a: string, b: string): number {
     const m = a.length;
     const n = b.length;
@@ -148,17 +208,34 @@ function levenshtein(a: string, b: string): number {
     return dp[m][n];
 }
 
+ /**
+  * Validates whether a search result coordinate falls within the polygon of the selected municipality context.
+  * @param r - The search result.
+  * @param ctx - The search context containing boundaries/geometries.
+  * @returns True if the point is inside the municipality boundary, or if no boundary exists in context.
+ */
 function isInMunicity(r: OsmSearchResult, ctx: PlaceSearchContext): boolean {
     if (!ctx.geometry) return true;
     return isPointInMunicity(r.lng, r.lat, ctx.geometry);
 }
 
+ /**
+  * Performs operations for extractLocationLabel in placeSearchApi.ts.
+  * @param displayName - Parameter representing displayName.
+  * @returns Value or promise returned by extractLocationLabel.
+ */
 function extractLocationLabel(displayName: string): string | undefined {
     const parts = displayName.split(",").map((p) => p.trim()).filter(Boolean);
     if (parts.length < 2) return undefined;
     return parts[1];
 }
 
+ /**
+  * Performs operations for hasStrongNameMatch in placeSearchApi.ts.
+  * @param query - Parameter representing query.
+  * @param r - Parameter representing r.
+  * @returns Value or promise returned by hasStrongNameMatch.
+ */
 function hasStrongNameMatch(query: string, r: OsmSearchResult): boolean {
     const q = query.toLowerCase().trim();
     const name = r.name.toLowerCase();
@@ -176,6 +253,14 @@ function hasStrongNameMatch(query: string, r: OsmSearchResult): boolean {
     return matched >= Math.ceil(tokens.length * 0.6);
 }
 
+ /**
+  * Generates fuzzy search suggestions (spelling corrections) within the selected municipality.
+  * @param query - The user search query.
+  * @param inMuni - Search results within the municipality boundary.
+  * @param primary - Primary ranked results already selected for display.
+  * @param municityName - Optional selected municipality name.
+  * @returns An array containing spelling correction suggestions, if any.
+ */
 function buildFuzzySuggestions(
     query: string,
     inMuni: OsmSearchResult[],
@@ -207,6 +292,13 @@ function buildFuzzySuggestions(
     return [{ result: best, kind: "fuzzy" }];
 }
 
+ /**
+  * Generates "nearby" search suggestions for strong matches located outside the selected municipality boundary.
+  * @param query - The user search query.
+  * @param outMuni - Search results outside the selected municipality.
+  * @param municityName - Optional selected municipality name.
+  * @returns An array of suggestions tagged as nearby.
+ */
 function buildNearbySuggestions(
     query: string,
     outMuni: OsmSearchResult[],
@@ -229,6 +321,12 @@ function buildNearbySuggestions(
     });
 }
 
+ /**
+  * Queries OpenStreetMap details using Nominatim Search API.
+  * @param query - Search term query.
+  * @param ctx - Bounding box or geographical context to prioritize.
+  * @returns A promise resolving to OSM search results.
+ */
 async function searchNominatim(
     query: string,
     ctx: PlaceSearchContext,
@@ -254,6 +352,12 @@ async function searchNominatim(
     return data.map(nominatimToResult);
 }
 
+ /**
+  * Queries geographic locations using Photon API (Elasticsearch search on OSM data).
+  * @param query - Search term.
+  * @param ctx - Coordinates or bbox context to narrow focus.
+  * @returns A list of parsed OSM search results.
+ */
 async function searchPhoton(query: string, ctx: PlaceSearchContext): Promise<OsmSearchResult[]> {
     const params = new URLSearchParams({
         q: query,
@@ -278,6 +382,13 @@ async function searchPhoton(query: string, ctx: PlaceSearchContext): Promise<Osm
     return data.features.map(photonToResult).filter((r): r is OsmSearchResult => r != null);
 }
 
+ /**
+  * Orchestrates multi-engine place searches (Photon + Nominatim) and filters/scores them
+  * against the provided municipality boundary context.
+  * @param query - The user-input text query.
+  * @param ctx - Bounding boxes, municipality names, and geometries to filter/bias results.
+  * @returns Merged results and fuzzy/nearby location suggestions.
+ */
 export async function searchPlaces(
     query: string,
     ctx: PlaceSearchContext = {},

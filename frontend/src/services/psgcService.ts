@@ -1,4 +1,4 @@
-// psgcService.ts — PSGC administrative division lookup from bundled CSV data.
+// PSGC administrative division lookup from bundled CSV data.
 // Parses regions, provinces, and municipalities/cities from raw CSV imports with in-memory caching
 
 import { parse } from "csv-parse/sync";
@@ -32,6 +32,10 @@ function parseCsv<T>(raw: string): T[] {
     return parse(raw, { columns: true, skip_empty_lines: true, delimiter: "," }) as T[];
 }
 
+ /**
+  * Performs operations for getRegions in psgcService.ts.
+  * @returns Value or promise returned by getRegions.
+ */
 export function getRegions(): PsgcRegion[] {
     if (!cachedRegions) {
         cachedRegions = parseCsv<PsgcRegion>(regionsCsv);
@@ -39,6 +43,10 @@ export function getRegions(): PsgcRegion[] {
     return cachedRegions;
 }
 
+ /**
+  * Performs operations for getProvinces in psgcService.ts.
+  * @returns Value or promise returned by getProvinces.
+ */
 export function getProvinces(): PsgcProvince[] {
     if (!cachedProvinces) {
         cachedProvinces = parseCsv<PsgcProvince>(provincesCsv);
@@ -46,6 +54,10 @@ export function getProvinces(): PsgcProvince[] {
     return cachedProvinces;
 }
 
+ /**
+  * Performs operations for getMunicities in psgcService.ts.
+  * @returns Value or promise returned by getMunicities.
+ */
 export function getMunicities(): PsgcMunicity[] {
     if (!cachedMunicities) {
         cachedMunicities = parseCsv<PsgcMunicity>(municitiesCsv);

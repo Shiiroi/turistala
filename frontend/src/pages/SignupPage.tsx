@@ -1,4 +1,4 @@
-// SignupPage.tsx — Account registration route with optional demo data handoff.
+// Account registration route with optional demo data handoff.
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -14,6 +14,7 @@ import {
     setPendingImport,
 } from "../features/travel/demoStorage";
 
+ // React component rendering SignupPage.
 export function SignupPage() {
     const navigate = useNavigate();
     const signUp = useSignUp();

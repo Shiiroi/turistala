@@ -1,4 +1,4 @@
-// authPreviewHeatmap.ts — Sample heatmap colors for the auth map preview.
+// Sample heatmap colors for the auth map preview.
 
 import {
     DEFAULT_MAP_ACCENT,

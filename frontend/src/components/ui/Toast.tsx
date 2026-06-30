@@ -1,10 +1,11 @@
-// Toast.tsx — Global toast notification provider and viewport.
+// Global toast notification provider and viewport.
 
 import { useCallback, useState, type ReactNode } from "react";
 import { cn } from "../../lib/cn";
 import { DISMISS_MS, ToastContext, type ToastState, type ToastVariant } from "../../hooks/toastContext";
 import { useToast } from "../../hooks/useToast";
 
+ // React component rendering ToastProvider.
 export function ToastProvider({ children }: { children: ReactNode }) {
     const [toast, setToast] = useState<ToastState | null>(null);
 
@@ -26,6 +27,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     );
 }
 
+ // React component rendering ToastViewport.
 export function ToastViewport() {
     const { toast } = useToast();
     if (!toast) return null;
